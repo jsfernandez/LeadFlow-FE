@@ -1,52 +1,75 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-8">
-      <main className="flex flex-col items-center gap-8 text-center">
-        <h1 className="text-foreground text-5xl font-bold">
-          Welcome to <span className="text-accent">LeadFlow</span>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold mb-2">
+          Welcome to <span className="text-primary">LeadFlow</span>
         </h1>
-        <p className="text-muted-foreground max-w-2xl text-lg">
-          A streamlined lead management system for tracking offers, proposals, lead assignments, and
-          payouts. Built with Next.js 15, TypeScript, TailwindCSS, and React Query.
+        <p className="text-muted-foreground text-lg">
+          Streamline your lead management from offer creation to payout
         </p>
-        <div className="mt-8 flex gap-4">
-          <a
-            href="/offers"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6 py-3 font-semibold transition-colors"
-          >
-            View Offers
-          </a>
-          <a
-            href="/dashboard"
-            className="border-border bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg border px-6 py-3 font-semibold transition-colors"
-          >
-            Dashboard
-          </a>
-        </div>
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <div className="border-border bg-card rounded-lg border p-6">
-            <h3 className="text-card-foreground mb-2 text-lg font-semibold">Offer Management</h3>
-            <p className="text-muted-foreground text-sm">
-              Create and manage offers with role-based access control
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Offer Management</CardTitle>
+            <CardDescription>Create and manage offers with role-based access control</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Sellers can create offers that lead managers can submit proposals for.
             </p>
-          </div>
-          <div className="border-border bg-card rounded-lg border p-6">
-            <h3 className="text-card-foreground mb-2 text-lg font-semibold">Lead Tracking</h3>
-            <p className="text-muted-foreground text-sm">
-              Track proposals, assignments, and qualification status
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Lead Tracking</CardTitle>
+            <CardDescription>Track proposals, assignments, and qualification status</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Monitor the complete journey from proposal submission to lead qualification.
             </p>
-          </div>
-          <div className="border-border bg-card rounded-lg border p-6">
-            <h3 className="text-card-foreground mb-2 text-lg font-semibold">Payout System</h3>
-            <p className="text-muted-foreground text-sm">
-              Manage payouts for won leads with complete transparency
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Payout System</CardTitle>
+            <CardDescription>Manage payouts for won leads with complete transparency</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Automated payout tracking ensures fair compensation for successful leads.
             </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="border-primary/50">
+        <CardHeader>
+          <CardTitle>Core Workflow</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Offer Creation</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Proposal Submission</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Acceptance</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Lead Assignment</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Qualification</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-2 font-medium">Payout</span>
           </div>
-        </div>
-      </main>
-      <footer className="text-muted-foreground mt-16 text-sm">
-        Powered by Next.js 15 • TypeScript • TailwindCSS • React Query
-      </footer>
+        </CardContent>
+      </Card>
     </div>
   );
 }
