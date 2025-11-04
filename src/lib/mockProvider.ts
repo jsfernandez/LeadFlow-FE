@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, OfferStatus, LeadStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, LeadStatus } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
