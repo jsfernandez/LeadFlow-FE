@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark Corporate Theme Colors */
+  --background: 2 6 23; /* slate-950 */
+  --foreground: 226 232 240; /* slate-200 - silver-gray text */
+  --card: 15 23 42; /* slate-900 */
+  --card-foreground: 226 232 240; /* slate-200 */
+  --popover: 15 23 42; /* slate-900 */
+  --popover-foreground: 226 232 240; /* slate-200 */
+  --primary: 251 191 36; /* amber-400 accent */
+  --primary-foreground: 2 6 23; /* slate-950 */
+  --secondary: 30 41 59; /* slate-800 */
+  --secondary-foreground: 226 232 240; /* slate-200 */
+  --muted: 30 41 59; /* slate-800 */
+  --muted-foreground: 148 163 184; /* slate-400 */
+  --accent: 251 191 36; /* amber-400 */
+  --accent-foreground: 2 6 23; /* slate-950 */
+  --destructive: 239 68 68; /* red-500 */
+  --destructive-foreground: 248 250 252; /* slate-50 */
+  --border: 51 65 85; /* slate-700 */
+  --input: 51 65 85; /* slate-700 */
+  --ring: 251 191 36; /* amber-400 */
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-card: rgb(var(--card));
+  --color-card-foreground: rgb(var(--card-foreground));
+  --color-popover: rgb(var(--popover));
+  --color-popover-foreground: rgb(var(--popover-foreground));
+  --color-primary: rgb(var(--primary));
+  --color-primary-foreground: rgb(var(--primary-foreground));
+  --color-secondary: rgb(var(--secondary));
+  --color-secondary-foreground: rgb(var(--secondary-foreground));
+  --color-muted: rgb(var(--muted));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-foreground: rgb(var(--accent-foreground));
+  --color-destructive: rgb(var(--destructive));
+  --color-destructive-foreground: rgb(var(--destructive-foreground));
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: rgb(var(--ring));
+}
+
+* {
+  border-color: rgb(var(--border));
+}
+
+body {
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+}
