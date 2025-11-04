@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
+import { AppLayout } from "@/components/layout/app-layout";
 
 export const metadata: Metadata = {
   title: "LeadFlow - Lead Management System",
@@ -17,7 +19,11 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="font-sans antialiased">
         <ThemeProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <AppLayout>{children}</AppLayout>
+            </AuthProvider>
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
