@@ -20,10 +20,12 @@ import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useOffers, useCreateOffer } from "@/hooks/use-offers";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useTranslation } from "@/hooks/use-translation";
 import type { OfferStatus } from "@/types";
 
 export default function OffersPage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { data: offers, isLoading, error } = useOffers();
   const createOffer = useCreateOffer();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -71,35 +73,35 @@ export default function OffersPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Offers</h1>
-          <p className="text-muted-foreground">Browse and manage available offers</p>
+          <h1 className="text-3xl font-bold">{t("offers.title")}</h1>
+          <p className="text-muted-foreground">{t("offers.subtitle")}</p>
         </div>
         {isSeller && (
-          <Button onClick={() => setIsCreateDialogOpen(true)}>Create Offer</Button>
+          <Button onClick={() => setIsCreateDialogOpen(true)}>{t("offers.createOffer")}</Button>
         )}
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>All Offers</CardTitle>
-          <CardDescription>List of all available offers in the system</CardDescription>
+          <CardTitle>{t("offers.allOffers")}</CardTitle>
+          <CardDescription>{t("offers.listDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <TableSkeleton rows={5} />
           ) : error ? (
             <div className="text-center py-8">
-              <p className="text-sm text-red-400">Failed to load offers. Please try again.</p>
+              <p className="text-sm text-red-400">{t("offers.failedToLoad")}</p>
             </div>
           ) : offers && offers.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>{t("offers.offerTitle")}</TableHead>
+                  <TableHead>{t("offers.description")}</TableHead>
+                  <TableHead>{t("offers.price")}</TableHead>
+                  <TableHead>{t("offers.status")}</TableHead>
+                  <TableHead>{t("offers.createdAt")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -121,16 +123,16 @@ export default function OffersPage() {
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Document}
-              title="No offers available"
+              title={t("offers.noOffersAvailable")}
               description={
                 isSeller
-                  ? "Get started by creating your first offer"
-                  : "There are no active offers at the moment"
+                  ? t("offers.startCreating")
+                  : t("offers.noOffersAvailable")
               }
               action={
                 isSeller
                   ? {
-                      label: "Create Offer",
+                      label: t("offers.createOffer"),
                       onClick: () => setIsCreateDialogOpen(true),
                     }
                   : undefined
@@ -145,18 +147,18 @@ export default function OffersPage() {
         <DialogContent>
           <form onSubmit={handleCreateOffer}>
             <DialogHeader>
-              <DialogTitle>Create New Offer</DialogTitle>
+              <DialogTitle>{t("offers.createDialog.title")}</DialogTitle>
               <DialogDescription>
-                Create a new offer for lead managers to submit proposals
+                {t("offers.createDialog.description")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">{t("offers.createDialog.offerTitle")}</Label>
                 <Input
                   id="title"
-                  placeholder="e.g., Premium SaaS Leads"
+                  placeholder={t("offers.createDialog.titlePlaceholder")}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
@@ -164,10 +166,10 @@ export default function OffersPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t("offers.createDialog.offerDescription")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe the offer details..."
+                  placeholder={t("offers.createDialog.descriptionPlaceholder")}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   required
@@ -175,13 +177,13 @@ export default function OffersPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="price">Price ($)</Label>
+                <Label htmlFor="price">{t("offers.createDialog.offerPrice")} ($)</Label>
                 <Input
                   id="price"
                   type="number"
                   step="0.01"
                   min="0"
-                  placeholder="0.00"
+                  placeholder={t("offers.createDialog.pricePlaceholder")}
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                   required
@@ -196,10 +198,10 @@ export default function OffersPage() {
                 onClick={() => setIsCreateDialogOpen(false)}
                 disabled={createOffer.isPending}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button type="submit" disabled={createOffer.isPending}>
-                {createOffer.isPending ? "Creating..." : "Create Offer"}
+                {createOffer.isPending ? t("common.loading") : t("offers.createOffer")}
               </Button>
             </DialogFooter>
           </form>
