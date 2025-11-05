@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mockProvider } from "@/lib/mockProvider";
+import { dataProvider } from "@/lib/dataProvider";
 import type { Offer, OfferStatus } from "@/types";
 import { toast } from "sonner";
 
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 export function useOffers() {
   return useQuery({
     queryKey: ["offers"],
-    queryFn: () => mockProvider.getOffers(),
+    queryFn: () => dataProvider.getOffers(),
   });
 }
 
@@ -19,7 +19,7 @@ export function useOffers() {
 export function useOffer(id: string) {
   return useQuery({
     queryKey: ["offers", id],
-    queryFn: () => mockProvider.getOfferById(id),
+    queryFn: () => dataProvider.getOfferById(id),
     enabled: !!id,
   });
 }
@@ -30,7 +30,7 @@ export function useOffer(id: string) {
 export function useOffersBySeller(sellerId: string) {
   return useQuery({
     queryKey: ["offers", "seller", sellerId],
-    queryFn: () => mockProvider.getOffersBySellerId(sellerId),
+    queryFn: () => dataProvider.getOffersBySellerId(sellerId),
     enabled: !!sellerId,
   });
 }
@@ -43,7 +43,7 @@ export function useCreateOffer() {
 
   return useMutation({
     mutationFn: (data: Omit<Offer, "id" | "createdAt" | "updatedAt">) =>
-      mockProvider.createOffer(data),
+      dataProvider.createOffer(data),
     onMutate: async (newOffer) => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["offers"] });
@@ -93,7 +93,7 @@ export function useUpdateOffer() {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Offer> }) =>
-      mockProvider.updateOffer(id, data),
+      dataProvider.updateOffer(id, data),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: ["offers", id] });
       
@@ -137,7 +137,7 @@ export function useUpdateOfferStatus() {
 
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: OfferStatus }) =>
-      mockProvider.updateOffer(id, { status }),
+      dataProvider.updateOffer(id, { status }),
     onSuccess: () => {
       toast.success("Success", {
         description: "Offer status updated successfully",
@@ -162,7 +162,7 @@ export function useDeleteOffer() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => mockProvider.deleteOffer(id),
+    mutationFn: (id: string) => dataProvider.deleteOffer(id),
     onSuccess: () => {
       toast.success("Success", {
         description: "Offer deleted successfully",

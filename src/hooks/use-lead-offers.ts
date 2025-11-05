@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mockProvider } from "@/lib/mockProvider";
+import { dataProvider } from "@/lib/dataProvider";
 import type { LeadOffer, LeadStatus } from "@/types";
 import { toast } from "sonner";
 
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 export function useLeadOffers() {
   return useQuery({
     queryKey: ["leadOffers"],
-    queryFn: () => mockProvider.getLeadOffers(),
+    queryFn: () => dataProvider.getLeadOffers(),
   });
 }
 
@@ -19,7 +19,7 @@ export function useLeadOffers() {
 export function useLeadOffer(id: string) {
   return useQuery({
     queryKey: ["leadOffers", id],
-    queryFn: () => mockProvider.getLeadOfferById(id),
+    queryFn: () => dataProvider.getLeadOfferById(id),
     enabled: !!id,
   });
 }
@@ -30,7 +30,7 @@ export function useLeadOffer(id: string) {
 export function useLeadOffersByManager(managerId: string) {
   return useQuery({
     queryKey: ["leadOffers", "manager", managerId],
-    queryFn: () => mockProvider.getLeadOffersByManagerId(managerId),
+    queryFn: () => dataProvider.getLeadOffersByManagerId(managerId),
     enabled: !!managerId,
   });
 }
@@ -41,7 +41,7 @@ export function useLeadOffersByManager(managerId: string) {
 export function useLeadOffersByOffer(offerId: string) {
   return useQuery({
     queryKey: ["leadOffers", "offer", offerId],
-    queryFn: () => mockProvider.getLeadOffersByOfferId(offerId),
+    queryFn: () => dataProvider.getLeadOffersByOfferId(offerId),
     enabled: !!offerId,
   });
 }
@@ -55,7 +55,7 @@ export function useCreateLeadOffer() {
   return useMutation({
     mutationFn: (
       data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
-    ) => mockProvider.createLeadOffer(data),
+    ) => dataProvider.createLeadOffer(data),
     onMutate: async (newLeadOffer) => {
       await queryClient.cancelQueries({ queryKey: ["leadOffers"] });
       
@@ -101,7 +101,7 @@ export function useUpdateLeadOfferStatus() {
 
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: LeadStatus }) =>
-      mockProvider.updateLeadOfferStatus(id, status),
+      dataProvider.updateLeadOfferStatus(id, status),
     onMutate: async ({ id, status }) => {
       await queryClient.cancelQueries({ queryKey: ["leadOffers", id] });
       

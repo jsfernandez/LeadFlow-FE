@@ -140,10 +140,98 @@ To customize the theme, modify the CSS variables in the `:root` selector:
 
 ## 🌐 Data Providers
 
-The application will support two data provider modes:
+The application supports **dual-mode data layer** for seamless switching between local development and production:
 
-1. **Mock Provider**: Local simulation with latency and partial data privacy
-2. **Real Provider**: Integration with backend API via `NEXT_PUBLIC_API_URL`
+### Mock Mode (Default)
+- **Purpose**: Local development and testing without backend
+- **Features**: 
+  - In-memory data storage with sample data
+  - Simulated API latency (300ms)
+  - Full CRUD operations
+  - Persists during session
+- **Configuration**: Set `NEXT_PUBLIC_API_MODE=mock` in `.env.local`
+
+### Real Mode
+- **Purpose**: Integration with backend API
+- **Features**:
+  - HTTP client with fetch API
+  - Request/response interceptors
+  - Automatic auth header injection
+  - Error handling and transformation
+  - Date serialization/deserialization
+- **Configuration**: 
+  - Set `NEXT_PUBLIC_API_MODE=real` in `.env.local`
+  - Set `NEXT_PUBLIC_API_URL` to your backend URL (e.g., `http://localhost:3001/api`)
+
+### Switching Between Modes
+
+1. Copy the example environment file:
+```bash
+cp .env.example .env.local
+```
+
+2. Edit `.env.local` to set your preferred mode:
+```env
+# For mock mode (local development)
+NEXT_PUBLIC_API_MODE=mock
+
+# For real mode (backend integration)
+NEXT_PUBLIC_API_MODE=real
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
+
+3. Restart the development server:
+```bash
+npm run dev
+```
+
+The application will automatically use the configured provider without any code changes.
+
+## 🔌 API Integration
+
+### API Client
+The `apiClient` (`src/lib/apiClient.ts`) provides:
+- RESTful HTTP methods (GET, POST, PUT, PATCH, DELETE)
+- Automatic authentication headers from localStorage
+- Request/response interceptors
+- Centralized error handling
+- Query parameter serialization
+
+### Data Provider Abstraction
+The `dataProvider` (`src/lib/dataProvider.ts`) provides:
+- Unified interface for both mock and real modes
+- Automatic mode switching based on environment
+- Type-safe DTOs matching backend contracts
+- Consistent error handling across modes
+
+### Backend API Endpoints (Real Mode)
+When using real mode, the following endpoints are expected:
+
+**Offers**
+- `GET /offers` - List all offers
+- `GET /offers/:id` - Get offer by ID
+- `GET /offers?sellerId={id}` - Get offers by seller
+- `POST /offers` - Create new offer
+- `PATCH /offers/:id` - Update offer
+- `DELETE /offers/:id` - Delete offer
+
+**Lead Offers**
+- `GET /lead-offers` - List all lead offers
+- `GET /lead-offers/:id` - Get lead offer by ID
+- `GET /lead-offers?managerId={id}` - Get by manager
+- `GET /lead-offers?offerId={id}` - Get by offer
+- `POST /lead-offers` - Create proposal
+- `PATCH /lead-offers/:id/status` - Update status
+
+**Payouts**
+- `GET /payouts` - List all payouts
+- `GET /payouts/:id` - Get payout by ID
+- `GET /payouts?leadOfferId={id}` - Get by lead offer
+- `GET /payouts?managerId={id}` - Get by manager
+- `PATCH /payouts/:id/status` - Update payout status
+
+**Users**
+- `GET /users/:id` - Get user by ID
 
 ## 📝 Type Safety
 
