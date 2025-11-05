@@ -125,7 +125,7 @@ class ApiClient {
     // Parse successful response
     // Handle empty responses (204 No Content)
     if (response.status === 204) {
-      return undefined as T;
+      return null as T; // For DELETE operations that return 204
     }
 
     try {

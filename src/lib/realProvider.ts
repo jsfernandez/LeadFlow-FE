@@ -6,7 +6,7 @@
  * Handles DTOs with proper date deserialization.
  */
 
-import { apiClient } from "./apiClient";
+import { apiClient, ApiError } from "./apiClient";
 import type { Offer, LeadOffer, Payout, User, LeadStatus } from "@/types";
 
 /**
@@ -122,9 +122,14 @@ export const realProvider = {
     try {
       const data = await apiClient.get<OfferDTO>(`/offers/${id}`);
       return transformOffer(data);
-    } catch {
+    } catch (error) {
       // Return null for 404 errors to match mock provider behavior
-      return null;
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      // Log other errors for debugging
+      console.error("[RealProvider] Error fetching offer:", error);
+      throw error;
     }
   },
 
@@ -146,8 +151,12 @@ export const realProvider = {
     try {
       const response = await apiClient.patch<OfferDTO>(`/offers/${id}`, data);
       return transformOffer(response);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating offer:", error);
+      throw error;
     }
   },
 
@@ -155,8 +164,12 @@ export const realProvider = {
     try {
       await apiClient.delete(`/offers/${id}`);
       return true;
-    } catch {
-      return false;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return false;
+      }
+      console.error("[RealProvider] Error deleting offer:", error);
+      throw error;
     }
   },
 
@@ -171,8 +184,12 @@ export const realProvider = {
     try {
       const data = await apiClient.get<LeadOfferDTO>(`/lead-offers/${id}`);
       return transformLeadOffer(data);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching lead offer:", error);
+      throw error;
     }
   },
 
@@ -208,8 +225,12 @@ export const realProvider = {
         qualifiedAt,
       });
       return transformLeadOffer(response);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating lead offer status:", error);
+      throw error;
     }
   },
 
@@ -224,8 +245,12 @@ export const realProvider = {
     try {
       const data = await apiClient.get<PayoutDTO>(`/payouts/${id}`);
       return transformPayout(data);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching payout:", error);
+      throw error;
     }
   },
 
@@ -252,8 +277,12 @@ export const realProvider = {
         status,
       });
       return transformPayout(response);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating payout status:", error);
+      throw error;
     }
   },
 
@@ -263,8 +292,12 @@ export const realProvider = {
     try {
       const data = await apiClient.get<UserDTO>(`/users/${id}`);
       return transformUser(data);
-    } catch {
-      return null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching user:", error);
+      throw error;
     }
   },
 };
