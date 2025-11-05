@@ -4,12 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableSkeleton, StatsCardSkeleton } from "@/components/ui/skeleton";
+import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { usePayoutsByManager, useUpdatePayoutStatus } from "@/hooks/use-payouts";
 import { useAuth } from "@/components/providers/auth-provider";
 
 export default function PayoutsPage() {
   const { user } = useAuth();
-  const { data: payouts, isLoading } = usePayoutsByManager(user?.id || "");
+  const { data: payouts, isLoading, error } = usePayoutsByManager(user?.id || "");
   const updatePayoutStatus = useUpdatePayoutStatus();
 
   const isAdmin = user?.role === "ADMIN";
@@ -21,6 +23,7 @@ export default function PayoutsPage() {
         status: "PAID",
       });
     } catch (error) {
+      // Error is handled by the mutation hook
       console.error("Failed to update payout status:", error);
     }
   };
@@ -46,43 +49,51 @@ export default function PayoutsPage() {
         <p className="text-muted-foreground">Track your earnings and payout history</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">${pendingTotal.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {payouts?.filter((p) => p.status === "PENDING").length || 0} payout(s)
-            </p>
-          </CardContent>
-        </Card>
+      {isLoading ? (
+        <div className="grid gap-4 md:grid-cols-3">
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Pending</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-500">${pendingTotal.toFixed(2)}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {payouts?.filter((p) => p.status === "PENDING").length || 0} payout(s)
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Paid</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-500">${paidTotal.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {payouts?.filter((p) => p.status === "PAID").length || 0} payout(s)
-            </p>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Paid</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-500">${paidTotal.toFixed(2)}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {payouts?.filter((p) => p.status === "PAID").length || 0} payout(s)
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Total Earnings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {payouts?.length || 0} total payout(s)
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Total Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {payouts?.length || 0} total payout(s)
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -91,7 +102,11 @@ export default function PayoutsPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading payouts...</p>
+            <TableSkeleton rows={5} />
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-red-400">Failed to load payouts. Please try again.</p>
+            </div>
           ) : payouts && payouts.length > 0 ? (
             <Table>
               <TableHeader>
@@ -126,7 +141,7 @@ export default function PayoutsPage() {
                             onClick={() => handleMarkAsPaid(payout.id)}
                             disabled={updatePayoutStatus.isPending}
                           >
-                            Mark as Paid
+                            {updatePayoutStatus.isPending ? "Processing..." : "Mark as Paid"}
                           </Button>
                         )}
                       </TableCell>
@@ -136,12 +151,11 @@ export default function PayoutsPage() {
               </TableBody>
             </Table>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">No payout history yet</p>
-              <p className="text-xs text-muted-foreground mt-2">
-                Payouts are generated when leads are marked as WON
-              </p>
-            </div>
+            <EmptyState
+              icon={EmptyStateIcons.Cash}
+              title="No payout history yet"
+              description="Payouts are generated when leads are marked as WON. Start qualifying your leads to earn payouts!"
+            />
           )}
         </CardContent>
       </Card>

@@ -4,6 +4,7 @@ import { ReactQueryProvider } from "@/components/providers/react-query-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { AppLayout } from "@/components/layout/app-layout";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "LeadFlow - Lead Management System",
@@ -22,6 +23,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <AuthProvider>
               <AppLayout>{children}</AppLayout>
+              <Toaster />
             </AuthProvider>
           </ReactQueryProvider>
         </ThemeProvider>

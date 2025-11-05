@@ -13,13 +13,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useLeadOffersByManager, useUpdateLeadOfferStatus } from "@/hooks/use-lead-offers";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus, LeadOffer } from "@/types";
 
 export default function AssignmentsPage() {
   const { user } = useAuth();
-  const { data: assignments, isLoading } = useLeadOffersByManager(user?.id || "");
+  const { data: assignments, isLoading, error } = useLeadOffersByManager(user?.id || "");
   const updateStatus = useUpdateLeadOfferStatus();
   const [selectedAssignment, setSelectedAssignment] = useState<LeadOffer | null>(null);
   const [isQualifyDialogOpen, setIsQualifyDialogOpen] = useState(false);
@@ -35,6 +37,7 @@ export default function AssignmentsPage() {
       setIsQualifyDialogOpen(false);
       setSelectedAssignment(null);
     } catch (error) {
+      // Error is handled by the mutation hook
       console.error("Failed to qualify lead:", error);
     }
   };
@@ -73,7 +76,11 @@ export default function AssignmentsPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading assignments...</p>
+            <TableSkeleton rows={3} />
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-red-400">Failed to load assignments. Please try again.</p>
+            </div>
           ) : pendingAssignments.length > 0 ? (
             <Table>
               <TableHeader>
@@ -109,7 +116,11 @@ export default function AssignmentsPage() {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-sm text-muted-foreground">No pending assignments</p>
+            <EmptyState
+              icon={EmptyStateIcons.Clipboard}
+              title="No pending assignments"
+              description="All your leads have been qualified. Great work!"
+            />
           )}
         </CardContent>
       </Card>
@@ -121,7 +132,9 @@ export default function AssignmentsPage() {
           <CardDescription>Previously qualified leads</CardDescription>
         </CardHeader>
         <CardContent>
-          {qualifiedAssignments.length > 0 ? (
+          {isLoading ? (
+            <TableSkeleton rows={3} />
+          ) : qualifiedAssignments.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -153,7 +166,11 @@ export default function AssignmentsPage() {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-sm text-muted-foreground">No qualified leads yet</p>
+            <EmptyState
+              icon={EmptyStateIcons.Document}
+              title="No qualified leads yet"
+              description="Qualified leads will appear here once you mark them as WON or LOST"
+            />
           )}
         </CardContent>
       </Card>
@@ -193,14 +210,14 @@ export default function AssignmentsPage() {
                     disabled={updateStatus.isPending}
                     className="bg-green-600 hover:bg-green-700 text-white"
                   >
-                    Mark as WON
+                    {updateStatus.isPending ? "Processing..." : "Mark as WON"}
                   </Button>
                   <Button
                     onClick={() => handleQualify("LOST")}
                     disabled={updateStatus.isPending}
                     variant="destructive"
                   >
-                    Mark as LOST
+                    {updateStatus.isPending ? "Processing..." : "Mark as LOST"}
                   </Button>
                 </div>
               </div>
@@ -215,6 +232,7 @@ export default function AssignmentsPage() {
                 setIsQualifyDialogOpen(false);
                 setSelectedAssignment(null);
               }}
+              disabled={updateStatus.isPending}
             >
               Cancel
             </Button>
