@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mockProvider } from "@/lib/mockProvider";
+import { dataProvider } from "@/lib/dataProvider";
 import { toast } from "sonner";
 
 /**
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export function usePayouts() {
   return useQuery({
     queryKey: ["payouts"],
-    queryFn: () => mockProvider.getPayouts(),
+    queryFn: () => dataProvider.getPayouts(),
   });
 }
 
@@ -18,7 +18,7 @@ export function usePayouts() {
 export function usePayout(id: string) {
   return useQuery({
     queryKey: ["payouts", id],
-    queryFn: () => mockProvider.getPayoutById(id),
+    queryFn: () => dataProvider.getPayoutById(id),
     enabled: !!id,
   });
 }
@@ -29,7 +29,7 @@ export function usePayout(id: string) {
 export function usePayoutsByLeadOffer(leadOfferId: string) {
   return useQuery({
     queryKey: ["payouts", "leadOffer", leadOfferId],
-    queryFn: () => mockProvider.getPayoutsByLeadOfferId(leadOfferId),
+    queryFn: () => dataProvider.getPayoutsByLeadOfferId(leadOfferId),
     enabled: !!leadOfferId,
   });
 }
@@ -40,7 +40,7 @@ export function usePayoutsByLeadOffer(leadOfferId: string) {
 export function usePayoutsByManager(managerId: string) {
   return useQuery({
     queryKey: ["payouts", "manager", managerId],
-    queryFn: () => mockProvider.getPayoutsByManagerId(managerId),
+    queryFn: () => dataProvider.getPayoutsByManagerId(managerId),
     enabled: !!managerId,
   });
 }
@@ -53,7 +53,7 @@ export function useUpdatePayoutStatus() {
 
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: "PENDING" | "PAID" }) =>
-      mockProvider.updatePayoutStatus(id, status),
+      dataProvider.updatePayoutStatus(id, status),
     onSuccess: () => {
       toast.success("Success", {
         description: "Payout marked as paid successfully",
