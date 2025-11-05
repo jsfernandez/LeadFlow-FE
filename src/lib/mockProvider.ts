@@ -50,35 +50,181 @@ class MockDataStore {
       role: "LEAD_MANAGER",
       createdAt: new Date("2024-01-01"),
     };
+    
+    const admin1: User = {
+      id: "admin-1",
+      email: "admin@leadflow.com",
+      name: "Admin User",
+      role: "ADMIN",
+      createdAt: new Date("2024-01-01"),
+    };
 
     this.users.set(seller1.id, seller1);
     this.users.set(leadManager1.id, leadManager1);
+    this.users.set(admin1.id, admin1);
 
-    // Sample offers
-    const offer1: Offer = {
-      id: "offer-1",
-      title: "Premium SaaS Leads",
-      description: "High-quality leads for SaaS companies with $10M+ ARR",
-      price: 500,
-      status: "ACTIVE",
-      sellerId: seller1.id,
-      createdAt: new Date("2024-01-15"),
-      updatedAt: new Date("2024-01-15"),
-    };
+    // Sample offers with varied dates for trend visualization
+    const offers: Offer[] = [
+      {
+        id: "offer-1",
+        title: "Premium SaaS Leads",
+        description: "High-quality leads for SaaS companies with $10M+ ARR",
+        price: 500,
+        status: "ACTIVE",
+        sellerId: seller1.id,
+        createdAt: new Date("2024-10-15"),
+        updatedAt: new Date("2024-10-15"),
+      },
+      {
+        id: "offer-2",
+        title: "E-commerce Store Leads",
+        description: "Qualified leads for e-commerce platforms, validated contact info",
+        price: 350,
+        status: "ACTIVE",
+        sellerId: seller1.id,
+        createdAt: new Date("2024-10-20"),
+        updatedAt: new Date("2024-10-20"),
+      },
+      {
+        id: "offer-3",
+        title: "Enterprise B2B Leads",
+        description: "Decision-maker contacts at Fortune 500 companies",
+        price: 750,
+        status: "ACTIVE",
+        sellerId: seller1.id,
+        createdAt: new Date("2024-11-01"),
+        updatedAt: new Date("2024-11-01"),
+      },
+      {
+        id: "offer-4",
+        title: "Startup Leads Package",
+        description: "Early-stage startups looking for services",
+        price: 250,
+        status: "ACTIVE",
+        sellerId: seller1.id,
+        createdAt: new Date("2024-11-03"),
+        updatedAt: new Date("2024-11-03"),
+      },
+    ];
 
-    const offer2: Offer = {
-      id: "offer-2",
-      title: "E-commerce Store Leads",
-      description: "Qualified leads for e-commerce platforms, validated contact info",
-      price: 350,
-      status: "ACTIVE",
-      sellerId: seller1.id,
-      createdAt: new Date("2024-01-20"),
-      updatedAt: new Date("2024-01-20"),
-    };
+    offers.forEach(offer => this.offers.set(offer.id, offer));
 
-    this.offers.set(offer1.id, offer1);
-    this.offers.set(offer2.id, offer2);
+    // Sample lead offers with varied statuses for conversion metrics
+    const leadOffers: LeadOffer[] = [
+      {
+        id: "lead-offer-1",
+        offerId: "offer-1",
+        leadManagerId: leadManager1.id,
+        customerName: "Acme Corp",
+        customerEmail: "contact@acme.com",
+        customerPhone: "+1-555-0101",
+        status: "WON",
+        assignedAt: new Date("2024-10-16"),
+        qualifiedAt: new Date("2024-10-18"),
+        createdAt: new Date("2024-10-16"),
+      },
+      {
+        id: "lead-offer-2",
+        offerId: "offer-1",
+        leadManagerId: leadManager1.id,
+        customerName: "TechStart Inc",
+        customerEmail: "hello@techstart.io",
+        customerPhone: "+1-555-0102",
+        status: "WON",
+        assignedAt: new Date("2024-10-22"),
+        qualifiedAt: new Date("2024-10-25"),
+        createdAt: new Date("2024-10-22"),
+      },
+      {
+        id: "lead-offer-3",
+        offerId: "offer-2",
+        leadManagerId: leadManager1.id,
+        customerName: "ShopZone LLC",
+        customerEmail: "info@shopzone.com",
+        customerPhone: "+1-555-0103",
+        status: "LOST",
+        assignedAt: new Date("2024-10-21"),
+        qualifiedAt: new Date("2024-10-23"),
+        createdAt: new Date("2024-10-21"),
+      },
+      {
+        id: "lead-offer-4",
+        offerId: "offer-2",
+        leadManagerId: leadManager1.id,
+        customerName: "MegaStore Co",
+        customerEmail: "sales@megastore.com",
+        customerPhone: "+1-555-0104",
+        status: "WON",
+        assignedAt: new Date("2024-11-01"),
+        qualifiedAt: new Date("2024-11-02"),
+        createdAt: new Date("2024-11-01"),
+      },
+      {
+        id: "lead-offer-5",
+        offerId: "offer-3",
+        leadManagerId: leadManager1.id,
+        customerName: "Global Enterprises",
+        customerEmail: "contact@globalent.com",
+        customerPhone: "+1-555-0105",
+        status: "PENDING",
+        assignedAt: new Date("2024-11-02"),
+        createdAt: new Date("2024-11-02"),
+      },
+      {
+        id: "lead-offer-6",
+        offerId: "offer-3",
+        leadManagerId: leadManager1.id,
+        customerName: "BigCorp Industries",
+        customerEmail: "reach@bigcorp.com",
+        customerPhone: "+1-555-0106",
+        status: "PENDING",
+        assignedAt: new Date("2024-11-04"),
+        createdAt: new Date("2024-11-04"),
+      },
+      {
+        id: "lead-offer-7",
+        offerId: "offer-4",
+        leadManagerId: leadManager1.id,
+        customerName: "InnovateLab",
+        customerEmail: "team@innovatelab.io",
+        customerPhone: "+1-555-0107",
+        status: "WON",
+        assignedAt: new Date("2024-11-03"),
+        qualifiedAt: new Date("2024-11-04"),
+        createdAt: new Date("2024-11-03"),
+      },
+      {
+        id: "lead-offer-8",
+        offerId: "offer-1",
+        leadManagerId: leadManager1.id,
+        customerName: "CloudTech Solutions",
+        customerEmail: "info@cloudtech.com",
+        customerPhone: "+1-555-0108",
+        status: "LOST",
+        assignedAt: new Date("2024-10-28"),
+        qualifiedAt: new Date("2024-10-30"),
+        createdAt: new Date("2024-10-28"),
+      },
+    ];
+
+    leadOffers.forEach(leadOffer => this.leadOffers.set(leadOffer.id, leadOffer));
+
+    // Create payouts for WON leads
+    const wonLeadOffers = leadOffers.filter(lo => lo.status === "WON");
+    wonLeadOffers.forEach((leadOffer, index) => {
+      const offer = this.offers.get(leadOffer.offerId);
+      if (offer) {
+        const payout: Payout = {
+          id: `payout-${leadOffer.id}`,
+          leadOfferId: leadOffer.id,
+          amount: offer.price,
+          status: index % 2 === 0 ? "PAID" : "PENDING",
+          paidAt: index % 2 === 0 ? leadOffer.qualifiedAt : undefined,
+          createdAt: leadOffer.qualifiedAt || leadOffer.createdAt,
+        };
+        this.payouts.set(payout.id, payout);
+      }
+    });
   }
 
   // ===== Offer Operations =====
