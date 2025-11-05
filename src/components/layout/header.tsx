@@ -4,13 +4,6 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { UserRole } from "@/types";
 
 const roleColors: Record<UserRole, string> = {
@@ -20,12 +13,12 @@ const roleColors: Record<UserRole, string> = {
 };
 
 /**
- * Header component with logo, user info, language selector, and logout button
+ * Header component with logo, user info, and logout button
  * Shows role badge and provides mobile menu trigger
  */
 export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void }) {
   const { user, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
@@ -80,27 +73,6 @@ export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
         </div>
 
         <div className="flex-1" />
-
-        {/* Language selector */}
-        <Select value={language} onValueChange={(value) => setLanguage(value as "en" | "es")}>
-          <SelectTrigger className="w-[140px]" aria-label={t("language.select")}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="en">
-              <span className="flex items-center gap-2">
-                <span>🇬🇧</span>
-                <span>{t("language.english")}</span>
-              </span>
-            </SelectItem>
-            <SelectItem value="es">
-              <span className="flex items-center gap-2">
-                <span>🇪🇸</span>
-                <span>{t("language.spanish")}</span>
-              </span>
-            </SelectItem>
-          </SelectContent>
-        </Select>
 
         {/* User info */}
         {user && (

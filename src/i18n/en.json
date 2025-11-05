@@ -32,6 +32,7 @@
   },
   "navigation": {
     "title": "Navigation",
+    "menu": "Menu",
     "dashboard": "Dashboard",
     "offers": "Offers",
     "myOffers": "My Offers",
@@ -232,5 +233,23 @@
     "select": "Language",
     "english": "English",
     "spanish": "Spanish"
+  },
+  "login": {
+    "selectRole": "Select your role to continue",
+    "mockAuthInfo": "Mock authentication for development. Your selection will be stored in localStorage.",
+    "roles": {
+      "seller": {
+        "title": "Seller",
+        "description": "Create and manage offers, view payouts"
+      },
+      "leadManager": {
+        "title": "Lead Manager",
+        "description": "Submit proposals, manage leads and assignments"
+      },
+      "admin": {
+        "title": "Admin",
+        "description": "Full system access, manage users and settings"
+      }
+    }
   }
 }
