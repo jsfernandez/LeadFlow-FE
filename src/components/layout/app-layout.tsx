@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useLanguage } from "@/contexts/language-context";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -14,6 +15,7 @@ import type { UserRole } from "@/types";
  */
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Show login screen if not authenticated
@@ -35,7 +37,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetContent side="left" className="w-64 p-0">
             <SheetHeader className="p-6 pb-4">
-              <SheetTitle>Menu</SheetTitle>
+              <SheetTitle>{t("navigation.menu")}</SheetTitle>
             </SheetHeader>
             <Sidebar />
           </SheetContent>
@@ -54,24 +56,25 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
  */
 function LoginScreen() {
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const roles: { role: UserRole; title: string; description: string; color: string }[] = [
     {
       role: "SELLER",
-      title: "Seller",
-      description: "Create and manage offers, view payouts",
+      title: t("login.roles.seller.title"),
+      description: t("login.roles.seller.description"),
       color: "bg-blue-600 hover:bg-blue-700",
     },
     {
       role: "LEAD_MANAGER",
-      title: "Lead Manager",
-      description: "Submit proposals, manage leads and assignments",
+      title: t("login.roles.leadManager.title"),
+      description: t("login.roles.leadManager.description"),
       color: "bg-green-600 hover:bg-green-700",
     },
     {
       role: "ADMIN",
-      title: "Admin",
-      description: "Full system access, manage users and settings",
+      title: t("login.roles.admin.title"),
+      description: t("login.roles.admin.description"),
       color: "bg-purple-600 hover:bg-purple-700",
     },
   ];
@@ -103,7 +106,7 @@ function LoginScreen() {
           <h1 className="text-4xl font-bold">
             Lead<span className="text-primary">Flow</span>
           </h1>
-          <p className="mt-2 text-muted-foreground">Select your role to continue</p>
+          <p className="mt-2 text-muted-foreground">{t("login.selectRole")}</p>
         </div>
 
         {/* Role Selection */}
@@ -130,7 +133,7 @@ function LoginScreen() {
         {/* Info */}
         <div className="text-center">
           <p className="text-xs text-muted-foreground">
-            Mock authentication for development. Your selection will be stored in localStorage.
+            {t("login.mockAuthInfo")}
           </p>
         </div>
       </div>

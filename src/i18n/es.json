@@ -32,6 +32,7 @@
   },
   "navigation": {
     "title": "Navegación",
+    "menu": "Menú",
     "dashboard": "Panel",
     "offers": "Ofertas",
     "myOffers": "Mis Ofertas",
@@ -232,5 +233,23 @@
     "select": "Idioma",
     "english": "Inglés",
     "spanish": "Español"
+  },
+  "login": {
+    "selectRole": "Seleccione su rol para continuar",
+    "mockAuthInfo": "Autenticación simulada para desarrollo. Su selección se guardará en localStorage.",
+    "roles": {
+      "seller": {
+        "title": "Vendedor",
+        "description": "Crear y gestionar ofertas, ver pagos"
+      },
+      "leadManager": {
+        "title": "Gestor de Leads",
+        "description": "Enviar propuestas, gestionar leads y asignaciones"
+      },
+      "admin": {
+        "title": "Administrador",
+        "description": "Acceso completo al sistema, gestionar usuarios y configuración"
+      }
+    }
   }
 }
