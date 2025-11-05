@@ -6,17 +6,29 @@ import { useLanguage } from "@/contexts/language-context";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { usePathname } from "next/navigation";
 import type { UserRole } from "@/types";
 
 /**
  * Main application layout with header, sidebar, and content area
  * Includes responsive mobile navigation using Sheet component
  * Shows login screen when user is not authenticated
+ * Public routes (like /landing) bypass authentication
  */
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Public routes that don't require authentication
+  const publicRoutes = ["/landing"];
+  const isPublicRoute = publicRoutes.some(route => pathname === route);
+
+  // Skip authentication check for public routes
+  if (isPublicRoute) {
+    return <>{children}</>;
+  }
 
   // Show login screen if not authenticated
   if (!isAuthenticated) {

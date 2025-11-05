@@ -234,6 +234,138 @@
     "english": "English",
     "spanish": "Spanish"
   },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "benefits": "Benefits",
+      "testimonials": "Testimonials",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "title": "Transform Your Lead Management",
+      "subtitle": "The complete platform for sellers and lead managers to create, track, and monetize leads efficiently",
+      "cta": "Start For Free",
+      "ctaSecondary": "Learn More"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "A streamlined workflow from offer creation to payout",
+      "step1": {
+        "title": "Create Offers",
+        "description": "Sellers create compelling offers with clear pricing and requirements"
+      },
+      "step2": {
+        "title": "Submit Proposals",
+        "description": "Lead Managers submit qualified proposals for available offers"
+      },
+      "step3": {
+        "title": "Accept & Assign",
+        "description": "Sellers review and accept proposals, automatically creating assignments"
+      },
+      "step4": {
+        "title": "Qualify Leads",
+        "description": "Lead Managers work assignments and mark them as WON or LOST"
+      },
+      "step5": {
+        "title": "Get Paid",
+        "description": "Automatic payout generation for successfully qualified leads"
+      }
+    },
+    "benefits": {
+      "title": "Benefits for Everyone",
+      "sellers": {
+        "title": "For Sellers",
+        "subtitle": "Grow your business with quality leads",
+        "benefit1": {
+          "title": "Quality Control",
+          "description": "Review and approve only the leads that meet your criteria"
+        },
+        "benefit2": {
+          "title": "Transparent Pricing",
+          "description": "Set your own prices and only pay for qualified leads"
+        },
+        "benefit3": {
+          "title": "Performance Tracking",
+          "description": "Monitor conversion rates and ROI with detailed analytics"
+        },
+        "benefit4": {
+          "title": "Scalable Growth",
+          "description": "Access multiple lead managers to scale your acquisition"
+        }
+      },
+      "leadManagers": {
+        "title": "For Lead Managers",
+        "subtitle": "Monetize your network and expertise",
+        "benefit1": {
+          "title": "Flexible Work",
+          "description": "Choose offers that match your expertise and network"
+        },
+        "benefit2": {
+          "title": "Fair Compensation",
+          "description": "Earn competitive payouts for every qualified lead"
+        },
+        "benefit3": {
+          "title": "Clear Criteria",
+          "description": "Know exactly what constitutes a qualified lead upfront"
+        },
+        "benefit4": {
+          "title": "Instant Tracking",
+          "description": "Track your submissions and earnings in real-time"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "What Our Users Say",
+      "subtitle": "Trusted by sellers and lead managers worldwide",
+      "testimonial1": {
+        "quote": "LeadFlow transformed how we acquire customers. The quality of leads and transparency in the process is unmatched.",
+        "author": "María González",
+        "role": "CEO, TechSolutions Inc."
+      },
+      "testimonial2": {
+        "quote": "As a lead manager, I love the flexibility and clear criteria. I always know what's expected and get paid fairly for quality work.",
+        "author": "John Smith",
+        "role": "Lead Manager"
+      },
+      "testimonial3": {
+        "quote": "The platform streamlined our entire lead management process. We've seen a 3x increase in qualified leads since switching.",
+        "author": "Ana Martínez",
+        "role": "Sales Director, GlobalCorp"
+      }
+    },
+    "footer": {
+      "tagline": "The complete lead management platform",
+      "product": {
+        "title": "Product",
+        "features": "Features",
+        "pricing": "Pricing",
+        "security": "Security",
+        "roadmap": "Roadmap"
+      },
+      "company": {
+        "title": "Company",
+        "about": "About Us",
+        "careers": "Careers",
+        "contact": "Contact",
+        "blog": "Blog"
+      },
+      "resources": {
+        "title": "Resources",
+        "documentation": "Documentation",
+        "guides": "Guides",
+        "support": "Support",
+        "api": "API"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy"
+      },
+      "copyright": "© 2025 LeadFlow. All rights reserved."
+    }
+  },
   "login": {
     "selectRole": "Select your role to continue",
     "mockAuthInfo": "Mock authentication for development. Your selection will be stored in localStorage.",
