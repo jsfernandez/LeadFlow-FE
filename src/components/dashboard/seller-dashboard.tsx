@@ -26,7 +26,14 @@ export function SellerDashboard() {
   const totalProposals = proposalsForMyOffers.length;
   const wonProposals = proposalsForMyOffers.filter(p => p.status === "WON").length;
   const conversionRate = totalProposals > 0 ? ((wonProposals / totalProposals) * 100).toFixed(1) : "0.0";
-  const totalRevenue = wonProposals * (myOffers.reduce((sum, o) => sum + o.price, 0) / myOffers.length || 0);
+  
+  // Calculate total revenue from won proposals by matching actual offer prices
+  const totalRevenue = proposalsForMyOffers
+    .filter(p => p.status === "WON")
+    .reduce((sum, proposal) => {
+      const offer = myOffers.find(o => o.id === proposal.offerId);
+      return sum + (offer?.price || 0);
+    }, 0);
 
   // Generate revenue chart data (last 30 days)
   const generateRevenueData = () => {
