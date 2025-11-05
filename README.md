@@ -233,6 +233,46 @@ When using real mode, the following endpoints are expected:
 **Users**
 - `GET /users/:id` - Get user by ID
 
+## 🧪 Testing the Dual-Mode Setup
+
+### Testing Mock Mode
+
+1. Ensure `.env.local` has `NEXT_PUBLIC_API_MODE=mock`
+2. Start the development server:
+```bash
+npm run dev
+```
+3. Open the browser console and look for the log message:
+```
+[DataProvider] Using MOCK mode
+```
+4. The application will use in-memory mock data with simulated 300ms latency
+
+### Testing Real Mode
+
+1. Update `.env.local`:
+```env
+NEXT_PUBLIC_API_MODE=real
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
+2. Ensure your backend API is running on the specified URL
+3. Restart the development server:
+```bash
+npm run dev
+```
+4. Open the browser console and look for the log message:
+```
+[DataProvider] Using REAL API mode
+```
+5. The application will make actual HTTP requests to your backend
+
+### Verifying the Mode
+
+You can check which mode is active by:
+- Looking at the browser console logs when the app loads
+- Observing network requests in DevTools (real mode will show HTTP requests)
+- Checking response times (mock mode has consistent 300ms delay)
+
 ## 📝 Type Safety
 
 All business entities are strictly typed in `src/types/index.ts`:
