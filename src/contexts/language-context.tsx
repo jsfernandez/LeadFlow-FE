@@ -35,7 +35,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         return savedLanguage;
       }
     }
-    return "en";
+    return "es"; // Default to Spanish
   });
 
   // Set language and persist to localStorage
