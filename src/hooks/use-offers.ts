@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { mockProvider } from "@/lib/mockProvider";
 import type { Offer, OfferStatus } from "@/types";
+import { toast } from "sonner";
 
 /**
  * Hook for fetching all offers
@@ -35,7 +36,7 @@ export function useOffersBySeller(sellerId: string) {
 }
 
 /**
- * Hook for creating a new offer
+ * Hook for creating a new offer with optimistic update
  */
 export function useCreateOffer() {
   const queryClient = useQueryClient();
@@ -43,15 +44,49 @@ export function useCreateOffer() {
   return useMutation({
     mutationFn: (data: Omit<Offer, "id" | "createdAt" | "updatedAt">) =>
       mockProvider.createOffer(data),
+    onMutate: async (newOffer) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["offers"] });
+
+      // Snapshot the previous value
+      const previousOffers = queryClient.getQueryData<Offer[]>(["offers"]);
+
+      // Optimistically update to the new value
+      if (previousOffers) {
+        const optimisticOffer: Offer = {
+          ...newOffer,
+          id: `temp-${Date.now()}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        queryClient.setQueryData<Offer[]>(["offers"], [optimisticOffer, ...previousOffers]);
+      }
+
+      return { previousOffers };
+    },
     onSuccess: () => {
-      // Invalidate and refetch offers queries
+      toast.success("Success", {
+        description: "Offer created successfully",
+      });
+    },
+    onError: (error, _, context) => {
+      // Rollback on error
+      if (context?.previousOffers) {
+        queryClient.setQueryData(["offers"], context.previousOffers);
+      }
+      toast.error("Error", {
+        description: "Failed to create offer. Please try again.",
+      });
+    },
+    onSettled: () => {
+      // Always refetch after error or success
       queryClient.invalidateQueries({ queryKey: ["offers"] });
     },
   });
 }
 
 /**
- * Hook for updating an offer
+ * Hook for updating an offer with optimistic update
  */
 export function useUpdateOffer() {
   const queryClient = useQueryClient();
@@ -59,8 +94,35 @@ export function useUpdateOffer() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Offer> }) =>
       mockProvider.updateOffer(id, data),
-    onSuccess: (_, variables) => {
-      // Invalidate specific offer and all offers queries
+    onMutate: async ({ id, data }) => {
+      await queryClient.cancelQueries({ queryKey: ["offers", id] });
+      
+      const previousOffer = queryClient.getQueryData<Offer>(["offers", id]);
+      
+      if (previousOffer) {
+        queryClient.setQueryData<Offer>(["offers", id], {
+          ...previousOffer,
+          ...data,
+          updatedAt: new Date(),
+        });
+      }
+      
+      return { previousOffer };
+    },
+    onSuccess: () => {
+      toast.success("Success", {
+        description: "Offer updated successfully",
+      });
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousOffer) {
+        queryClient.setQueryData(["offers", variables.id], context.previousOffer);
+      }
+      toast.error("Error", {
+        description: "Failed to update offer. Please try again.",
+      });
+    },
+    onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({ queryKey: ["offers", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["offers"] });
     },
@@ -76,7 +138,17 @@ export function useUpdateOfferStatus() {
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: OfferStatus }) =>
       mockProvider.updateOffer(id, { status }),
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
+      toast.success("Success", {
+        description: "Offer status updated successfully",
+      });
+    },
+    onError: () => {
+      toast.error("Error", {
+        description: "Failed to update offer status. Please try again.",
+      });
+    },
+    onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({ queryKey: ["offers", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["offers"] });
     },
@@ -92,7 +164,15 @@ export function useDeleteOffer() {
   return useMutation({
     mutationFn: (id: string) => mockProvider.deleteOffer(id),
     onSuccess: () => {
+      toast.success("Success", {
+        description: "Offer deleted successfully",
+      });
       queryClient.invalidateQueries({ queryKey: ["offers"] });
+    },
+    onError: () => {
+      toast.error("Error", {
+        description: "Failed to delete offer. Please try again.",
+      });
     },
   });
 }

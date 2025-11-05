@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { mockProvider } from "@/lib/mockProvider";
+import { toast } from "sonner";
 
 /**
  * Hook for fetching all payouts
@@ -45,7 +46,7 @@ export function usePayoutsByManager(managerId: string) {
 }
 
 /**
- * Hook for updating payout status (admin only)
+ * Hook for updating payout status (admin only) with optimistic update
  */
 export function useUpdatePayoutStatus() {
   const queryClient = useQueryClient();
@@ -53,8 +54,17 @@ export function useUpdatePayoutStatus() {
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: "PENDING" | "PAID" }) =>
       mockProvider.updatePayoutStatus(id, status),
-    onSuccess: (_, variables) => {
-      // Invalidate specific payout and all payouts queries
+    onSuccess: () => {
+      toast.success("Success", {
+        description: "Payout marked as paid successfully",
+      });
+    },
+    onError: () => {
+      toast.error("Error", {
+        description: "Failed to update payout status. Please try again.",
+      });
+    },
+    onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({ queryKey: ["payouts", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["payouts"] });
     },

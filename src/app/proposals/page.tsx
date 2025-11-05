@@ -22,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useLeadOffersByManager, useCreateLeadOffer } from "@/hooks/use-lead-offers";
 import { useOffers } from "@/hooks/use-offers";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -29,8 +31,8 @@ import type { LeadStatus } from "@/types";
 
 export default function ProposalsPage() {
   const { user } = useAuth();
-  const { data: proposals, isLoading: proposalsLoading } = useLeadOffersByManager(user?.id || "");
-  const { data: offers } = useOffers();
+  const { data: proposals, isLoading: proposalsLoading, error } = useLeadOffersByManager(user?.id || "");
+  const { data: offers, isLoading: offersLoading } = useOffers();
   const createProposal = useCreateLeadOffer();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -62,6 +64,7 @@ export default function ProposalsPage() {
       });
       setIsCreateDialogOpen(false);
     } catch (error) {
+      // Error is handled by the mutation hook
       console.error("Failed to submit proposal:", error);
     }
   };
@@ -85,7 +88,12 @@ export default function ProposalsPage() {
           <h1 className="text-3xl font-bold">Proposals</h1>
           <p className="text-muted-foreground">Manage your lead proposals</p>
         </div>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>Submit Proposal</Button>
+        <Button 
+          onClick={() => setIsCreateDialogOpen(true)}
+          disabled={offersLoading || activeOffers.length === 0}
+        >
+          Submit Proposal
+        </Button>
       </div>
 
       <Card>
@@ -95,7 +103,11 @@ export default function ProposalsPage() {
         </CardHeader>
         <CardContent>
           {proposalsLoading ? (
-            <p className="text-sm text-muted-foreground">Loading proposals...</p>
+            <TableSkeleton rows={5} />
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-red-400">Failed to load proposals. Please try again.</p>
+            </div>
           ) : proposals && proposals.length > 0 ? (
             <Table>
               <TableHeader>
@@ -128,7 +140,15 @@ export default function ProposalsPage() {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-sm text-muted-foreground">You haven&apos;t submitted any proposals yet</p>
+            <EmptyState
+              icon={EmptyStateIcons.Clipboard}
+              title="No proposals yet"
+              description="You haven't submitted any proposals. Browse available offers and submit your first proposal to get started."
+              action={{
+                label: "Submit Proposal",
+                onClick: () => setIsCreateDialogOpen(true),
+              }}
+            />
           )}
         </CardContent>
       </Card>
@@ -212,6 +232,7 @@ export default function ProposalsPage() {
                 type="button"
                 variant="secondary"
                 onClick={() => setIsCreateDialogOpen(false)}
+                disabled={createProposal.isPending}
               >
                 Cancel
               </Button>

@@ -14,6 +14,27 @@ export type LeadStatus = "PENDING" | "WON" | "LOST";
 export type OfferStatus = "ACTIVE" | "INACTIVE" | "ARCHIVED";
 
 /**
+ * Pagination parameters
+ */
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+/**
+ * Paginated response wrapper
+ */
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+/**
  * Base user type
  */
 export interface User {

@@ -16,13 +16,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useOffers, useCreateOffer } from "@/hooks/use-offers";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { OfferStatus } from "@/types";
 
 export default function OffersPage() {
   const { user } = useAuth();
-  const { data: offers, isLoading } = useOffers();
+  const { data: offers, isLoading, error } = useOffers();
   const createOffer = useCreateOffer();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -50,6 +52,7 @@ export default function OffersPage() {
       setFormData({ title: "", description: "", price: "" });
       setIsCreateDialogOpen(false);
     } catch (error) {
+      // Error is handled by the mutation hook
       console.error("Failed to create offer:", error);
     }
   };
@@ -83,7 +86,11 @@ export default function OffersPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading offers...</p>
+            <TableSkeleton rows={5} />
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-red-400">Failed to load offers. Please try again.</p>
+            </div>
           ) : offers && offers.length > 0 ? (
             <Table>
               <TableHeader>
@@ -112,7 +119,23 @@ export default function OffersPage() {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-sm text-muted-foreground">No offers available yet</p>
+            <EmptyState
+              icon={EmptyStateIcons.Document}
+              title="No offers available"
+              description={
+                isSeller
+                  ? "Get started by creating your first offer"
+                  : "There are no active offers at the moment"
+              }
+              action={
+                isSeller
+                  ? {
+                      label: "Create Offer",
+                      onClick: () => setIsCreateDialogOpen(true),
+                    }
+                  : undefined
+              }
+            />
           )}
         </CardContent>
       </Card>
@@ -171,6 +194,7 @@ export default function OffersPage() {
                 type="button"
                 variant="secondary"
                 onClick={() => setIsCreateDialogOpen(false)}
+                disabled={createOffer.isPending}
               >
                 Cancel
               </Button>
