@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useTranslation } from "@/hooks/use-translation";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/types";
 
 interface NavItem {
-  title: string;
+  titleKey: string;
   href: string;
   icon: React.ReactNode;
   roles: UserRole[];
@@ -16,7 +17,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    title: "Dashboard",
+    titleKey: "navigation.dashboard",
     href: "/dashboard",
     icon: (
       <svg
@@ -39,7 +40,7 @@ const navItems: NavItem[] = [
     roles: ["SELLER", "LEAD_MANAGER", "ADMIN"],
   },
   {
-    title: "Offers",
+    titleKey: "navigation.offers",
     href: "/offers",
     icon: (
       <svg
@@ -60,7 +61,7 @@ const navItems: NavItem[] = [
     roles: ["SELLER", "LEAD_MANAGER", "ADMIN"],
   },
   {
-    title: "My Offers",
+    titleKey: "navigation.myOffers",
     href: "/my-offers",
     icon: (
       <svg
@@ -81,7 +82,7 @@ const navItems: NavItem[] = [
     roles: ["SELLER"],
   },
   {
-    title: "Proposals",
+    titleKey: "navigation.proposals",
     href: "/proposals",
     icon: (
       <svg
@@ -105,7 +106,7 @@ const navItems: NavItem[] = [
     roles: ["LEAD_MANAGER", "ADMIN"],
   },
   {
-    title: "Assignments",
+    titleKey: "navigation.assignments",
     href: "/assignments",
     icon: (
       <svg
@@ -128,7 +129,7 @@ const navItems: NavItem[] = [
     roles: ["LEAD_MANAGER", "ADMIN"],
   },
   {
-    title: "Payouts",
+    titleKey: "navigation.payouts",
     href: "/payouts",
     icon: (
       <svg
@@ -149,7 +150,7 @@ const navItems: NavItem[] = [
     roles: ["LEAD_MANAGER", "SELLER", "ADMIN"],
   },
   {
-    title: "Users",
+    titleKey: "navigation.users",
     href: "/users",
     icon: (
       <svg
@@ -180,6 +181,7 @@ const navItems: NavItem[] = [
 export function Sidebar({ className }: { className?: string }) {
   const { user } = useAuth();
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   if (!user) return null;
 
@@ -189,7 +191,7 @@ export function Sidebar({ className }: { className?: string }) {
   return (
     <aside className={cn("flex flex-col gap-4 pb-12", className)}>
       <div className="px-3 py-2">
-        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Navigation</h2>
+        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">{t("navigation.title")}</h2>
         <Separator className="mb-4" />
         <div className="space-y-1">
           {allowedNavItems.map((item) => {
@@ -206,7 +208,7 @@ export function Sidebar({ className }: { className?: string }) {
                 )}
               >
                 {item.icon}
-                {item.title}
+                {t(item.titleKey)}
               </Link>
             );
           })}
@@ -217,7 +219,7 @@ export function Sidebar({ className }: { className?: string }) {
         <Separator className="mb-4" />
         <div className="px-4 py-2">
           <p className="text-xs text-muted-foreground">
-            Logged in as <span className="font-medium text-foreground">{user.role.replace("_", " ")}</span>
+            {t("navigation.loggedInAs")} <span className="font-medium text-foreground">{user.role.replace("_", " ")}</span>
           </p>
         </div>
       </div>
