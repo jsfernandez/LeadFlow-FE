@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/stat-card";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useTranslation } from "@/hooks/use-translation";
 import { useOffersBySeller } from "@/hooks/use-offers";
 import { useLeadOffers } from "@/hooks/use-lead-offers";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
  */
 export function SellerDashboard() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { data: myOffers = [] } = useOffersBySeller(user?.id || "");
   const { data: allLeadOffers = [] } = useLeadOffers();
 
@@ -73,18 +75,18 @@ export function SellerDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Seller Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t("dashboard.seller.title")}</h1>
         <p className="text-muted-foreground">
-          Overview of your offers and performance metrics
+          {t("dashboard.seller.subtitle")}
         </p>
       </div>
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Active Offers"
+          title={t("dashboard.seller.activeOffers")}
           value={activeOffers}
-          description="Currently available"
+          description={t("dashboard.seller.currentlyAvailable")}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -104,9 +106,9 @@ export function SellerDashboard() {
         />
 
         <StatCard
-          title="Proposals Received"
+          title={t("dashboard.seller.proposalsReceived")}
           value={totalProposals}
-          description="Total submissions"
+          description={t("dashboard.seller.totalSubmissions")}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -126,9 +128,9 @@ export function SellerDashboard() {
         />
 
         <StatCard
-          title="Conversion Rate"
+          title={t("dashboard.seller.conversionRate")}
           value={`${conversionRate}%`}
-          description={`${wonProposals} won / ${totalProposals} total`}
+          description={`${wonProposals} ${t("dashboard.seller.wonTotal")} ${totalProposals}`}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -147,9 +149,9 @@ export function SellerDashboard() {
         />
 
         <StatCard
-          title="Estimated Revenue"
+          title={t("dashboard.seller.estimatedRevenue")}
           value={`$${totalRevenue.toFixed(0)}`}
-          description="From won proposals"
+          description={t("dashboard.seller.fromWonProposals")}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -175,8 +177,8 @@ export function SellerDashboard() {
         {/* Revenue Trend Chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Revenue Trend</CardTitle>
-            <CardDescription>Daily revenue from won proposals (last 7 days)</CardDescription>
+            <CardTitle>{t("dashboard.seller.revenueTrend")}</CardTitle>
+            <CardDescription>{t("dashboard.seller.revenueChartDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -226,8 +228,8 @@ export function SellerDashboard() {
         {/* Recent Offers */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Offers</CardTitle>
-            <CardDescription>Your latest created offers</CardDescription>
+            <CardTitle>{t("dashboard.seller.recentOffers")}</CardTitle>
+            <CardDescription>{t("dashboard.seller.latestCreatedOffers")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -253,7 +255,7 @@ export function SellerDashboard() {
               ))}
               {myOffers.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No offers created yet
+                  {t("dashboard.seller.noOffersCreated")}
                 </p>
               )}
             </div>
@@ -264,8 +266,8 @@ export function SellerDashboard() {
       {/* Proposals Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Proposals Summary</CardTitle>
-          <CardDescription>Recent proposals for your offers</CardDescription>
+          <CardTitle>{t("dashboard.seller.proposalsSummary")}</CardTitle>
+          <CardDescription>{t("dashboard.seller.recentProposalsForOffers")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -295,7 +297,7 @@ export function SellerDashboard() {
             })}
             {proposalsForMyOffers.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No proposals received yet
+                {t("dashboard.seller.noProposalsReceived")}
               </p>
             )}
           </div>
