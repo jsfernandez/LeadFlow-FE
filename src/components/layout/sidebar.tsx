@@ -219,7 +219,7 @@ export function Sidebar({ className }: { className?: string }) {
         <Separator className="mb-4" />
         <div className="px-4 py-2">
           <p className="text-xs text-muted-foreground">
-            {t("navigation.loggedInAs")} <span className="font-medium text-foreground">{user.role.replace("_", " ")}</span>
+            {t("navigation.loggedInAs")} <span className="font-medium text-foreground">{t(`users.roles.${user.role}`)}</span>
           </p>
         </div>
       </div>
