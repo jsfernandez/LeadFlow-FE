@@ -6,6 +6,9 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useLeadOffersByManager } from "@/hooks/use-lead-offers";
 import { usePayoutsByManager } from "@/hooks/use-payouts";
 import { Badge } from "@/components/ui/badge";
+import { ReputationBadge } from "@/components/ui/reputation-badge";
+import { RatingsList } from "@/components/ui/ratings-list";
+import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
@@ -16,6 +19,8 @@ export function LeadManagerDashboard() {
   const { user } = useAuth();
   const { data: myLeads = [] } = useLeadOffersByManager(user?.id || "");
   const { data: myPayouts = [] } = usePayoutsByManager(user?.id || "");
+  const { data: myReputation } = useUserReputation(user?.id || "");
+  const { data: myRatings = [] } = useUserRatings(user?.id || "");
 
   // Calculate metrics
   const totalLeads = myLeads.length;
@@ -41,6 +46,21 @@ export function LeadManagerDashboard() {
           Track your assigned leads and performance
         </p>
       </div>
+
+      {/* User Reputation Card - Prominent Display */}
+      {myReputation && myReputation.totalRatings > 0 && (
+        <Card className="border-primary/50 bg-gradient-to-br from-card to-card/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              Your Reputation
+              <ReputationBadge reputation={myReputation} variant="detailed" size="lg" />
+            </CardTitle>
+            <CardDescription>
+              Based on {myReputation.totalRatings} {myReputation.totalRatings === 1 ? 'rating' : 'ratings'} from sellers
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      )}
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -277,6 +297,35 @@ export function LeadManagerDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ratings & Reviews Section */}
+      {myRatings && myRatings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Your Ratings & Reviews</span>
+              {myReputation && (
+                <ReputationBadge reputation={myReputation} size="md" />
+              )}
+            </CardTitle>
+            <CardDescription>
+              Feedback from sellers who received your leads
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RatingsList 
+              ratings={myRatings.slice(0, 5)} 
+              showRaterInfo={true}
+              showRatedInfo={false}
+            />
+            {myRatings.length > 5 && (
+              <p className="text-sm text-muted-foreground text-center mt-4">
+                Showing 5 of {myRatings.length} ratings
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
