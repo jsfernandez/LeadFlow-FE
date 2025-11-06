@@ -301,7 +301,7 @@ export default function OffersPage() {
             <Card>
               <CardHeader>
                 <CardTitle>{t("offers.myOffers")}</CardTitle>
-                <CardDescription>Offers you have created</CardDescription>
+                <CardDescription>{t("myOffers.subtitle")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {renderOffersTable(myOffers, isLoadingMy, true)}

@@ -112,7 +112,7 @@ export function RatingModal({
               </div>
               {rating > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {rating} {rating === 1 ? "star" : t("ratings.stars")}
+                  {rating} {rating === 1 ? t("ratings.star") : t("ratings.stars")}
                 </p>
               )}
             </div>

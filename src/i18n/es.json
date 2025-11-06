@@ -452,6 +452,7 @@
     "averageRating": "Calificación Promedio",
     "ratings": "calificaciones",
     "noRatingsYet": "Sin calificaciones aún",
+    "star": "estrella",
     "stars": "estrellas"
   }
 }
