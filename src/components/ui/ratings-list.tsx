@@ -71,22 +71,22 @@ function RatingCard({
   });
 
   const getScoreColor = (score: number): string => {
-    if (score >= 4.5) return "text-emerald-500";
-    if (score >= 3.5) return "text-amber-500";
-    if (score >= 2.5) return "text-orange-500";
-    return "text-red-500";
+    if (score >= 4.5) return "text-emerald-400";
+    if (score >= 3.5) return "text-amber-400";
+    if (score >= 2.5) return "text-orange-400";
+    return "text-red-400";
   };
 
   const getContextLabel = (context: string): { label: string; variant: string } => {
     switch (context) {
       case "PROPOSAL_ACCEPTED":
-        return { label: "Accepted Proposal", variant: "bg-green-600 text-white" };
+        return { label: "Accepted Proposal", variant: "bg-green-700 text-green-100" };
       case "PROPOSAL_REJECTED":
-        return { label: "Rejected Proposal", variant: "bg-red-600 text-white" };
+        return { label: "Rejected Proposal", variant: "bg-red-700 text-red-100" };
       case "LEAD_MANAGER_RATED":
-        return { label: "Lead Manager Review", variant: "bg-blue-600 text-white" };
+        return { label: "Lead Manager Review", variant: "bg-blue-700 text-blue-100" };
       default:
-        return { label: "Review", variant: "bg-gray-600 text-white" };
+        return { label: "Review", variant: "bg-gray-700 text-gray-100" };
     }
   };
 

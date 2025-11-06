@@ -39,33 +39,33 @@ export function ReputationBadge({
     lg: 16,
   };
 
-  // Enhanced gradient colors based on rating
+  // Muted gradient colors based on rating - less bright, more subtle
   const getRatingStyle = (rating: number): { gradient: string; shadow: string; text: string } => {
     if (rating >= 4.5) {
       return {
-        gradient: "bg-gradient-to-r from-emerald-500 to-green-600",
-        shadow: "shadow-lg shadow-green-500/30",
-        text: "text-white"
+        gradient: "bg-gradient-to-r from-emerald-700 to-emerald-800",
+        shadow: "shadow-md shadow-emerald-900/20",
+        text: "text-emerald-100"
       };
     }
     if (rating >= 3.5) {
       return {
-        gradient: "bg-gradient-to-r from-amber-400 to-amber-600",
-        shadow: "shadow-lg shadow-amber-500/30",
-        text: "text-white"
+        gradient: "bg-gradient-to-r from-amber-600 to-amber-700",
+        shadow: "shadow-md shadow-amber-900/20",
+        text: "text-amber-100"
       };
     }
     if (rating >= 2.5) {
       return {
-        gradient: "bg-gradient-to-r from-orange-400 to-orange-600",
-        shadow: "shadow-lg shadow-orange-500/30",
-        text: "text-white"
+        gradient: "bg-gradient-to-r from-orange-600 to-orange-700",
+        shadow: "shadow-md shadow-orange-900/20",
+        text: "text-orange-100"
       };
     }
     return {
-      gradient: "bg-gradient-to-r from-red-400 to-red-600",
-      shadow: "shadow-lg shadow-red-500/30",
-      text: "text-white"
+      gradient: "bg-gradient-to-r from-red-700 to-red-800",
+      shadow: "shadow-md shadow-red-900/20",
+      text: "text-red-100"
     };
   };
 
