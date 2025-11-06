@@ -7,6 +7,7 @@ interface AuthContextValue {
   user: User | null;
   login: (role: UserRole) => void;
   logout: () => void;
+  updateUser: (updatedUser: User) => void;
   isAuthenticated: boolean;
 }
 
@@ -78,12 +79,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("leadmanager_user");
   };
 
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+    localStorage.setItem("leadmanager_user", JSON.stringify(updatedUser));
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         login,
         logout,
+        updateUser,
         isAuthenticated: user !== null,
       }}
     >
