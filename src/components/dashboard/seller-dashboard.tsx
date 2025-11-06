@@ -7,7 +7,13 @@ import { useTranslation } from "@/hooks/use-translation";
 import { useOffersBySeller } from "@/hooks/use-offers";
 import { useLeadOffers } from "@/hooks/use-lead-offers";
 import { Badge } from "@/components/ui/badge";
+import { ReputationBadge } from "@/components/ui/reputation-badge";
+import { RatingsList } from "@/components/ui/ratings-list";
+import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
+// Constants
+const MAX_DISPLAYED_RATINGS = 5;
 
 /**
  * SELLER Dashboard Component
@@ -18,6 +24,8 @@ export function SellerDashboard() {
   const { t } = useTranslation();
   const { data: myOffers = [] } = useOffersBySeller(user?.id || "");
   const { data: allLeadOffers = [] } = useLeadOffers();
+  const { data: myReputation } = useUserReputation(user?.id || "");
+  const { data: myRatings = [] } = useUserRatings(user?.id || "");
 
   // Filter proposals related to seller's offers
   const myOfferIds = myOffers.map(offer => offer.id);
@@ -80,6 +88,21 @@ export function SellerDashboard() {
           {t("dashboard.seller.subtitle")}
         </p>
       </div>
+
+      {/* User Reputation Card - Prominent Display */}
+      {myReputation && myReputation.totalRatings > 0 && (
+        <Card className="border-primary/50 bg-gradient-to-br from-card to-card/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              Your Reputation
+              <ReputationBadge reputation={myReputation} variant="detailed" size="lg" />
+            </CardTitle>
+            <CardDescription>
+              Based on {myReputation.totalRatings} {myReputation.totalRatings === 1 ? 'rating' : 'ratings'} from lead managers
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      )}
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -303,6 +326,35 @@ export function SellerDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ratings & Reviews Section */}
+      {myRatings && myRatings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Your Ratings & Reviews</span>
+              {myReputation && (
+                <ReputationBadge reputation={myReputation} size="md" />
+              )}
+            </CardTitle>
+            <CardDescription>
+              Feedback from lead managers who worked with your offers
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RatingsList 
+              ratings={myRatings.slice(0, MAX_DISPLAYED_RATINGS)} 
+              showRaterInfo={true}
+              showRatedInfo={false}
+            />
+            {myRatings.length > MAX_DISPLAYED_RATINGS && (
+              <p className="text-sm text-muted-foreground text-center mt-4">
+                Showing {MAX_DISPLAYED_RATINGS} of {myRatings.length} ratings
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
