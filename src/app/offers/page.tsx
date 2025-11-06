@@ -69,7 +69,9 @@ export default function OffersPage() {
         ...(formData.clientType && { clientType: formData.clientType }),
         ...(formData.acceptanceCriteria && { acceptanceCriteria: formData.acceptanceCriteria }),
         ...(formData.offerDuration && { offerDuration: parseInt(formData.offerDuration, 10) }),
-        ...(formData.allowConsultations && { allowConsultations: formData.allowConsultations === "yes" }),
+        ...(formData.allowConsultations && formData.allowConsultations !== "no" && { 
+          allowConsultations: formData.allowConsultations === "yes" 
+        }),
       };
 
       // Validate with Zod schema
@@ -157,7 +159,7 @@ export default function OffersPage() {
               </TableHeader>
               <TableBody>
                 {offers.map((offer) => (
-                  <TableRow key={offer.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableRow key={offer.id}>
                     <TableCell className="font-medium">{offer.title}</TableCell>
                     <TableCell className="max-w-md truncate">{offer.description}</TableCell>
                     <TableCell className="font-semibold text-primary">
