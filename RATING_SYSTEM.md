@@ -93,21 +93,25 @@ interface UserReputation {
 
 ## Translations
 
-### English
-- Title: "Rate User"
-- Your Rating: "Your Rating"
-- Stars: "Select rating (1-5 stars)"
-- Feedback: "Feedback (Optional)"
-- Placeholder: "Share your experience..."
-- Submit: "Submit Rating"
+### English (en.json)
+- `title`: "Rate User"
+- `yourRating`: "Your Rating"
+- `selectStars`: "Select rating (1-5 stars)"
+- `feedback`: "Feedback (Optional)"
+- `feedbackPlaceholder`: "Share your experience..."
+- `submit`: "Submit Rating"
+- `star`: "star"
+- `stars`: "stars"
 
-### Spanish (Español)
-- Title: "Calificar Usuario"
-- Your Rating: "Su Calificación"
-- Stars: "Seleccione calificación (1-5 estrellas)"
-- Feedback: "Comentarios (Opcional)"
-- Placeholder: "Comparta su experiencia..."
-- Submit: "Enviar Calificación"
+### Spanish (es.json)
+- `title`: "Calificar Usuario"
+- `yourRating`: "Su Calificación"
+- `selectStars`: "Seleccione calificación (1-5 estrellas)"
+- `feedback`: "Comentarios (Opcional)"
+- `feedbackPlaceholder`: "Comparta su experiencia..."
+- `submit`: "Enviar Calificación"
+- `star`: "estrella"
+- `stars`: "estrellas"
 
 ## How to Use
 
