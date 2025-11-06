@@ -43,6 +43,7 @@ export interface User {
   name: string;
   role: UserRole;
   language?: "en" | "es"; // User's preferred language
+  reputation?: UserReputation; // User's reputation from ratings
   createdAt: Date;
 }
 
@@ -93,4 +94,29 @@ export interface Payout {
   status: "PENDING" | "PAID";
   paidAt?: Date;
   createdAt: Date;
+}
+
+/**
+ * Rating entity for mutual rating system
+ */
+export interface Rating {
+  id: string;
+  raterId: string; // User who gave the rating
+  ratedUserId: string; // User who received the rating
+  score: number; // 1-5 stars
+  feedback?: string; // Optional feedback text
+  context: "PROPOSAL_ACCEPTED" | "PROPOSAL_REJECTED" | "LEAD_MANAGER_RATED"; // Context of rating
+  relatedOfferId?: string; // Related offer ID for context
+  relatedProposalId?: string; // Related proposal ID for context
+  createdAt: Date;
+}
+
+/**
+ * User reputation aggregate
+ */
+export interface UserReputation {
+  userId: string;
+  averageRating: number; // Average of all ratings (1-5)
+  totalRatings: number; // Number of ratings received
+  lastUpdated: Date;
 }

@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, LeadStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -25,6 +25,8 @@ class MockDataStore {
   private leadOffers: Map<string, LeadOffer> = new Map();
   private payouts: Map<string, Payout> = new Map();
   private users: Map<string, User> = new Map();
+  private ratings: Map<string, Rating> = new Map();
+  private reputations: Map<string, UserReputation> = new Map();
 
   constructor() {
     this.initializeMockData();
@@ -246,6 +248,78 @@ class MockDataStore {
         this.payouts.set(payout.id, payout);
       }
     });
+
+    // Sample ratings
+    const ratings: Rating[] = [
+      {
+        id: "rating-1",
+        raterId: seller1.id,
+        ratedUserId: leadManager1.id,
+        score: 5,
+        feedback: "Excellent quality leads! Very professional and responsive.",
+        context: "PROPOSAL_ACCEPTED",
+        relatedOfferId: "offer-1",
+        relatedProposalId: "lead-offer-1",
+        createdAt: new Date("2024-10-18"),
+      },
+      {
+        id: "rating-2",
+        raterId: leadManager1.id,
+        ratedUserId: seller1.id,
+        score: 4,
+        feedback: "Great offer, clear requirements. Communication could be faster.",
+        context: "LEAD_MANAGER_RATED",
+        relatedOfferId: "offer-1",
+        relatedProposalId: "lead-offer-2",
+        createdAt: new Date("2024-10-25"),
+      },
+      {
+        id: "rating-3",
+        raterId: seller1.id,
+        ratedUserId: leadManager1.id,
+        score: 4,
+        feedback: "Good work, leads were qualified but needed some follow-up.",
+        context: "PROPOSAL_ACCEPTED",
+        relatedOfferId: "offer-2",
+        relatedProposalId: "lead-offer-4",
+        createdAt: new Date("2024-11-02"),
+      },
+    ];
+
+    ratings.forEach(rating => this.ratings.set(rating.id, rating));
+
+    // Calculate and store reputations
+    this.calculateReputation(seller1.id);
+    this.calculateReputation(leadManager1.id);
+  }
+
+  /**
+   * Calculate and update user reputation based on all received ratings
+   */
+  private calculateReputation(userId: string): void {
+    const userRatings = Array.from(this.ratings.values()).filter(
+      rating => rating.ratedUserId === userId
+    );
+
+    if (userRatings.length > 0) {
+      const totalScore = userRatings.reduce((sum, rating) => sum + rating.score, 0);
+      const averageRating = totalScore / userRatings.length;
+
+      const reputation: UserReputation = {
+        userId,
+        averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
+        totalRatings: userRatings.length,
+        lastUpdated: new Date(),
+      };
+
+      this.reputations.set(userId, reputation);
+
+      // Update user with reputation
+      const user = this.users.get(userId);
+      if (user) {
+        user.reputation = reputation;
+      }
+    }
   }
 
   // ===== Offer Operations =====
@@ -460,6 +534,45 @@ class MockDataStore {
     this.users.set(userId, updatedUser);
     return updatedUser;
   }
+
+  // ===== Rating Operations =====
+
+  async createRating(
+    data: Omit<Rating, "id" | "createdAt">
+  ): Promise<Rating> {
+    await delay();
+    const newRating: Rating = {
+      ...data,
+      id: `rating-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date(),
+    };
+
+    this.ratings.set(newRating.id, newRating);
+    
+    // Recalculate reputation for the rated user
+    this.calculateReputation(data.ratedUserId);
+
+    return newRating;
+  }
+
+  async getRatingsByUser(userId: string): Promise<Rating[]> {
+    await delay();
+    return Array.from(this.ratings.values())
+      .filter((rating) => rating.ratedUserId === userId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getRatingsByRater(raterId: string): Promise<Rating[]> {
+    await delay();
+    return Array.from(this.ratings.values())
+      .filter((rating) => rating.raterId === raterId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getUserReputation(userId: string): Promise<UserReputation | null> {
+    await delay();
+    return this.reputations.get(userId) || null;
+  }
 }
 
 // Singleton instance
@@ -504,4 +617,11 @@ export const mockProvider = {
   getUserById: (id: string) => mockDataStore.getUserById(id),
   updateUserLanguage: (userId: string, language: "en" | "es") =>
     mockDataStore.updateUserLanguage(userId, language),
+
+  // Ratings
+  createRating: (data: Omit<Rating, "id" | "createdAt">) =>
+    mockDataStore.createRating(data),
+  getRatingsByUser: (userId: string) => mockDataStore.getRatingsByUser(userId),
+  getRatingsByRater: (raterId: string) => mockDataStore.getRatingsByRater(raterId),
+  getUserReputation: (userId: string) => mockDataStore.getUserReputation(userId),
 };
