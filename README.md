@@ -1,10 +1,10 @@
-# LeadFlow-FE
+# LeadManager-FE
 
 A modern, type-safe frontend application for managing leads, offers, proposals, and payouts. Built with Next.js 15, TypeScript, TailwindCSS, shadcn/ui, and React Query.
 
 ## 🎯 Project Overview
 
-LeadFlow is a lead management system that streamlines the workflow from offer creation to payout. The application supports role-based access control and follows this core business flow:
+LeadManager is a lead management system that streamlines the workflow from offer creation to payout. The application supports role-based access control and follows this core business flow:
 
 > **Offer creation → Proposal submission → Acceptance → Lead assignment → Qualification (WON/LOST) → Payout**
 
@@ -31,7 +31,7 @@ The application uses a **dark corporate theme** with the following color palette
 ## 📁 Project Structure
 
 ```
-LeadFlow-FE/
+LeadManager-FE/
 ├── src/
 │   ├── app/              # Next.js App Router pages
 │   │   ├── layout.tsx    # Root layout with providers
@@ -66,8 +66,8 @@ LeadFlow-FE/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/VamadorF/LeadFlow-FE.git
-cd LeadFlow-FE
+git clone https://github.com/VamadorF/LeadManager-FE.git
+cd LeadManager-FE
 ```
 
 2. Install dependencies:
@@ -296,7 +296,7 @@ This project is private and proprietary.
 
 ## 🔗 Related Projects
 
-- Backend API: [LeadFlow Backend Repository]
+- Backend API: [LeadManager Backend Repository]
 - Design System: Based on shadcn/ui components
 
 ---

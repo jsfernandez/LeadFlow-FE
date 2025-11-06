@@ -28,7 +28,7 @@
     "unpaid": "Unpaid"
   },
   "header": {
-    "title": "LeadFlow"
+    "title": "LeadManager"
   },
   "navigation": {
     "title": "Navigation",
@@ -319,7 +319,7 @@
       "title": "What Our Users Say",
       "subtitle": "Trusted by sellers and lead managers worldwide",
       "testimonial1": {
-        "quote": "LeadFlow transformed how we acquire customers. The quality of leads and transparency in the process is unmatched.",
+        "quote": "LeadManager transformed how we acquire customers. The quality of leads and transparency in the process is unmatched.",
         "author": "María González",
         "role": "CEO, TechSolutions Inc."
       },
@@ -363,7 +363,7 @@
         "terms": "Terms of Service",
         "cookies": "Cookie Policy"
       },
-      "copyright": "© 2025 LeadFlow. All rights reserved."
+      "copyright": "© 2025 LeadManager. All rights reserved."
     }
   },
   "login": {

@@ -8,7 +8,7 @@ import { AppLayout } from "@/components/layout/app-layout";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "LeadFlow - Lead Management System",
+  title: "LeadManager - Lead Management System",
   description: "Manage offers, proposals, lead assignments, and payouts in a streamlined workflow",
 };
 
