@@ -234,6 +234,138 @@
     "english": "Inglés",
     "spanish": "Español"
   },
+  "landing": {
+    "nav": {
+      "features": "Características",
+      "howItWorks": "Cómo Funciona",
+      "benefits": "Beneficios",
+      "testimonials": "Testimonios",
+      "getStarted": "Comenzar"
+    },
+    "hero": {
+      "title": "Transforme su Gestión de Leads",
+      "subtitle": "La plataforma completa para vendedores y gestores de leads para crear, rastrear y monetizar leads eficientemente",
+      "cta": "Comenzar Gratis",
+      "ctaSecondary": "Saber Más"
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "subtitle": "Un flujo de trabajo optimizado desde la creación de ofertas hasta el pago",
+      "step1": {
+        "title": "Crear Ofertas",
+        "description": "Los vendedores crean ofertas atractivas con precios y requisitos claros"
+      },
+      "step2": {
+        "title": "Enviar Propuestas",
+        "description": "Los gestores de leads envían propuestas calificadas para ofertas disponibles"
+      },
+      "step3": {
+        "title": "Aceptar y Asignar",
+        "description": "Los vendedores revisan y aceptan propuestas, creando asignaciones automáticamente"
+      },
+      "step4": {
+        "title": "Calificar Leads",
+        "description": "Los gestores de leads trabajan las asignaciones y las marcan como GANADAS o PERDIDAS"
+      },
+      "step5": {
+        "title": "Recibir Pago",
+        "description": "Generación automática de pagos para leads calificados exitosamente"
+      }
+    },
+    "benefits": {
+      "title": "Beneficios para Todos",
+      "sellers": {
+        "title": "Para Vendedores",
+        "subtitle": "Haga crecer su negocio con leads de calidad",
+        "benefit1": {
+          "title": "Control de Calidad",
+          "description": "Revise y apruebe solo los leads que cumplan sus criterios"
+        },
+        "benefit2": {
+          "title": "Precios Transparentes",
+          "description": "Establezca sus propios precios y pague solo por leads calificados"
+        },
+        "benefit3": {
+          "title": "Seguimiento de Rendimiento",
+          "description": "Monitoree tasas de conversión y ROI con análisis detallados"
+        },
+        "benefit4": {
+          "title": "Crecimiento Escalable",
+          "description": "Acceda a múltiples gestores de leads para escalar su adquisición"
+        }
+      },
+      "leadManagers": {
+        "title": "Para Gestores de Leads",
+        "subtitle": "Monetice su red y experiencia",
+        "benefit1": {
+          "title": "Trabajo Flexible",
+          "description": "Elija ofertas que coincidan con su experiencia y red"
+        },
+        "benefit2": {
+          "title": "Compensación Justa",
+          "description": "Gane pagos competitivos por cada lead calificado"
+        },
+        "benefit3": {
+          "title": "Criterios Claros",
+          "description": "Sepa exactamente qué constituye un lead calificado desde el principio"
+        },
+        "benefit4": {
+          "title": "Seguimiento Instantáneo",
+          "description": "Rastree sus envíos y ganancias en tiempo real"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Lo Que Dicen Nuestros Usuarios",
+      "subtitle": "Confianza de vendedores y gestores de leads en todo el mundo",
+      "testimonial1": {
+        "quote": "LeadFlow transformó cómo adquirimos clientes. La calidad de los leads y la transparencia del proceso no tiene comparación.",
+        "author": "María González",
+        "role": "CEO, TechSolutions Inc."
+      },
+      "testimonial2": {
+        "quote": "Como gestor de leads, me encanta la flexibilidad y los criterios claros. Siempre sé qué se espera y recibo un pago justo por un trabajo de calidad.",
+        "author": "John Smith",
+        "role": "Gestor de Leads"
+      },
+      "testimonial3": {
+        "quote": "La plataforma optimizó todo nuestro proceso de gestión de leads. Hemos visto un aumento de 3x en leads calificados desde que cambiamos.",
+        "author": "Ana Martínez",
+        "role": "Directora de Ventas, GlobalCorp"
+      }
+    },
+    "footer": {
+      "tagline": "La plataforma completa de gestión de leads",
+      "product": {
+        "title": "Producto",
+        "features": "Características",
+        "pricing": "Precios",
+        "security": "Seguridad",
+        "roadmap": "Hoja de Ruta"
+      },
+      "company": {
+        "title": "Empresa",
+        "about": "Sobre Nosotros",
+        "careers": "Carreras",
+        "contact": "Contacto",
+        "blog": "Blog"
+      },
+      "resources": {
+        "title": "Recursos",
+        "documentation": "Documentación",
+        "guides": "Guías",
+        "support": "Soporte",
+        "api": "API"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio",
+        "cookies": "Política de Cookies"
+      },
+      "copyright": "© 2025 LeadFlow. Todos los derechos reservados."
+    }
+  },
   "login": {
     "selectRole": "Seleccione su rol para continuar",
     "mockAuthInfo": "Autenticación simulada para desarrollo. Su selección se guardará en localStorage.",
