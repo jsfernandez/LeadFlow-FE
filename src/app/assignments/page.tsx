@@ -15,16 +15,44 @@ import {
 } from "@/components/ui/dialog";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
+import { RatingModal } from "@/components/ui/rating-modal";
 import { useLeadOffersByManager, useUpdateLeadOfferStatus } from "@/hooks/use-lead-offers";
+import { useCreateRating } from "@/hooks/use-ratings";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus, LeadOffer } from "@/types";
+import { dataProvider } from "@/lib/dataProvider";
+import { useQuery } from "@tanstack/react-query";
 
 export default function AssignmentsPage() {
   const { user } = useAuth();
   const { data: assignments, isLoading, error } = useLeadOffersByManager(user?.id || "");
   const updateStatus = useUpdateLeadOfferStatus();
+  const createRating = useCreateRating();
+  
   const [selectedAssignment, setSelectedAssignment] = useState<LeadOffer | null>(null);
   const [isQualifyDialogOpen, setIsQualifyDialogOpen] = useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [assignmentToRate, setAssignmentToRate] = useState<LeadOffer | null>(null);
+
+  // Fetch offer details for rating context
+  const { data: offerForRating } = useQuery({
+    queryKey: ["offer", assignmentToRate?.offerId],
+    queryFn: () =>
+      assignmentToRate?.offerId
+        ? dataProvider.getOfferById(assignmentToRate.offerId)
+        : null,
+    enabled: !!assignmentToRate?.offerId,
+  });
+
+  // Fetch seller details for rating
+  const { data: sellerForRating } = useQuery({
+    queryKey: ["user", offerForRating?.sellerId],
+    queryFn: () =>
+      offerForRating?.sellerId
+        ? dataProvider.getUserById(offerForRating.sellerId)
+        : null,
+    enabled: !!offerForRating?.sellerId,
+  });
 
   const handleQualify = async (status: "WON" | "LOST") => {
     if (!selectedAssignment) return;
@@ -45,6 +73,25 @@ export default function AssignmentsPage() {
   const openQualifyDialog = (assignment: LeadOffer) => {
     setSelectedAssignment(assignment);
     setIsQualifyDialogOpen(true);
+  };
+
+  const handleRateSeller = (assignment: LeadOffer) => {
+    setAssignmentToRate(assignment);
+    setIsRatingModalOpen(true);
+  };
+
+  const handleSubmitRating = async (score: number, feedback?: string) => {
+    if (!user || !assignmentToRate || !offerForRating) return;
+
+    await createRating.mutateAsync({
+      raterId: user.id,
+      ratedUserId: offerForRating.sellerId,
+      score,
+      feedback,
+      context: "LEAD_MANAGER_RATED",
+      relatedOfferId: assignmentToRate.offerId,
+      relatedProposalId: assignmentToRate.id,
+    });
   };
 
   const getStatusBadge = (status: LeadStatus) => {
@@ -144,6 +191,7 @@ export default function AssignmentsPage() {
                   <TableHead>Status</TableHead>
                   <TableHead>Submitted</TableHead>
                   <TableHead>Qualified</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -160,6 +208,15 @@ export default function AssignmentsPage() {
                       {assignment.qualifiedAt
                         ? new Date(assignment.qualifiedAt).toLocaleDateString()
                         : "-"}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleRateSeller(assignment)}
+                      >
+                        Rate Company
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -239,6 +296,19 @@ export default function AssignmentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Rating Modal */}
+      <RatingModal
+        open={isRatingModalOpen}
+        onOpenChange={setIsRatingModalOpen}
+        onSubmit={handleSubmitRating}
+        title="Rate Company"
+        description={
+          sellerForRating
+            ? `Rate ${sellerForRating.name} for this offer`
+            : "Rate this company"
+        }
+      />
     </div>
   );
 }

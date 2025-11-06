@@ -24,10 +24,13 @@ import {
 } from "@/components/ui/select";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
+import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { useLeadOffersByManager, useCreateLeadOffer } from "@/hooks/use-lead-offers";
 import { useOffers } from "@/hooks/use-offers";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus } from "@/types";
+import { dataProvider } from "@/lib/dataProvider";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProposalsPage() {
   const { user } = useAuth();
@@ -79,6 +82,40 @@ export default function ProposalsPage() {
     return <Badge className={variants[status]}>{status}</Badge>;
   };
 
+  // Component to display offer with seller reputation
+  // NOTE: This creates an N+1 query pattern. For optimization in production,
+  // consider prefetching offer and seller data at the parent level or implementing
+  // data aggregation in the API.
+  const OfferCell = ({ offerId }: { offerId: string }) => {
+    const { data: offer } = useQuery({
+      queryKey: ["offer", offerId],
+      queryFn: () => dataProvider.getOfferById(offerId),
+      enabled: !!offerId,
+    });
+
+    const { data: seller } = useQuery({
+      queryKey: ["user", offer?.sellerId],
+      queryFn: () => offer?.sellerId ? dataProvider.getUserById(offer.sellerId) : null,
+      enabled: !!offer?.sellerId,
+    });
+
+    if (!offer) {
+      return <span className="text-sm text-muted-foreground">Loading...</span>;
+    }
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="text-sm font-medium">{offer.title}</span>
+        {seller?.reputation && (
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-muted-foreground">{seller.name}</span>
+            <ReputationBadge reputation={seller.reputation} size="sm" />
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const activeOffers = offers?.filter((offer) => offer.status === "ACTIVE") || [];
 
   return (
@@ -115,6 +152,7 @@ export default function ProposalsPage() {
                   <TableHead>Customer Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
+                  <TableHead>Offer / Company</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Submitted</TableHead>
                   <TableHead>Qualified</TableHead>
@@ -126,6 +164,9 @@ export default function ProposalsPage() {
                     <TableCell className="font-medium">{proposal.customerName}</TableCell>
                     <TableCell>{proposal.customerEmail}</TableCell>
                     <TableCell>{proposal.customerPhone}</TableCell>
+                    <TableCell>
+                      <OfferCell offerId={proposal.offerId} />
+                    </TableCell>
                     <TableCell>{getStatusBadge(proposal.status)}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(proposal.createdAt).toLocaleDateString()}

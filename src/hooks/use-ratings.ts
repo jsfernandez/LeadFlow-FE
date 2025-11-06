@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { dataProvider } from "@/lib/dataProvider";
-import type { Rating, UserReputation } from "@/types";
+import type { Rating } from "@/types";
 import { toast } from "sonner";
 
 /**
