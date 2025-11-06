@@ -11,6 +11,9 @@ import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
+// Constants
+const MAX_DISPLAYED_RATINGS = 5;
+
 /**
  * LEAD_MANAGER Dashboard Component
  * Shows assigned leads, won ratio, pending actions, and performance metrics
@@ -314,13 +317,13 @@ export function LeadManagerDashboard() {
           </CardHeader>
           <CardContent>
             <RatingsList 
-              ratings={myRatings.slice(0, 5)} 
+              ratings={myRatings.slice(0, MAX_DISPLAYED_RATINGS)} 
               showRaterInfo={true}
               showRatedInfo={false}
             />
-            {myRatings.length > 5 && (
+            {myRatings.length > MAX_DISPLAYED_RATINGS && (
               <p className="text-sm text-muted-foreground text-center mt-4">
-                Showing 5 of {myRatings.length} ratings
+                Showing {MAX_DISPLAYED_RATINGS} of {myRatings.length} ratings
               </p>
             )}
           </CardContent>
