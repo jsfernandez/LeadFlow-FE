@@ -1,19 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/language-context";
-import { useRouter } from "next/navigation";
+import { LoginForm } from "@/components/auth/login-form";
+import { RegisterForm } from "@/components/auth/register-form";
 
 /**
  * Public Landing Page Component
  * Full dark corporate design with responsive layout
  * Includes: hero, how it works, benefits, testimonials, footer
  * Bilingual support (ENG/ESP) via language toggle in header
+ * Authentication forms available via login/register dialogs
  */
 export default function LandingPage() {
   const { t, language, setLanguage } = useLanguage();
-  const router = useRouter();
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+
+  const openLoginDialog = () => {
+    setAuthMode("login");
+    setAuthDialogOpen(true);
+  };
+
+  const openRegisterDialog = () => {
+    setAuthMode("register");
+    setAuthDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,7 +97,10 @@ export default function LandingPage() {
                 ESP
               </button>
             </div>
-            <Button onClick={() => router.push("/")} size="sm">
+            <Button onClick={openLoginDialog} variant="ghost" size="sm">
+              {t("auth.login.title")}
+            </Button>
+            <Button onClick={openRegisterDialog} size="sm">
               {t("landing.nav.getStarted")}
             </Button>
           </div>
@@ -100,7 +118,7 @@ export default function LandingPage() {
               {t("landing.hero.subtitle")}
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button size="lg" onClick={() => router.push("/")} className="w-full sm:w-auto">
+              <Button size="lg" onClick={openRegisterDialog} className="w-full sm:w-auto">
                 {t("landing.hero.cta")}
               </Button>
               <Button size="lg" variant="outline" onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })} className="w-full sm:w-auto">
@@ -537,6 +555,21 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Authentication Dialog */}
+      <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          {authMode === "login" ? (
+            <LoginForm
+              onToggleToRegister={() => setAuthMode("register")}
+            />
+          ) : (
+            <RegisterForm
+              onToggleToLogin={() => setAuthMode("login")}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
