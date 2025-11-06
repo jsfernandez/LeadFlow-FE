@@ -415,6 +415,7 @@
       "hasAccount": "Already have an account?",
       "signIn": "Sign In",
       "passwordMismatch": "Passwords do not match",
+      "roleRequired": "Please select a role",
       "error": "Registration failed. Please try again."
     }
   }

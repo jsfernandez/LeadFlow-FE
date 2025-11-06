@@ -415,6 +415,7 @@
       "hasAccount": "¿Ya tiene una cuenta?",
       "signIn": "Iniciar Sesión",
       "passwordMismatch": "Las contraseñas no coinciden",
+      "roleRequired": "Por favor seleccione un rol",
       "error": "Registro fallido. Por favor, inténtelo de nuevo."
     }
   }

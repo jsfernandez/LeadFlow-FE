@@ -42,7 +42,7 @@ export function LoginForm({ onToggleToRegister }: LoginFormProps) {
 
       const role = emailToRole[email.toLowerCase()];
       
-      if (!role || password.length < 1) {
+      if (!role || !password.trim()) {
         setError(t("auth.login.error"));
         setIsLoading(false);
         return;

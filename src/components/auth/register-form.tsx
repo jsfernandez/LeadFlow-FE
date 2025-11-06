@@ -45,7 +45,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
 
     // Validate role selection
     if (!formData.role) {
-      setError(t("auth.register.error"));
+      setError(t("auth.register.roleRequired"));
       return;
     }
 
@@ -54,6 +54,8 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
     try {
       // Mock registration - in real app, this would call an API to create the user
       // For now, we'll just log them in with the selected role
+      // Note: Admin role is intentionally excluded from registration for security.
+      // Admin users should be created through a separate administrative process.
       login(formData.role);
       
       // Redirect to dashboard
