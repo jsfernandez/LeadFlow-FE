@@ -1,30 +1,33 @@
 "use client";
 
 import { useAuth } from "@/components/providers/auth-provider";
-import { SellerDashboard } from "@/components/dashboard/seller-dashboard";
-import { LeadManagerDashboard } from "@/components/dashboard/lead-manager-dashboard";
-import { AdminDashboard } from "@/components/dashboard/admin-dashboard";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 /**
  * Main Dashboard Page
- * Routes to role-specific dashboard based on user role
+ * Redirects to role-specific dashboard based on user role
  */
 export default function DashboardPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
-  // Route to appropriate dashboard based on user role
-  if (user?.role === "SELLER") {
-    return <SellerDashboard />;
-  }
+  useEffect(() => {
+    if (user) {
+      // Redirect to role-specific dashboard
+      const roleRoutes = {
+        SELLER: "/dashboard/seller",
+        LEAD_MANAGER: "/dashboard/lead-manager",
+        ADMIN: "/dashboard/admin",
+      };
+      
+      const targetRoute = roleRoutes[user.role];
+      if (targetRoute) {
+        router.replace(targetRoute);
+      }
+    }
+  }, [user, router]);
 
-  if (user?.role === "LEAD_MANAGER") {
-    return <LeadManagerDashboard />;
-  }
-
-  if (user?.role === "ADMIN") {
-    return <AdminDashboard />;
-  }
-
-  // Fallback - shouldn't reach here if auth is working
+  // Show nothing while redirecting
   return null;
 }

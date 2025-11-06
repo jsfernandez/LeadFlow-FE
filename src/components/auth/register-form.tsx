@@ -58,8 +58,13 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       // Admin users should be created through a separate administrative process.
       login(formData.role);
       
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect to role-specific dashboard
+      const roleRoutes = {
+        SELLER: "/dashboard/seller",
+        LEAD_MANAGER: "/dashboard/lead-manager",
+        ADMIN: "/dashboard/admin",
+      };
+      router.push(roleRoutes[formData.role]);
     } catch {
       setError(t("auth.register.error"));
       setIsLoading(false);

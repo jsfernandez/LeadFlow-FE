@@ -51,8 +51,13 @@ export function LoginForm({ onToggleToRegister }: LoginFormProps) {
       // Mock login - in real app, this would call an API
       login(role);
       
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect to role-specific dashboard
+      const roleRoutes = {
+        SELLER: "/dashboard/seller",
+        LEAD_MANAGER: "/dashboard/lead-manager",
+        ADMIN: "/dashboard/admin",
+      };
+      router.push(roleRoutes[role]);
     } catch {
       setError(t("auth.login.error"));
       setIsLoading(false);
