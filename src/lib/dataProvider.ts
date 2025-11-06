@@ -46,6 +46,7 @@ export interface DataProvider {
 
   // User operations
   getUserById(id: string): Promise<User | null>;
+  updateUserLanguage(userId: string, language: "en" | "es"): Promise<User | null>;
 }
 
 /**

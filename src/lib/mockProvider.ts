@@ -446,6 +446,20 @@ class MockDataStore {
     await delay();
     return this.users.get(id) || null;
   }
+
+  async updateUserLanguage(userId: string, language: "en" | "es"): Promise<User | null> {
+    await delay();
+    const user = this.users.get(userId);
+    if (!user) return null;
+
+    const updatedUser: User = {
+      ...user,
+      language,
+    };
+
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
 }
 
 // Singleton instance
@@ -488,4 +502,6 @@ export const mockProvider = {
 
   // Users
   getUserById: (id: string) => mockDataStore.getUserById(id),
+  updateUserLanguage: (userId: string, language: "en" | "es") =>
+    mockDataStore.updateUserLanguage(userId, language),
 };

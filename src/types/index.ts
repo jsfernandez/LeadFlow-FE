@@ -42,6 +42,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  language?: "en" | "es"; // User's preferred language
   createdAt: Date;
 }
 

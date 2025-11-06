@@ -20,16 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="font-sans antialiased">
-        <LanguageProvider>
-          <ThemeProvider>
-            <ReactQueryProvider>
-              <AuthProvider>
+        <ThemeProvider>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <LanguageProvider>
                 <AppLayout>{children}</AppLayout>
                 <Toaster />
-              </AuthProvider>
-            </ReactQueryProvider>
-          </ThemeProvider>
-        </LanguageProvider>
+              </LanguageProvider>
+            </AuthProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

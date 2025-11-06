@@ -4,6 +4,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import type { UserRole } from "@/types";
 
 const roleColors: Record<UserRole, string> = {
@@ -13,7 +14,7 @@ const roleColors: Record<UserRole, string> = {
 };
 
 /**
- * Header component with logo, user info, and logout button
+ * Header component with logo, user info, language switcher, and logout button
  * Shows role badge and provides mobile menu trigger
  */
 export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void }) {
@@ -73,6 +74,9 @@ export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
         </div>
 
         <div className="flex-1" />
+
+        {/* Language Switcher */}
+        <LanguageSwitcher />
 
         {/* User info */}
         {user && (

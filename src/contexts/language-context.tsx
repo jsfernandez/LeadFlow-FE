@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
+import { useAuth } from "@/components/providers/auth-provider";
+import { dataProvider } from "@/lib/dataProvider";
 import enTranslations from "@/i18n/en.json";
 import esTranslations from "@/i18n/es.json";
 
@@ -24,11 +26,13 @@ const translations = {
 /**
  * Language Provider Component
  * Manages language state and provides translation functionality
- * Persists language choice in localStorage
+ * Syncs language preference with backend and persists in localStorage
  */
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Initialize language from localStorage (client-side only)
-  const [language, setLanguageState] = useState<Language>(() => {
+  const { user, updateUser } = useAuth();
+  
+  // Initialize language from localStorage or default to Spanish
+  const [localLanguage, setLocalLanguage] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const savedLanguage = localStorage.getItem("leadmanager-language") as Language;
       if (savedLanguage && (savedLanguage === "en" || savedLanguage === "es")) {
@@ -38,11 +42,29 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return "es"; // Default to Spanish
   });
 
-  // Set language and persist to localStorage
-  const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
+  // Use user's language preference if available, otherwise use local language
+  const language = user?.language || localLanguage;
+
+  // Set language and persist to localStorage and backend
+  const setLanguage = async (lang: Language) => {
+    setLocalLanguage(lang);
+    
+    // Persist to localStorage
     if (typeof window !== "undefined") {
       localStorage.setItem("leadmanager-language", lang);
+    }
+
+    // Sync with backend if user is authenticated
+    if (user) {
+      try {
+        const updatedUser = await dataProvider.updateUserLanguage(user.id, lang);
+        if (updatedUser) {
+          updateUser(updatedUser);
+        }
+      } catch (error) {
+        console.error("Failed to update user language preference:", error);
+        // Continue anyway - localStorage is already updated
+      }
     }
   };
 

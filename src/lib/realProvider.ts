@@ -51,6 +51,7 @@ interface UserDTO {
   email: string;
   name: string;
   role: "SELLER" | "LEAD_MANAGER" | "ADMIN";
+  language?: "en" | "es";
   createdAt: string;
 }
 
@@ -297,6 +298,21 @@ export const realProvider = {
         return null;
       }
       console.error("[RealProvider] Error fetching user:", error);
+      throw error;
+    }
+  },
+
+  async updateUserLanguage(userId: string, language: "en" | "es"): Promise<User | null> {
+    try {
+      const response = await apiClient.patch<UserDTO>(`/users/${userId}/language`, {
+        language,
+      });
+      return transformUser(response);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating user language:", error);
       throw error;
     }
   },
