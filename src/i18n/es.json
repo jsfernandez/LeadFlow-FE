@@ -25,7 +25,9 @@
     "won": "Ganado",
     "lost": "Perdido",
     "paid": "Pagado",
-    "unpaid": "No Pagado"
+    "unpaid": "No Pagado",
+    "viewDetails": "Ver Detalles",
+    "createProposal": "Crear Propuesta"
   },
   "header": {
     "title": "LeadManager"
@@ -136,12 +138,15 @@
     "subtitle": "Explore y gestione las ofertas disponibles",
     "createOffer": "Crear Oferta",
     "allOffers": "Todas las Ofertas",
+    "myOffers": "Mis Ofertas",
     "listDescription": "Lista de todas las ofertas disponibles en el sistema",
     "offerTitle": "Título",
     "description": "Descripción",
     "price": "Precio",
     "status": "Estado",
     "seller": "Vendedor",
+    "company": "Empresa",
+    "reputation": "Reputación",
     "createdAt": "Creado el",
     "actions": "Acciones",
     "noOffersAvailable": "No hay ofertas disponibles",
@@ -156,6 +161,19 @@
       "titlePlaceholder": "ej., Paquete de Leads Premium",
       "descriptionPlaceholder": "Describa lo que incluye la oferta...",
       "pricePlaceholder": "0.00"
+    },
+    "proposalDialog": {
+      "title": "Enviar Propuesta",
+      "description": "Proporcione información del cliente para esta oferta",
+      "customerName": "Nombre del Cliente",
+      "customerEmail": "Email del Cliente",
+      "customerPhone": "Teléfono del Cliente",
+      "namePlaceholder": "ej., Juan Pérez",
+      "emailPlaceholder": "cliente@ejemplo.com",
+      "phonePlaceholder": "+34-555-0100",
+      "submit": "Enviar Propuesta",
+      "success": "Propuesta enviada exitosamente",
+      "error": "Error al enviar la propuesta"
     }
   },
   "myOffers": {
@@ -418,5 +436,22 @@
       "roleRequired": "Por favor seleccione un rol",
       "error": "Registro fallido. Por favor, inténtelo de nuevo."
     }
+  },
+  "ratings": {
+    "title": "Calificar Usuario",
+    "rateLeadManager": "Calificar Gestor de Leads",
+    "rateCompany": "Calificar Empresa",
+    "yourRating": "Su Calificación",
+    "selectStars": "Seleccione calificación (1-5 estrellas)",
+    "feedback": "Comentarios (Opcional)",
+    "feedbackPlaceholder": "Comparta su experiencia...",
+    "submit": "Enviar Calificación",
+    "cancel": "Cancelar",
+    "success": "Calificación enviada exitosamente",
+    "error": "Error al enviar la calificación",
+    "averageRating": "Calificación Promedio",
+    "ratings": "calificaciones",
+    "noRatingsYet": "Sin calificaciones aún",
+    "stars": "estrellas"
   }
 }
