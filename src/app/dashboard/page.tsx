@@ -3,6 +3,7 @@
 import { useAuth } from "@/components/providers/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getDashboardRoute } from "@/lib/routes";
 
 /**
  * Main Dashboard Page
@@ -15,16 +16,8 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user) {
       // Redirect to role-specific dashboard
-      const roleRoutes = {
-        SELLER: "/dashboard/seller",
-        LEAD_MANAGER: "/dashboard/lead-manager",
-        ADMIN: "/dashboard/admin",
-      };
-      
-      const targetRoute = roleRoutes[user.role];
-      if (targetRoute) {
-        router.replace(targetRoute);
-      }
+      const targetRoute = getDashboardRoute(user.role);
+      router.replace(targetRoute);
     }
   }, [user, router]);
 

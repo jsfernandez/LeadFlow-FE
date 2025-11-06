@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
+import { getDashboardRoute } from "@/lib/routes";
 import type { UserRole } from "@/types";
 
 interface LoginFormProps {
@@ -52,12 +53,7 @@ export function LoginForm({ onToggleToRegister }: LoginFormProps) {
       login(role);
       
       // Redirect to role-specific dashboard
-      const roleRoutes = {
-        SELLER: "/dashboard/seller",
-        LEAD_MANAGER: "/dashboard/lead-manager",
-        ADMIN: "/dashboard/admin",
-      };
-      router.push(roleRoutes[role]);
+      router.push(getDashboardRoute(role));
     } catch {
       setError(t("auth.login.error"));
       setIsLoading(false);

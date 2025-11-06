@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
+import { getDashboardRoute } from "@/lib/routes";
 import type { UserRole } from "@/types";
 
 interface RegisterFormProps {
@@ -59,12 +60,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       login(formData.role);
       
       // Redirect to role-specific dashboard
-      const roleRoutes = {
-        SELLER: "/dashboard/seller",
-        LEAD_MANAGER: "/dashboard/lead-manager",
-        ADMIN: "/dashboard/admin",
-      };
-      router.push(roleRoutes[formData.role]);
+      router.push(getDashboardRoute(formData.role));
     } catch {
       setError(t("auth.register.error"));
       setIsLoading(false);
