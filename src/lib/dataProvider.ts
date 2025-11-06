@@ -8,7 +8,7 @@
 
 import { mockProvider } from "./mockProvider";
 import { realProvider } from "./realProvider";
-import type { Offer, LeadOffer, Payout, User, LeadStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
 
 /**
  * Data provider interface
@@ -47,6 +47,12 @@ export interface DataProvider {
   // User operations
   getUserById(id: string): Promise<User | null>;
   updateUserLanguage(userId: string, language: "en" | "es"): Promise<User | null>;
+
+  // Rating operations
+  createRating(data: Omit<Rating, "id" | "createdAt">): Promise<Rating>;
+  getRatingsByUser(userId: string): Promise<Rating[]>;
+  getRatingsByRater(raterId: string): Promise<Rating[]>;
+  getUserReputation(userId: string): Promise<UserReputation | null>;
 }
 
 /**

@@ -25,7 +25,9 @@
     "won": "Won",
     "lost": "Lost",
     "paid": "Paid",
-    "unpaid": "Unpaid"
+    "unpaid": "Unpaid",
+    "viewDetails": "View Details",
+    "createProposal": "Create Proposal"
   },
   "header": {
     "title": "LeadManager"
@@ -136,12 +138,15 @@
     "subtitle": "Browse and manage available offers",
     "createOffer": "Create Offer",
     "allOffers": "All Offers",
+    "myOffers": "My Offers",
     "listDescription": "List of all available offers in the system",
     "offerTitle": "Title",
     "description": "Description",
     "price": "Price",
     "status": "Status",
     "seller": "Seller",
+    "company": "Company",
+    "reputation": "Reputation",
     "createdAt": "Created At",
     "actions": "Actions",
     "noOffersAvailable": "No offers available",
@@ -156,6 +161,19 @@
       "titlePlaceholder": "e.g., Premium Lead Package",
       "descriptionPlaceholder": "Describe what the offer includes...",
       "pricePlaceholder": "0.00"
+    },
+    "proposalDialog": {
+      "title": "Submit Proposal",
+      "description": "Provide customer information for this offer",
+      "customerName": "Customer Name",
+      "customerEmail": "Customer Email",
+      "customerPhone": "Customer Phone",
+      "namePlaceholder": "e.g., John Doe",
+      "emailPlaceholder": "customer@example.com",
+      "phonePlaceholder": "+1-555-0100",
+      "submit": "Submit Proposal",
+      "success": "Proposal submitted successfully",
+      "error": "Failed to submit proposal"
     }
   },
   "myOffers": {
@@ -418,5 +436,23 @@
       "roleRequired": "Please select a role",
       "error": "Registration failed. Please try again."
     }
+  },
+  "ratings": {
+    "title": "Rate User",
+    "rateLeadManager": "Rate Lead Manager",
+    "rateCompany": "Rate Company",
+    "yourRating": "Your Rating",
+    "selectStars": "Select rating (1-5 stars)",
+    "feedback": "Feedback (Optional)",
+    "feedbackPlaceholder": "Share your experience...",
+    "submit": "Submit Rating",
+    "cancel": "Cancel",
+    "success": "Rating submitted successfully",
+    "error": "Failed to submit rating",
+    "averageRating": "Average Rating",
+    "ratings": "ratings",
+    "noRatingsYet": "No ratings yet",
+    "star": "star",
+    "stars": "stars"
   }
 }

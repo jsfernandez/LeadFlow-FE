@@ -7,7 +7,7 @@
  */
 
 import { apiClient, ApiError } from "./apiClient";
-import type { Offer, LeadOffer, Payout, User, LeadStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
 
 /**
  * API response types (DTOs from backend)
@@ -53,6 +53,25 @@ interface UserDTO {
   role: "SELLER" | "LEAD_MANAGER" | "ADMIN";
   language?: "en" | "es";
   createdAt: string;
+}
+
+interface RatingDTO {
+  id: string;
+  raterId: string;
+  ratedUserId: string;
+  score: number;
+  feedback?: string;
+  context: "PROPOSAL_ACCEPTED" | "PROPOSAL_REJECTED" | "LEAD_MANAGER_RATED";
+  relatedOfferId?: string;
+  relatedProposalId?: string;
+  createdAt: string;
+}
+
+interface UserReputationDTO {
+  userId: string;
+  averageRating: number;
+  totalRatings: number;
+  lastUpdated: string;
 }
 
 /**
@@ -104,6 +123,26 @@ function transformUser(data: UserDTO): User {
   return {
     ...data,
     createdAt: parseDate(data.createdAt) || new Date(),
+  };
+}
+
+/**
+ * Transform API rating response to typed Rating
+ */
+function transformRating(data: RatingDTO): Rating {
+  return {
+    ...data,
+    createdAt: parseDate(data.createdAt) || new Date(),
+  };
+}
+
+/**
+ * Transform API user reputation response to typed UserReputation
+ */
+function transformUserReputation(data: UserReputationDTO): UserReputation {
+  return {
+    ...data,
+    lastUpdated: parseDate(data.lastUpdated) || new Date(),
   };
 }
 
@@ -313,6 +352,40 @@ export const realProvider = {
         return null;
       }
       console.error("[RealProvider] Error updating user language:", error);
+      throw error;
+    }
+  },
+
+  // ===== Rating Operations =====
+
+  async createRating(data: Omit<Rating, "id" | "createdAt">): Promise<Rating> {
+    const response = await apiClient.post<RatingDTO>("/ratings", data);
+    return transformRating(response);
+  },
+
+  async getRatingsByUser(userId: string): Promise<Rating[]> {
+    const data = await apiClient.get<RatingDTO[]>("/ratings", {
+      params: { ratedUserId: userId },
+    });
+    return data.map(transformRating);
+  },
+
+  async getRatingsByRater(raterId: string): Promise<Rating[]> {
+    const data = await apiClient.get<RatingDTO[]>("/ratings", {
+      params: { raterId },
+    });
+    return data.map(transformRating);
+  },
+
+  async getUserReputation(userId: string): Promise<UserReputation | null> {
+    try {
+      const data = await apiClient.get<UserReputationDTO>(`/users/${userId}/reputation`);
+      return transformUserReputation(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching user reputation:", error);
       throw error;
     }
   },
