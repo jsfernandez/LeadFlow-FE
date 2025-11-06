@@ -55,6 +55,13 @@ export interface Offer {
   price: number;
   status: OfferStatus;
   sellerId: string;
+  // Optional fields for extended offer details
+  leadType?: string;
+  leadQuantity?: number;
+  clientType?: string;
+  acceptanceCriteria?: string;
+  offerDuration?: number; // in days
+  allowConsultations?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
