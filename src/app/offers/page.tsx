@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
+import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { useOffers, useOffersBySeller, useCreateOffer, useUpdateOfferStatus } from "@/hooks/use-offers";
 import { useCreateLeadOffer } from "@/hooks/use-lead-offers";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -33,6 +34,8 @@ import { useTranslation } from "@/hooks/use-translation";
 import type { OfferStatus, Offer } from "@/types";
 import { createOfferSchema } from "@/lib/schemas/offer.schema";
 import { toast } from "sonner";
+import { dataProvider } from "@/lib/dataProvider";
+import { useQuery } from "@tanstack/react-query";
 
 export default function OffersPage() {
   const { user } = useAuth();
@@ -170,6 +173,28 @@ export default function OffersPage() {
     return <Badge className={variants[status]}>{status}</Badge>;
   };
 
+  // Component to display seller info with reputation
+  const SellerCell = ({ sellerId }: { sellerId: string }) => {
+    const { data: seller } = useQuery({
+      queryKey: ["user", sellerId],
+      queryFn: () => dataProvider.getUserById(sellerId),
+      enabled: !!sellerId,
+    });
+
+    if (!seller) {
+      return <span className="text-sm text-muted-foreground">Loading...</span>;
+    }
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="text-sm font-medium">{seller.name}</span>
+        {seller.reputation && (
+          <ReputationBadge reputation={seller.reputation} size="sm" />
+        )}
+      </div>
+    );
+  };
+
   const renderOffersTable = (offers: Offer[] | undefined, isLoading: boolean, showActions: boolean = false) => {
     if (isLoading) {
       return <TableSkeleton rows={5} />;
@@ -205,6 +230,7 @@ export default function OffersPage() {
             <TableHead>{t("offers.description")}</TableHead>
             <TableHead>{t("offers.price")}</TableHead>
             <TableHead>{t("offers.status")}</TableHead>
+            {!showActions && <TableHead>{t("offers.company")}</TableHead>}
             <TableHead>{t("offers.createdAt")}</TableHead>
             <TableHead className="text-right">{t("offers.actions")}</TableHead>
           </TableRow>
@@ -218,6 +244,11 @@ export default function OffersPage() {
                 ${offer.price.toFixed(2)}
               </TableCell>
               <TableCell>{getStatusBadge(offer.status)}</TableCell>
+              {!showActions && (
+                <TableCell>
+                  <SellerCell sellerId={offer.sellerId} />
+                </TableCell>
+              )}
               <TableCell className="text-sm text-muted-foreground">
                 {new Date(offer.createdAt).toLocaleDateString()}
               </TableCell>
