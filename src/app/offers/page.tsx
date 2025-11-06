@@ -174,6 +174,9 @@ export default function OffersPage() {
   };
 
   // Component to display seller info with reputation
+  // NOTE: This creates an N+1 query pattern. For optimization in production,
+  // consider including seller data in the initial offers query or implementing
+  // batch fetching at the parent level.
   const SellerCell = ({ sellerId }: { sellerId: string }) => {
     const { data: seller } = useQuery({
       queryKey: ["user", sellerId],

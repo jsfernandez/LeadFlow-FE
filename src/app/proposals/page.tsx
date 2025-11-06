@@ -83,6 +83,9 @@ export default function ProposalsPage() {
   };
 
   // Component to display offer with seller reputation
+  // NOTE: This creates an N+1 query pattern. For optimization in production,
+  // consider prefetching offer and seller data at the parent level or implementing
+  // data aggregation in the API.
   const OfferCell = ({ offerId }: { offerId: string }) => {
     const { data: offer } = useQuery({
       queryKey: ["offer", offerId],

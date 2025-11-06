@@ -63,12 +63,17 @@ export default function MyOffersPage() {
   const handleSubmitRating = async (score: number, feedback?: string) => {
     if (!user || !selectedProposal || !leadManagerForRating) return;
 
-    const context = 
-      selectedProposal.status === "WON" 
-        ? ("PROPOSAL_ACCEPTED" as const)
-        : selectedProposal.status === "LOST"
-        ? ("PROPOSAL_REJECTED" as const)
-        : ("PROPOSAL_ACCEPTED" as const);
+    // Determine rating context based on proposal status
+    let context: "PROPOSAL_ACCEPTED" | "PROPOSAL_REJECTED" | "LEAD_MANAGER_RATED";
+    if (selectedProposal.status === "WON") {
+      context = "PROPOSAL_ACCEPTED";
+    } else if (selectedProposal.status === "LOST") {
+      context = "PROPOSAL_REJECTED";
+    } else {
+      // Pending proposals shouldn't be rated, but handle gracefully
+      console.warn("Attempting to rate a PENDING proposal");
+      context = "PROPOSAL_ACCEPTED";
+    }
 
     await createRating.mutateAsync({
       raterId: user.id,
