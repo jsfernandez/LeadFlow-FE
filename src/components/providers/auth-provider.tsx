@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 function loadUserFromStorage(): User | null {
   if (typeof window === "undefined") return null;
   
-  const storedUser = localStorage.getItem("leadflow_user");
+  const storedUser = localStorage.getItem("leadmanager_user");
   if (!storedUser) return null;
 
   try {
@@ -30,7 +30,7 @@ function loadUserFromStorage(): User | null {
     };
   } catch (error) {
     console.error("Failed to parse stored user:", error);
-    localStorage.removeItem("leadflow_user");
+    localStorage.removeItem("leadmanager_user");
     return null;
   }
 }
@@ -47,21 +47,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const mockUsers: Record<UserRole, User> = {
       SELLER: {
         id: "seller-1",
-        email: "seller@leadflow.com",
+        email: "seller@leadmanager.com",
         name: "John Seller",
         role: "SELLER",
         createdAt: new Date(),
       },
       LEAD_MANAGER: {
         id: "lead-manager-1",
-        email: "manager@leadflow.com",
+        email: "manager@leadmanager.com",
         name: "Jane Manager",
         role: "LEAD_MANAGER",
         createdAt: new Date(),
       },
       ADMIN: {
         id: "admin-1",
-        email: "admin@leadflow.com",
+        email: "admin@leadmanager.com",
         name: "Admin User",
         role: "ADMIN",
         createdAt: new Date(),
@@ -70,12 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const newUser = mockUsers[role];
     setUser(newUser);
-    localStorage.setItem("leadflow_user", JSON.stringify(newUser));
+    localStorage.setItem("leadmanager_user", JSON.stringify(newUser));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("leadflow_user");
+    localStorage.removeItem("leadmanager_user");
   };
 
   return (

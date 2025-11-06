@@ -1,6 +1,6 @@
-# Getting Started with LeadFlow-FE
+# Getting Started with LeadManager-FE
 
-Welcome to the LeadFlow Frontend project! This guide will help you get up and running quickly.
+Welcome to the LeadManager Frontend project! This guide will help you get up and running quickly.
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ npm run format  # Format all code with Prettier
 
 ## Project Overview
 
-LeadFlow is a lead management system that follows this workflow:
+LeadManager is a lead management system that follows this workflow:
 
 **Offer Creation → Proposal Submission → Acceptance → Lead Assignment → Qualification (WON/LOST) → Payout**
 
@@ -119,7 +119,7 @@ The application will support:
 
 Configure via environment variable:
 ```env
-NEXT_PUBLIC_API_URL=https://api.leadflow.example.com
+NEXT_PUBLIC_API_URL=https://api.leadmanager.example.com
 ```
 
 ## Development Tips

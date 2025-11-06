@@ -52,7 +52,7 @@ class ApiClient {
   private getAuthToken(): string | null {
     if (typeof window === "undefined") return null;
     
-    const storedUser = localStorage.getItem("leadflow_user");
+    const storedUser = localStorage.getItem("leadmanager_user");
     if (!storedUser) return null;
 
     try {

@@ -37,7 +37,7 @@ class MockDataStore {
     // Sample users
     const seller1: User = {
       id: "seller-1",
-      email: "seller@leadflow.com",
+      email: "seller@leadmanager.com",
       name: "John Seller",
       role: "SELLER",
       createdAt: new Date("2024-01-01"),
@@ -45,7 +45,7 @@ class MockDataStore {
 
     const leadManager1: User = {
       id: "lead-manager-1",
-      email: "manager@leadflow.com",
+      email: "manager@leadmanager.com",
       name: "Jane Manager",
       role: "LEAD_MANAGER",
       createdAt: new Date("2024-01-01"),
@@ -53,7 +53,7 @@ class MockDataStore {
     
     const admin1: User = {
       id: "admin-1",
-      email: "admin@leadflow.com",
+      email: "admin@leadmanager.com",
       name: "Admin User",
       role: "ADMIN",
       createdAt: new Date("2024-01-01"),

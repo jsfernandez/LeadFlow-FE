@@ -30,7 +30,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // Initialize language from localStorage (client-side only)
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window !== "undefined") {
-      const savedLanguage = localStorage.getItem("leadflow-language") as Language;
+      const savedLanguage = localStorage.getItem("leadmanager-language") as Language;
       if (savedLanguage && (savedLanguage === "en" || savedLanguage === "es")) {
         return savedLanguage;
       }
@@ -42,7 +42,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== "undefined") {
-      localStorage.setItem("leadflow-language", lang);
+      localStorage.setItem("leadmanager-language", lang);
     }
   };
 

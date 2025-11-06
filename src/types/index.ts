@@ -1,5 +1,5 @@
 /**
- * User roles in the LeadFlow system
+ * User roles in the LeadManager system
  */
 export type UserRole = "SELLER" | "LEAD_MANAGER" | "ADMIN";
 
