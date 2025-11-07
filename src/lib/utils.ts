@@ -38,7 +38,7 @@ export function isCorporateEmail(email: string): boolean {
     return false;
   }
 
-  const domain = email.split("@")[1]?.toLowerCase();
+  const domain = email.trim().split("@")[1]?.toLowerCase();
   if (!domain) {
     return false;
   }

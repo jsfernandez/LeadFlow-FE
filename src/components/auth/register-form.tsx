@@ -101,7 +101,6 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
     }
   };
 
-  const isRoleSelected = formData.role !== "";
   const isSeller = formData.role === "SELLER";
 
   return (
@@ -165,7 +164,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
             required
             disabled={isLoading}
           />
-          {isSeller && isRoleSelected && (
+          {isSeller && (
             <p className="text-xs text-muted-foreground">
               {t("auth.register.corporateEmailHint")}
             </p>
