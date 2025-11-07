@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
 import { getDashboardRoute } from "@/lib/routes";
+import { isCorporateEmail } from "@/lib/utils";
 import type { UserRole } from "@/types";
 
 interface RegisterFormProps {
@@ -17,26 +18,52 @@ interface RegisterFormProps {
 
 /**
  * Register Form Component
- * Provides user registration with name, email, password, role selection
- * Currently uses mock registration - in production, this would call the backend API
+ * Provides user registration with role-based email validation
+ * - SELLER: requires corporate email (rejects free providers)
+ * - LEAD_MANAGER: allows any email
+ * Role selection is prioritized and shown first
  */
 export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
   const { login } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "" as UserRole | "",
+  
+  // Initialize role from localStorage if available
+  const [formData, setFormData] = useState(() => {
+    const savedRole = typeof window !== "undefined" 
+      ? localStorage.getItem("registration_role") 
+      : null;
+    
+    return {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: (savedRole === "SELLER" || savedRole === "LEAD_MANAGER" ? savedRole : "") as UserRole | "",
+    };
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Save role to localStorage when it changes
+  const handleRoleChange = (role: UserRole) => {
+    setFormData({ ...formData, role });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("registration_role", role);
+    }
+    // Clear email error when role changes
+    setError("");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Validate role selection
+    if (!formData.role) {
+      setError(t("auth.register.roleRequired"));
+      return;
+    }
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -44,9 +71,9 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       return;
     }
 
-    // Validate role selection
-    if (!formData.role) {
-      setError(t("auth.register.roleRequired"));
+    // Validate corporate email for sellers
+    if (formData.role === "SELLER" && !isCorporateEmail(formData.email)) {
+      setError(t("auth.register.corporateEmailRequired"));
       return;
     }
 
@@ -59,6 +86,11 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       // Admin users should be created through a separate administrative process.
       login(formData.role);
       
+      // Clear saved role from localStorage after successful registration
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("registration_role");
+      }
+      
       // Redirect to role-specific dashboard
       router.push(getDashboardRoute(formData.role));
     } catch {
@@ -66,6 +98,9 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       setIsLoading(false);
     }
   };
+
+  const isRoleSelected = formData.role !== "";
+  const isSeller = formData.role === "SELLER";
 
   return (
     <div className="w-full">
@@ -75,6 +110,28 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Role Selection - Prioritized at the top */}
+        <div className="space-y-2">
+          <Label htmlFor="role" className="text-base font-semibold">
+            {t("auth.register.role")} <span className="text-destructive">*</span>
+          </Label>
+          <Select
+            value={formData.role}
+            onValueChange={handleRoleChange}
+            disabled={isLoading}
+            required
+          >
+            <SelectTrigger id="role" className="h-11">
+              <SelectValue placeholder={t("auth.register.role")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="SELLER">{t("auth.register.roleSeller")}</SelectItem>
+              <SelectItem value="LEAD_MANAGER">{t("auth.register.roleLeadManager")}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Name Field */}
         <div className="space-y-2">
           <Label htmlFor="name">{t("auth.register.name")}</Label>
           <Input
@@ -88,19 +145,32 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
           />
         </div>
 
+        {/* Email Field - Changes based on role */}
         <div className="space-y-2">
-          <Label htmlFor="email">{t("auth.register.email")}</Label>
+          <Label htmlFor="email">
+            {isSeller ? t("auth.register.corporateEmail") : t("auth.register.email")}
+          </Label>
           <Input
             id="email"
             type="email"
-            placeholder={t("auth.register.emailPlaceholder")}
+            placeholder={
+              isSeller 
+                ? t("auth.register.corporateEmailPlaceholder") 
+                : t("auth.register.emailPlaceholder")
+            }
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
             disabled={isLoading}
           />
+          {isSeller && isRoleSelected && (
+            <p className="text-xs text-muted-foreground">
+              {t("auth.register.corporateEmailHint")}
+            </p>
+          )}
         </div>
 
+        {/* Password Field */}
         <div className="space-y-2">
           <Label htmlFor="password">{t("auth.register.password")}</Label>
           <Input
@@ -115,6 +185,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
           />
         </div>
 
+        {/* Confirm Password Field */}
         <div className="space-y-2">
           <Label htmlFor="confirmPassword">{t("auth.register.confirmPassword")}</Label>
           <Input
@@ -127,23 +198,6 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
             disabled={isLoading}
             minLength={6}
           />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="role">{t("auth.register.role")}</Label>
-          <Select
-            value={formData.role}
-            onValueChange={(value) => setFormData({ ...formData, role: value as UserRole })}
-            disabled={isLoading}
-          >
-            <SelectTrigger id="role">
-              <SelectValue placeholder={t("auth.register.role")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="SELLER">{t("auth.register.roleSeller")}</SelectItem>
-              <SelectItem value="LEAD_MANAGER">{t("auth.register.roleLeadManager")}</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         {error && (
