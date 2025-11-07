@@ -17,6 +17,15 @@ interface RegisterFormProps {
 }
 
 /**
+ * Get the saved role from localStorage (client-side only)
+ */
+function getSavedRole(): UserRole | "" {
+  if (typeof window === "undefined") return "";
+  const savedRole = localStorage.getItem("registration_role");
+  return (savedRole === "SELLER" || savedRole === "LEAD_MANAGER") ? savedRole : "";
+}
+
+/**
  * Register Form Component
  * Provides user registration with role-based email validation
  * - SELLER: requires corporate email (rejects free providers)
@@ -28,20 +37,13 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
   const { t } = useLanguage();
   const router = useRouter();
   
-  // Initialize role from localStorage if available
-  const [formData, setFormData] = useState(() => {
-    const savedRole = typeof window !== "undefined" 
-      ? localStorage.getItem("registration_role") 
-      : null;
-    
-    return {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      role: (savedRole === "SELLER" || savedRole === "LEAD_MANAGER" ? savedRole : "") as UserRole | "",
-    };
-  });
+  const [formData, setFormData] = useState(() => ({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: getSavedRole(),
+  }));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -113,7 +115,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
         {/* Role Selection - Prioritized at the top */}
         <div className="space-y-2">
           <Label htmlFor="role" className="text-base font-semibold">
-            {t("auth.register.role")} <span className="text-destructive">*</span>
+            {t("auth.register.role")} <span className="text-destructive" aria-label="required">*</span>
           </Label>
           <Select
             value={formData.role}
@@ -121,7 +123,7 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
             disabled={isLoading}
             required
           >
-            <SelectTrigger id="role" className="h-11">
+            <SelectTrigger id="role" className="h-11" aria-required="true">
               <SelectValue placeholder={t("auth.register.role")} />
             </SelectTrigger>
             <SelectContent>
