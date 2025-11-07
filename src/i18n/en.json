@@ -422,6 +422,9 @@
       "namePlaceholder": "Enter your full name",
       "email": "Email",
       "emailPlaceholder": "Enter your email",
+      "corporateEmail": "Corporate Email",
+      "corporateEmailPlaceholder": "Enter your company email",
+      "corporateEmailHint": "Sellers must use a corporate email address",
       "password": "Password",
       "passwordPlaceholder": "Create a password",
       "confirmPassword": "Confirm Password",
@@ -434,6 +437,7 @@
       "signIn": "Sign In",
       "passwordMismatch": "Passwords do not match",
       "roleRequired": "Please select a role",
+      "corporateEmailRequired": "Sellers must use a corporate email address (Gmail, Outlook, Yahoo, and Hotmail are not allowed)",
       "error": "Registration failed. Please try again."
     }
   },

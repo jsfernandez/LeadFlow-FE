@@ -422,6 +422,9 @@
       "namePlaceholder": "Ingrese su nombre completo",
       "email": "Correo Electrónico",
       "emailPlaceholder": "Ingrese su correo electrónico",
+      "corporateEmail": "Correo Electrónico Corporativo",
+      "corporateEmailPlaceholder": "Ingrese su correo corporativo",
+      "corporateEmailHint": "Los vendedores deben usar una dirección de correo corporativa",
       "password": "Contraseña",
       "passwordPlaceholder": "Cree una contraseña",
       "confirmPassword": "Confirmar Contraseña",
@@ -434,6 +437,7 @@
       "signIn": "Iniciar Sesión",
       "passwordMismatch": "Las contraseñas no coinciden",
       "roleRequired": "Por favor seleccione un rol",
+      "corporateEmailRequired": "Los vendedores deben usar una dirección de correo corporativa (Gmail, Outlook, Yahoo y Hotmail no están permitidos)",
       "error": "Registro fallido. Por favor, inténtelo de nuevo."
     }
   },
