@@ -174,7 +174,11 @@ export function Sidebar({ className }: { className?: string }) {
         <Separator className="mb-4" />
         <div className="space-y-1">
           {allowedNavItems.map((item) => {
-            const isActive = pathname === item.href;
+            // Use prefix match for dashboard to handle role-specific routes
+            // e.g., /dashboard/seller, /dashboard/lead-manager, /dashboard/admin
+            const isActive = item.href === "/dashboard" 
+              ? pathname.startsWith(item.href)
+              : pathname === item.href;
             return (
               <Link
                 key={item.href}
