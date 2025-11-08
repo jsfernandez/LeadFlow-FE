@@ -69,7 +69,7 @@ export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
             </svg>
           </div>
           <h1 className="text-xl font-bold">
-            Lead<span className="text-primary">Flow</span>
+            Lead<span className="text-primary">Manager</span>
           </h1>
         </div>
 
