@@ -22,8 +22,10 @@ import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus, LeadOffer } from "@/types";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function AssignmentsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { data: assignments, isLoading, error } = useLeadOffersByManager(user?.id || "");
   const updateStatus = useUpdateLeadOfferStatus();
@@ -111,33 +113,33 @@ export default function AssignmentsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Assignments</h1>
-        <p className="text-muted-foreground">View and manage your lead assignments</p>
+        <h1 className="text-3xl font-bold">{t("assignments.title")}</h1>
+        <p className="text-muted-foreground">{t("assignments.subtitle")}</p>
       </div>
 
       {/* Pending Assignments - Need Action */}
       <Card className="border-primary/50">
         <CardHeader>
-          <CardTitle>Pending Qualification</CardTitle>
-          <CardDescription>Leads assigned to you that need to be qualified</CardDescription>
+          <CardTitle>{t("assignments.pendingQualification")}</CardTitle>
+          <CardDescription>{t("assignments.leadsAssignedNeedQualified")}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <TableSkeleton rows={3} />
           ) : error ? (
             <div className="text-center py-8">
-              <p className="text-sm text-red-400">Failed to load assignments. Please try again.</p>
+              <p className="text-sm text-red-400">{t("assignments.failedToLoad")}</p>
             </div>
           ) : pendingAssignments.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>{t("assignments.customerName")}</TableHead>
+                  <TableHead>{t("assignments.email")}</TableHead>
+                  <TableHead>{t("assignments.phone")}</TableHead>
+                  <TableHead>{t("assignments.status")}</TableHead>
+                  <TableHead>{t("assignments.submitted")}</TableHead>
+                  <TableHead>{t("assignments.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -155,7 +157,7 @@ export default function AssignmentsPage() {
                         size="sm"
                         onClick={() => openQualifyDialog(assignment)}
                       >
-                        Qualify Lead
+                        {t("assignments.qualifyLead")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -165,8 +167,8 @@ export default function AssignmentsPage() {
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Clipboard}
-              title="No pending assignments"
-              description="All your leads have been qualified. Great work!"
+              title={t("assignments.noPendingAssignments")}
+              description={t("assignments.allQualified")}
             />
           )}
         </CardContent>
@@ -175,8 +177,8 @@ export default function AssignmentsPage() {
       {/* Qualified Assignments - History */}
       <Card>
         <CardHeader>
-          <CardTitle>Qualification History</CardTitle>
-          <CardDescription>Previously qualified leads</CardDescription>
+          <CardTitle>{t("assignments.qualificationHistory")}</CardTitle>
+          <CardDescription>{t("assignments.previouslyQualifiedLeads")}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -185,13 +187,13 @@ export default function AssignmentsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Qualified</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>{t("assignments.customerName")}</TableHead>
+                  <TableHead>{t("assignments.email")}</TableHead>
+                  <TableHead>{t("assignments.phone")}</TableHead>
+                  <TableHead>{t("assignments.status")}</TableHead>
+                  <TableHead>{t("assignments.submitted")}</TableHead>
+                  <TableHead>{t("assignments.qualified")}</TableHead>
+                  <TableHead>{t("assignments.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -215,7 +217,7 @@ export default function AssignmentsPage() {
                         variant="outline"
                         onClick={() => handleRateSeller(assignment)}
                       >
-                        Rate Company
+                        {t("assignments.rateCompany")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -225,8 +227,8 @@ export default function AssignmentsPage() {
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Document}
-              title="No qualified leads yet"
-              description="Qualified leads will appear here once you mark them as WON or LOST"
+              title={t("assignments.noQualifiedLeadsYet")}
+              description={t("assignments.qualifiedLeadsAppear")}
             />
           )}
         </CardContent>
@@ -236,9 +238,9 @@ export default function AssignmentsPage() {
       <Dialog open={isQualifyDialogOpen} onOpenChange={setIsQualifyDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Qualify Lead</DialogTitle>
+            <DialogTitle>{t("assignments.qualifyLeadTitle")}</DialogTitle>
             <DialogDescription>
-              Mark this lead as WON or LOST based on the outcome
+              {t("assignments.qualifyLeadDescription")}
             </DialogDescription>
           </DialogHeader>
 
@@ -246,35 +248,35 @@ export default function AssignmentsPage() {
             <div className="space-y-4 py-4">
               <div className="rounded-lg bg-muted p-4 space-y-2">
                 <div>
-                  <p className="text-sm font-medium">Customer</p>
+                  <p className="text-sm font-medium">{t("assignments.customer")}</p>
                   <p className="text-sm text-muted-foreground">{selectedAssignment.customerName}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Email</p>
+                  <p className="text-sm font-medium">{t("assignments.email")}</p>
                   <p className="text-sm text-muted-foreground">{selectedAssignment.customerEmail}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Phone</p>
+                  <p className="text-sm font-medium">{t("assignments.phone")}</p>
                   <p className="text-sm text-muted-foreground">{selectedAssignment.customerPhone}</p>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium">Select Outcome</p>
+                <p className="text-sm font-medium">{t("assignments.selectOutcome")}</p>
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     onClick={() => handleQualify("WON")}
                     disabled={updateStatus.isPending}
                     className="bg-green-600 hover:bg-green-700 text-white"
                   >
-                    {updateStatus.isPending ? "Processing..." : "Mark as WON"}
+                    {updateStatus.isPending ? t("assignments.processing") : t("assignments.markAsWonButton")}
                   </Button>
                   <Button
                     onClick={() => handleQualify("LOST")}
                     disabled={updateStatus.isPending}
                     variant="destructive"
                   >
-                    {updateStatus.isPending ? "Processing..." : "Mark as LOST"}
+                    {updateStatus.isPending ? t("assignments.processing") : t("assignments.markAsLostButton")}
                   </Button>
                 </div>
               </div>
@@ -291,7 +293,7 @@ export default function AssignmentsPage() {
               }}
               disabled={updateStatus.isPending}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -302,11 +304,11 @@ export default function AssignmentsPage() {
         open={isRatingModalOpen}
         onOpenChange={setIsRatingModalOpen}
         onSubmit={handleSubmitRating}
-        title="Rate Company"
+        title={t("ratings.rateCompany")}
         description={
           sellerForRating
-            ? `Rate ${sellerForRating.name} for this offer`
-            : "Rate this company"
+            ? t("ratings.rateUser").replace("{name}", sellerForRating.name)
+            : t("ratings.rateCompany")
         }
       />
     </div>

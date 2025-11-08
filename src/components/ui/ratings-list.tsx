@@ -7,6 +7,7 @@ import type { Rating } from "@/types";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { dataProvider } from "@/lib/dataProvider";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface RatingsListProps {
   ratings: Rating[];
@@ -25,11 +26,13 @@ export function RatingsList({
   showRatedInfo = false,
   className 
 }: RatingsListProps) {
+  const { t } = useTranslation();
+
   if (!ratings || ratings.length === 0) {
     return (
       <div className="text-center py-12">
         <Star className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-        <p className="text-sm text-muted-foreground">No ratings yet</p>
+        <p className="text-sm text-muted-foreground">{t("ratings.noRatingsYet")}</p>
       </div>
     );
   }
@@ -57,6 +60,8 @@ function RatingCard({
   showRaterInfo: boolean;
   showRatedInfo: boolean;
 }) {
+  const { t } = useTranslation();
+
   // Fetch user info if needed
   const { data: rater } = useQuery({
     queryKey: ["user", rating.raterId],
@@ -80,13 +85,13 @@ function RatingCard({
   const getContextLabel = (context: string): { label: string; variant: string } => {
     switch (context) {
       case "PROPOSAL_ACCEPTED":
-        return { label: "Accepted Proposal", variant: "bg-green-700 text-green-100" };
+        return { label: t("ratings.contextAcceptedProposal"), variant: "bg-green-700 text-green-100" };
       case "PROPOSAL_REJECTED":
-        return { label: "Rejected Proposal", variant: "bg-red-700 text-red-100" };
+        return { label: t("ratings.contextRejectedProposal"), variant: "bg-red-700 text-red-100" };
       case "LEAD_MANAGER_RATED":
-        return { label: "Lead Manager Review", variant: "bg-blue-700 text-blue-100" };
+        return { label: t("ratings.contextLeadManagerRated"), variant: "bg-blue-700 text-blue-100" };
       default:
-        return { label: "Review", variant: "bg-gray-700 text-gray-100" };
+        return { label: t("ratings.contextReview"), variant: "bg-gray-700 text-gray-100" };
     }
   };
 
