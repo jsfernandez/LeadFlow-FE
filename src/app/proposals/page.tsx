@@ -31,8 +31,10 @@ import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus } from "@/types";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function ProposalsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { data: proposals, isLoading: proposalsLoading, error } = useLeadOffersByManager(user?.id || "");
   const { data: offers, isLoading: offersLoading } = useOffers();
@@ -100,7 +102,7 @@ export default function ProposalsPage() {
     });
 
     if (!offer) {
-      return <span className="text-sm text-muted-foreground">Loading...</span>;
+      return <span className="text-sm text-muted-foreground">{t("proposals.loading")}</span>;
     }
 
     return (
@@ -122,40 +124,40 @@ export default function ProposalsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Proposals</h1>
-          <p className="text-muted-foreground">Manage your lead proposals</p>
+          <h1 className="text-3xl font-bold">{t("proposals.title")}</h1>
+          <p className="text-muted-foreground">{t("proposals.subtitle")}</p>
         </div>
         <Button 
           onClick={() => setIsCreateDialogOpen(true)}
           disabled={offersLoading || activeOffers.length === 0}
         >
-          Submit Proposal
+          {t("proposals.submitProposal")}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Proposals</CardTitle>
-          <CardDescription>All proposals you&apos;ve submitted</CardDescription>
+          <CardTitle>{t("proposals.yourProposals")}</CardTitle>
+          <CardDescription>{t("proposals.allSubmitted")}</CardDescription>
         </CardHeader>
         <CardContent>
           {proposalsLoading ? (
             <TableSkeleton rows={5} />
           ) : error ? (
             <div className="text-center py-8">
-              <p className="text-sm text-red-400">Failed to load proposals. Please try again.</p>
+              <p className="text-sm text-red-400">{t("proposals.failedToLoad")}</p>
             </div>
           ) : proposals && proposals.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Offer / Company</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Qualified</TableHead>
+                  <TableHead>{t("proposals.customerName")}</TableHead>
+                  <TableHead>{t("proposals.email")}</TableHead>
+                  <TableHead>{t("proposals.phone")}</TableHead>
+                  <TableHead>{t("proposals.offerCompany")}</TableHead>
+                  <TableHead>{t("proposals.status")}</TableHead>
+                  <TableHead>{t("proposals.submitted")}</TableHead>
+                  <TableHead>{t("proposals.qualified")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -183,10 +185,10 @@ export default function ProposalsPage() {
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Clipboard}
-              title="No proposals yet"
-              description="You haven't submitted any proposals. Browse available offers and submit your first proposal to get started."
+              title={t("proposals.noProposalsYet")}
+              description={t("proposals.noneSubmitted")}
               action={{
-                label: "Submit Proposal",
+                label: t("proposals.submitProposal"),
                 onClick: () => setIsCreateDialogOpen(true),
               }}
             />
@@ -199,22 +201,22 @@ export default function ProposalsPage() {
         <DialogContent>
           <form onSubmit={handleSubmitProposal}>
             <DialogHeader>
-              <DialogTitle>Submit Lead Proposal</DialogTitle>
+              <DialogTitle>{t("proposals.submitLeadProposal")}</DialogTitle>
               <DialogDescription>
-                Submit a lead proposal for an active offer
+                {t("proposals.submitProposalForOffer")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="offerId">Select Offer</Label>
+                <Label htmlFor="offerId">{t("proposals.selectOffer")}</Label>
                 <Select
                   value={formData.offerId}
                   onValueChange={(value) => setFormData({ ...formData, offerId: value })}
                   required
                 >
                   <SelectTrigger id="offerId">
-                    <SelectValue placeholder="Choose an offer" />
+                    <SelectValue placeholder={t("proposals.chooseOffer")} />
                   </SelectTrigger>
                   <SelectContent>
                     {activeOffers.length > 0 ? (
@@ -225,7 +227,7 @@ export default function ProposalsPage() {
                       ))
                     ) : (
                       <SelectItem value="none" disabled>
-                        No active offers available
+                        {t("proposals.noActiveOffers")}
                       </SelectItem>
                     )}
                   </SelectContent>
@@ -233,10 +235,10 @@ export default function ProposalsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerName">Customer Name</Label>
+                <Label htmlFor="customerName">{t("proposals.customerName")}</Label>
                 <Input
                   id="customerName"
-                  placeholder="John Doe"
+                  placeholder={t("offers.proposalDialog.namePlaceholder")}
                   value={formData.customerName}
                   onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
                   required
@@ -244,11 +246,11 @@ export default function ProposalsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerEmail">Customer Email</Label>
+                <Label htmlFor="customerEmail">{t("proposals.customerEmail")}</Label>
                 <Input
                   id="customerEmail"
                   type="email"
-                  placeholder="customer@example.com"
+                  placeholder={t("offers.proposalDialog.emailPlaceholder")}
                   value={formData.customerEmail}
                   onChange={(e) => setFormData({ ...formData, customerEmail: e.target.value })}
                   required
@@ -256,11 +258,11 @@ export default function ProposalsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerPhone">Customer Phone</Label>
+                <Label htmlFor="customerPhone">{t("offers.proposalDialog.customerPhone")}</Label>
                 <Input
                   id="customerPhone"
                   type="tel"
-                  placeholder="+1 (555) 123-4567"
+                  placeholder={t("offers.proposalDialog.phonePlaceholder")}
                   value={formData.customerPhone}
                   onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
                   required
@@ -275,13 +277,13 @@ export default function ProposalsPage() {
                 onClick={() => setIsCreateDialogOpen(false)}
                 disabled={createProposal.isPending}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={createProposal.isPending || activeOffers.length === 0}
               >
-                {createProposal.isPending ? "Submitting..." : "Submit Proposal"}
+                {createProposal.isPending ? t("proposals.submitting") : t("proposals.submitProposal")}
               </Button>
             </DialogFooter>
           </form>

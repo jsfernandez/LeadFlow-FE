@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { UserReputation } from "@/types";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface ReputationBadgeProps {
   reputation?: UserReputation | null;
@@ -23,6 +24,8 @@ export function ReputationBadge({
   showCount = true,
   variant = "default"
 }: ReputationBadgeProps) {
+  const { t } = useTranslation();
+
   if (!reputation || reputation.totalRatings === 0) {
     return null;
   }
@@ -101,7 +104,7 @@ export function ReputationBadge({
           </span>
           {showCount && (
             <span className={cn("text-xs opacity-90", style.text)}>
-              {reputation.totalRatings} {reputation.totalRatings === 1 ? "review" : "reviews"}
+              {reputation.totalRatings} {reputation.totalRatings === 1 ? t("ratings.review") : t("ratings.reviews")}
             </span>
           )}
         </div>

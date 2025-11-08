@@ -10,6 +10,7 @@ import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useTranslation } from "@/hooks/use-translation";
 
 // Constants
 const MAX_DISPLAYED_RATINGS = 5;
@@ -19,6 +20,7 @@ const MAX_DISPLAYED_RATINGS = 5;
  * Shows assigned leads, won ratio, pending actions, and performance metrics
  */
 export function LeadManagerDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { data: myLeads = [] } = useLeadOffersByManager(user?.id || "");
   const { data: myPayouts = [] } = usePayoutsByManager(user?.id || "");
@@ -34,19 +36,19 @@ export function LeadManagerDashboard() {
   const totalEarnings = myPayouts.reduce((sum, p) => sum + p.amount, 0);
   const pendingPayouts = myPayouts.filter(p => p.status === "PENDING").length;
 
-  // Generate performance chart data
+  // Generate performance chart data (using translated labels)
   const performanceData = [
-    { status: "Won", count: wonLeads, fill: "rgb(34, 197, 94)" },
-    { status: "Lost", count: lostLeads, fill: "rgb(239, 68, 68)" },
-    { status: "Pending", count: pendingLeads, fill: "rgb(251, 191, 36)" },
+    { status: t("dashboard.leadManager.chartStatusWon"), count: wonLeads, fill: "rgb(34, 197, 94)" },
+    { status: t("dashboard.leadManager.chartStatusLost"), count: lostLeads, fill: "rgb(239, 68, 68)" },
+    { status: t("dashboard.leadManager.chartStatusPending"), count: pendingLeads, fill: "rgb(251, 191, 36)" },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Lead Manager Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t("dashboard.leadManager.title")}</h1>
         <p className="text-muted-foreground">
-          Track your assigned leads and performance
+          {t("dashboard.leadManager.subtitle")}
         </p>
       </div>
 
@@ -55,11 +57,13 @@ export function LeadManagerDashboard() {
         <Card className="border-primary/50 bg-gradient-to-br from-card to-card/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              Your Reputation
+              {t("dashboard.leadManager.yourReputation")}
               <ReputationBadge reputation={myReputation} variant="detailed" size="lg" />
             </CardTitle>
             <CardDescription>
-              Based on {myReputation.totalRatings} {myReputation.totalRatings === 1 ? 'rating' : 'ratings'} from sellers
+              {t("dashboard.leadManager.basedOnRatings")
+                .replace("{count}", myReputation.totalRatings.toString())
+                .replace("{rating}", myReputation.totalRatings === 1 ? t("dashboard.leadManager.rating") : t("dashboard.leadManager.ratings"))}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -68,9 +72,9 @@ export function LeadManagerDashboard() {
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Assigned Leads"
+          title={t("dashboard.leadManager.assignedLeads")}
           value={totalLeads}
-          description="Total managed"
+          description={t("dashboard.leadManager.totalManaged")}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,9 +96,9 @@ export function LeadManagerDashboard() {
         />
 
         <StatCard
-          title="Won Ratio"
+          title={t("dashboard.leadManager.wonRatio")}
           value={`${wonRatio}%`}
-          description={`${wonLeads} won / ${totalLeads} total`}
+          description={`${wonLeads} ${t("dashboard.leadManager.wonTotal")}`}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -115,9 +119,9 @@ export function LeadManagerDashboard() {
         />
 
         <StatCard
-          title="Pending Actions"
+          title={t("dashboard.leadManager.pendingActions")}
           value={pendingLeads}
-          description="Need qualification"
+          description={t("dashboard.leadManager.needQualification")}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -137,9 +141,9 @@ export function LeadManagerDashboard() {
         />
 
         <StatCard
-          title="Total Earnings"
+          title={t("dashboard.leadManager.totalEarnings")}
           value={`$${totalEarnings.toFixed(0)}`}
-          description={`${pendingPayouts} pending payouts`}
+          description={`${pendingPayouts} ${t("dashboard.leadManager.pendingPayouts")}`}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -165,8 +169,8 @@ export function LeadManagerDashboard() {
         {/* Performance Chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Lead Performance</CardTitle>
-            <CardDescription>Distribution of lead statuses</CardDescription>
+            <CardTitle>{t("dashboard.leadManager.leadPerformance")}</CardTitle>
+            <CardDescription>{t("dashboard.leadManager.distributionOfStatuses")}</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -192,7 +196,7 @@ export function LeadManagerDashboard() {
                   }}
                   labelStyle={{ color: "rgb(226, 232, 240)" }}
                   cursor={{ fill: "rgba(251, 191, 36, 0.1)" }}
-                  formatter={(value) => [value, "Count"]}
+                  formatter={(value) => [value, t("dashboard.leadManager.count")]}
                 />
                 <Bar dataKey="count" radius={[8, 8, 0, 0]} />
               </BarChart>
@@ -203,8 +207,8 @@ export function LeadManagerDashboard() {
         {/* Recent Leads */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Leads</CardTitle>
-            <CardDescription>Your latest assigned leads</CardDescription>
+            <CardTitle>{t("dashboard.leadManager.recentLeads")}</CardTitle>
+            <CardDescription>{t("dashboard.leadManager.yourLatestAssignedLeads")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -231,7 +235,7 @@ export function LeadManagerDashboard() {
               ))}
               {myLeads.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No leads assigned yet
+                  {t("dashboard.leadManager.noLeadsAssignedYet")}
                 </p>
               )}
             </div>
@@ -243,8 +247,8 @@ export function LeadManagerDashboard() {
       {pendingLeads > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Pending Actions</CardTitle>
-            <CardDescription>Leads waiting for qualification</CardDescription>
+            <CardTitle>{t("dashboard.leadManager.pendingActionsTitle")}</CardTitle>
+            <CardDescription>{t("dashboard.leadManager.leadsWaitingQualification")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -261,7 +265,7 @@ export function LeadManagerDashboard() {
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">
-                        Assigned {new Date(lead.assignedAt || lead.createdAt).toLocaleDateString()}
+                        {t("dashboard.leadManager.assigned")} {new Date(lead.assignedAt || lead.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -274,25 +278,25 @@ export function LeadManagerDashboard() {
       {/* Payouts Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Earnings Summary</CardTitle>
-          <CardDescription>Your payout breakdown</CardDescription>
+          <CardTitle>{t("dashboard.leadManager.earningsSummary")}</CardTitle>
+          <CardDescription>{t("dashboard.leadManager.yourPayoutBreakdown")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Pending Payouts</span>
+              <span className="text-sm text-muted-foreground">{t("dashboard.leadManager.pendingPayoutsLabel")}</span>
               <span className="font-semibold text-yellow-500">
                 ${myPayouts.filter(p => p.status === "PENDING").reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Paid Payouts</span>
+              <span className="text-sm text-muted-foreground">{t("dashboard.leadManager.paidPayouts")}</span>
               <span className="font-semibold text-green-500">
                 ${myPayouts.filter(p => p.status === "PAID").reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
               </span>
             </div>
             <div className="border-t pt-4 flex items-center justify-between">
-              <span className="text-sm font-medium">Total Earnings</span>
+              <span className="text-sm font-medium">{t("dashboard.leadManager.totalEarnings")}</span>
               <span className="font-bold text-primary text-lg">
                 ${totalEarnings.toFixed(2)}
               </span>
@@ -306,13 +310,13 @@ export function LeadManagerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>Your Ratings & Reviews</span>
+              <span>{t("dashboard.leadManager.yourRatingsAndReviews")}</span>
               {myReputation && (
                 <ReputationBadge reputation={myReputation} size="md" />
               )}
             </CardTitle>
             <CardDescription>
-              Feedback from sellers who received your leads
+              {t("dashboard.leadManager.feedbackFromSellers")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -323,7 +327,7 @@ export function LeadManagerDashboard() {
             />
             {myRatings.length > MAX_DISPLAYED_RATINGS && (
               <p className="text-sm text-muted-foreground text-center mt-4">
-                Showing {MAX_DISPLAYED_RATINGS} of {myRatings.length} ratings
+                {t("dashboard.leadManager.showing")} {MAX_DISPLAYED_RATINGS} {t("dashboard.leadManager.of")} {myRatings.length} {t("dashboard.leadManager.ratings")}
               </p>
             )}
           </CardContent>
