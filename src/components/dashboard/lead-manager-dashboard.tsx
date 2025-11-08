@@ -16,6 +16,7 @@ import { useState, useMemo, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LeadInfo } from "./lead-info";
 // Constants
 const RATINGS_PER_PAGE = 5;
 
@@ -325,10 +326,7 @@ export function LeadManagerDashboard() {
                 .map((lead) => (
                   <div key={lead.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
                     <div className="flex-1">
-                      <p className="font-medium text-sm">{lead.customerName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {lead.customerEmail} • {lead.customerPhone}
-                      </p>
+                      <LeadInfo leadId={lead.leadId} showFullDetails={true} />
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">

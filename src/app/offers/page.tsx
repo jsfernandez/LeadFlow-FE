@@ -124,7 +124,7 @@ export default function OffersPage() {
     if (!user || !selectedOffer) return;
 
     try {
-      // Get lead info to populate deprecated fields for backward compatibility
+      // Verify lead exists
       const lead = leads?.find(l => l.id === proposalFormData.leadId);
       if (!lead) {
         toast.error(t("offers.proposalDialog.error"), {
@@ -138,10 +138,6 @@ export default function OffersPage() {
         leadManagerId: user.id,
         leadId: proposalFormData.leadId,
         description: proposalFormData.description,
-        // Deprecated fields for backward compatibility
-        customerName: lead.name,
-        customerEmail: lead.email,
-        customerPhone: lead.phone,
       });
 
       setProposalFormData({
@@ -550,7 +546,7 @@ export default function OffersPage() {
                     {leads && leads.length > 0 ? (
                       leads.map((lead) => (
                         <SelectItem key={lead.id} value={lead.id}>
-                          {lead.companyName || lead.name} - {lead.email}
+                          {lead.companyName} - {lead.fullName} ({lead.email})
                         </SelectItem>
                       ))
                     ) : (

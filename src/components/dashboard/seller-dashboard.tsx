@@ -11,6 +11,7 @@ import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { LeadInfo } from "./lead-info";
 
 // Constants
 const MAX_DISPLAYED_RATINGS = 5;
@@ -299,7 +300,7 @@ export function SellerDashboard() {
               return (
                 <div key={proposal.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
                   <div className="flex-1">
-                    <p className="font-medium text-sm">{proposal.customerName}</p>
+                    <LeadInfo leadId={proposal.leadId} />
                     <p className="text-xs text-muted-foreground">
                       {offer?.title} • {new Date(proposal.createdAt).toLocaleDateString()}
                     </p>

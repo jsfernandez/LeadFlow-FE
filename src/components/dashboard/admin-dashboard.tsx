@@ -7,6 +7,7 @@ import { useLeadOffers } from "@/hooks/use-lead-offers";
 import { usePayouts } from "@/hooks/use-payouts";
 import { Badge } from "@/components/ui/badge";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { LeadInfo } from "./lead-info";
 
 /**
  * ADMIN Dashboard Component
@@ -313,7 +314,7 @@ export function AdminDashboard() {
               {allLeadOffers.slice(0, 5).map((lead) => (
                 <div key={lead.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
                   <div className="flex-1">
-                    <p className="font-medium text-sm">{lead.customerName}</p>
+                    <LeadInfo leadId={lead.leadId} />
                     <p className="text-xs text-muted-foreground">
                       {new Date(lead.createdAt).toLocaleDateString()}
                     </p>

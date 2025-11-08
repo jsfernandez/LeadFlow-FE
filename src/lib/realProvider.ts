@@ -26,10 +26,23 @@ interface OfferDTO {
 
 interface LeadDTO {
   id: string;
-  name: string;
+  fullName: string;
+  leadId: string;
   email: string;
   phone: string;
-  companyName?: string;
+  companyName: string;
+  title: string;
+  country: string;
+  city: string;
+  industry: string;
+  profileUrl?: string;
+  partialPreviewJson?: string;
+  positionCode?: string;
+  gender?: string;
+  minRevenue: number;
+  maxRevenue: number;
+  source?: string;
+  tags?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -40,9 +53,6 @@ interface LeadOfferDTO {
   leadManagerId: string;
   leadId: string;
   description?: string;
-  customerName: string; // Deprecated
-  customerEmail: string; // Deprecated
-  customerPhone: string; // Deprecated
   status: "PENDING" | "WON" | "LOST";
   assignedAt?: string;
   qualifiedAt?: string;
