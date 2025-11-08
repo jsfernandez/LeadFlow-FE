@@ -7,7 +7,7 @@
  */
 
 import { apiClient, ApiError } from "./apiClient";
-import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
 
 /**
  * API response types (DTOs from backend)
@@ -24,13 +24,25 @@ interface OfferDTO {
   updatedAt: string;
 }
 
+interface LeadDTO {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface LeadOfferDTO {
   id: string;
   offerId: string;
   leadManagerId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
+  leadId: string;
+  description?: string;
+  customerName: string; // Deprecated
+  customerEmail: string; // Deprecated
+  customerPhone: string; // Deprecated
   status: "PENDING" | "WON" | "LOST";
   assignedAt?: string;
   qualifiedAt?: string;
@@ -86,6 +98,17 @@ function parseDate(dateStr: string | Date | undefined): Date | undefined {
  * Transform API offer response to typed Offer
  */
 function transformOffer(data: OfferDTO): Offer {
+  return {
+    ...data,
+    createdAt: parseDate(data.createdAt) || new Date(),
+    updatedAt: parseDate(data.updatedAt) || new Date(),
+  };
+}
+
+/**
+ * Transform API lead response to typed Lead
+ */
+function transformLead(data: LeadDTO): Lead {
   return {
     ...data,
     createdAt: parseDate(data.createdAt) || new Date(),
@@ -209,6 +232,59 @@ export const realProvider = {
         return false;
       }
       console.error("[RealProvider] Error deleting offer:", error);
+      throw error;
+    }
+  },
+
+  // ===== Lead Operations =====
+
+  async getLeads(): Promise<Lead[]> {
+    const data = await apiClient.get<LeadDTO[]>("/leads");
+    return data.map(transformLead);
+  },
+
+  async getLeadById(id: string): Promise<Lead | null> {
+    try {
+      const data = await apiClient.get<LeadDTO>(`/leads/${id}`);
+      return transformLead(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching lead:", error);
+      throw error;
+    }
+  },
+
+  async createLead(
+    data: Omit<Lead, "id" | "createdAt" | "updatedAt">
+  ): Promise<Lead> {
+    const response = await apiClient.post<LeadDTO>("/leads", data);
+    return transformLead(response);
+  },
+
+  async updateLead(id: string, data: Partial<Lead>): Promise<Lead | null> {
+    try {
+      const response = await apiClient.patch<LeadDTO>(`/leads/${id}`, data);
+      return transformLead(response);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating lead:", error);
+      throw error;
+    }
+  },
+
+  async deleteLead(id: string): Promise<boolean> {
+    try {
+      await apiClient.delete(`/leads/${id}`);
+      return true;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return false;
+      }
+      console.error("[RealProvider] Error deleting lead:", error);
       throw error;
     }
   },

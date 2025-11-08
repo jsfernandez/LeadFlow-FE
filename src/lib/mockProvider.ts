@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -22,6 +22,7 @@ const delay = (ms: number = API_LATENCY) => new Promise((resolve) => setTimeout(
  */
 class MockDataStore {
   private offers: Map<string, Offer> = new Map();
+  private leads: Map<string, Lead> = new Map();
   private leadOffers: Map<string, LeadOffer> = new Map();
   private payouts: Map<string, Payout> = new Map();
   private users: Map<string, User> = new Map();
@@ -132,15 +133,95 @@ class MockDataStore {
 
     offers.forEach(offer => this.offers.set(offer.id, offer));
 
+    // Sample leads (customers/prospects)
+    const leads: Lead[] = [
+      {
+        id: "lead-1",
+        name: "Acme Corp",
+        email: "contact@acme.com",
+        phone: "+1-555-0101",
+        companyName: "Acme Corporation",
+        createdAt: new Date("2024-10-15"),
+        updatedAt: new Date("2024-10-15"),
+      },
+      {
+        id: "lead-2",
+        name: "TechStart Inc",
+        email: "hello@techstart.io",
+        phone: "+1-555-0102",
+        companyName: "TechStart Innovations",
+        createdAt: new Date("2024-10-20"),
+        updatedAt: new Date("2024-10-20"),
+      },
+      {
+        id: "lead-3",
+        name: "ShopZone LLC",
+        email: "info@shopzone.com",
+        phone: "+1-555-0103",
+        companyName: "ShopZone E-commerce",
+        createdAt: new Date("2024-10-21"),
+        updatedAt: new Date("2024-10-21"),
+      },
+      {
+        id: "lead-4",
+        name: "MegaStore Co",
+        email: "sales@megastore.com",
+        phone: "+1-555-0104",
+        companyName: "MegaStore Company",
+        createdAt: new Date("2024-10-25"),
+        updatedAt: new Date("2024-10-25"),
+      },
+      {
+        id: "lead-5",
+        name: "Global Enterprises",
+        email: "contact@globalent.com",
+        phone: "+1-555-0105",
+        companyName: "Global Enterprises Ltd",
+        createdAt: new Date("2024-11-01"),
+        updatedAt: new Date("2024-11-01"),
+      },
+      {
+        id: "lead-6",
+        name: "BigCorp Industries",
+        email: "reach@bigcorp.com",
+        phone: "+1-555-0106",
+        companyName: "BigCorp Industries Inc",
+        createdAt: new Date("2024-11-02"),
+        updatedAt: new Date("2024-11-02"),
+      },
+      {
+        id: "lead-7",
+        name: "InnovateLab",
+        email: "team@innovatelab.io",
+        phone: "+1-555-0107",
+        companyName: "InnovateLab Research",
+        createdAt: new Date("2024-11-03"),
+        updatedAt: new Date("2024-11-03"),
+      },
+      {
+        id: "lead-8",
+        name: "CloudTech Solutions",
+        email: "info@cloudtech.com",
+        phone: "+1-555-0108",
+        companyName: "CloudTech Solutions Group",
+        createdAt: new Date("2024-10-28"),
+        updatedAt: new Date("2024-10-28"),
+      },
+    ];
+
+    leads.forEach(lead => this.leads.set(lead.id, lead));
+
     // Sample lead offers with varied statuses for conversion metrics
     const leadOffers: LeadOffer[] = [
       {
         id: "lead-offer-1",
         offerId: "offer-1",
         leadManagerId: leadManager1.id,
-        customerName: "Acme Corp",
-        customerEmail: "contact@acme.com",
-        customerPhone: "+1-555-0101",
+        leadId: "lead-1",
+        description: "High-value prospect interested in SaaS solutions",
+        customerName: "Acme Corp", // Deprecated
+        customerEmail: "contact@acme.com", // Deprecated
+        customerPhone: "+1-555-0101", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-10-16"),
         qualifiedAt: new Date("2024-10-18"),
@@ -150,9 +231,11 @@ class MockDataStore {
         id: "lead-offer-2",
         offerId: "offer-1",
         leadManagerId: leadManager1.id,
-        customerName: "TechStart Inc",
-        customerEmail: "hello@techstart.io",
-        customerPhone: "+1-555-0102",
+        leadId: "lead-2",
+        description: "Startup looking for enterprise solutions",
+        customerName: "TechStart Inc", // Deprecated
+        customerEmail: "hello@techstart.io", // Deprecated
+        customerPhone: "+1-555-0102", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-10-22"),
         qualifiedAt: new Date("2024-10-25"),
@@ -162,9 +245,11 @@ class MockDataStore {
         id: "lead-offer-3",
         offerId: "offer-2",
         leadManagerId: leadManager1.id,
-        customerName: "ShopZone LLC",
-        customerEmail: "info@shopzone.com",
-        customerPhone: "+1-555-0103",
+        leadId: "lead-3",
+        description: "E-commerce platform seeking qualified leads",
+        customerName: "ShopZone LLC", // Deprecated
+        customerEmail: "info@shopzone.com", // Deprecated
+        customerPhone: "+1-555-0103", // Deprecated
         status: "LOST",
         assignedAt: new Date("2024-10-21"),
         qualifiedAt: new Date("2024-10-23"),
@@ -174,9 +259,11 @@ class MockDataStore {
         id: "lead-offer-4",
         offerId: "offer-2",
         leadManagerId: leadManager1.id,
-        customerName: "MegaStore Co",
-        customerEmail: "sales@megastore.com",
-        customerPhone: "+1-555-0104",
+        leadId: "lead-4",
+        description: "Large retail chain interested in e-commerce leads",
+        customerName: "MegaStore Co", // Deprecated
+        customerEmail: "sales@megastore.com", // Deprecated
+        customerPhone: "+1-555-0104", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-11-01"),
         qualifiedAt: new Date("2024-11-02"),
@@ -186,9 +273,11 @@ class MockDataStore {
         id: "lead-offer-5",
         offerId: "offer-3",
         leadManagerId: leadManager1.id,
-        customerName: "Global Enterprises",
-        customerEmail: "contact@globalent.com",
-        customerPhone: "+1-555-0105",
+        leadId: "lead-5",
+        description: "Enterprise client seeking B2B leads",
+        customerName: "Global Enterprises", // Deprecated
+        customerEmail: "contact@globalent.com", // Deprecated
+        customerPhone: "+1-555-0105", // Deprecated
         status: "PENDING",
         assignedAt: new Date("2024-11-02"),
         createdAt: new Date("2024-11-02"),
@@ -197,9 +286,11 @@ class MockDataStore {
         id: "lead-offer-6",
         offerId: "offer-3",
         leadManagerId: leadManager1.id,
-        customerName: "BigCorp Industries",
-        customerEmail: "reach@bigcorp.com",
-        customerPhone: "+1-555-0106",
+        leadId: "lead-6",
+        description: "Fortune 500 company interested in decision-maker contacts",
+        customerName: "BigCorp Industries", // Deprecated
+        customerEmail: "reach@bigcorp.com", // Deprecated
+        customerPhone: "+1-555-0106", // Deprecated
         status: "PENDING",
         assignedAt: new Date("2024-11-04"),
         createdAt: new Date("2024-11-04"),
@@ -208,9 +299,11 @@ class MockDataStore {
         id: "lead-offer-7",
         offerId: "offer-4",
         leadManagerId: leadManager1.id,
-        customerName: "InnovateLab",
-        customerEmail: "team@innovatelab.io",
-        customerPhone: "+1-555-0107",
+        leadId: "lead-7",
+        description: "Research lab looking for startup leads",
+        customerName: "InnovateLab", // Deprecated
+        customerEmail: "team@innovatelab.io", // Deprecated
+        customerPhone: "+1-555-0107", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-11-03"),
         qualifiedAt: new Date("2024-11-04"),
@@ -220,9 +313,11 @@ class MockDataStore {
         id: "lead-offer-8",
         offerId: "offer-1",
         leadManagerId: leadManager1.id,
-        customerName: "CloudTech Solutions",
-        customerEmail: "info@cloudtech.com",
-        customerPhone: "+1-555-0108",
+        leadId: "lead-8",
+        description: "Cloud solutions provider interested in SaaS leads",
+        customerName: "CloudTech Solutions", // Deprecated
+        customerEmail: "info@cloudtech.com", // Deprecated
+        customerPhone: "+1-555-0108", // Deprecated
         status: "LOST",
         assignedAt: new Date("2024-10-28"),
         qualifiedAt: new Date("2024-10-30"),
@@ -374,6 +469,53 @@ class MockDataStore {
     return this.offers.delete(id);
   }
 
+  // ===== Lead Operations =====
+
+  async getLeads(): Promise<Lead[]> {
+    await delay();
+    return Array.from(this.leads.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
+  }
+
+  async getLeadById(id: string): Promise<Lead | null> {
+    await delay();
+    return this.leads.get(id) || null;
+  }
+
+  async createLead(
+    data: Omit<Lead, "id" | "createdAt" | "updatedAt">
+  ): Promise<Lead> {
+    await delay();
+    const newLead: Lead = {
+      ...data,
+      id: `lead-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.leads.set(newLead.id, newLead);
+    return newLead;
+  }
+
+  async updateLead(id: string, data: Partial<Lead>): Promise<Lead | null> {
+    await delay();
+    const lead = this.leads.get(id);
+    if (!lead) return null;
+
+    const updatedLead: Lead = {
+      ...lead,
+      ...data,
+      updatedAt: new Date(),
+    };
+    this.leads.set(id, updatedLead);
+    return updatedLead;
+  }
+
+  async deleteLead(id: string): Promise<boolean> {
+    await delay();
+    return this.leads.delete(id);
+  }
+
   // ===== Lead Offer (Proposal) Operations =====
 
   async getLeadOffers(): Promise<LeadOffer[]> {
@@ -406,9 +548,19 @@ class MockDataStore {
     data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
   ): Promise<LeadOffer> {
     await delay();
+    
+    // Fetch lead details to populate deprecated fields for backward compatibility
+    const lead = this.leads.get(data.leadId);
+    if (!lead) {
+      throw new Error(`Lead with id ${data.leadId} not found`);
+    }
+    
     const newLeadOffer: LeadOffer = {
       ...data,
       id: `lead-offer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      customerName: lead.name, // Populate from lead for backward compatibility
+      customerEmail: lead.email, // Populate from lead for backward compatibility
+      customerPhone: lead.phone, // Populate from lead for backward compatibility
       status: "PENDING",
       createdAt: new Date(),
     };
@@ -591,6 +743,14 @@ export const mockProvider = {
     mockDataStore.createOffer(data),
   updateOffer: (id: string, data: Partial<Offer>) => mockDataStore.updateOffer(id, data),
   deleteOffer: (id: string) => mockDataStore.deleteOffer(id),
+
+  // Leads
+  getLeads: () => mockDataStore.getLeads(),
+  getLeadById: (id: string) => mockDataStore.getLeadById(id),
+  createLead: (data: Omit<Lead, "id" | "createdAt" | "updatedAt">) =>
+    mockDataStore.createLead(data),
+  updateLead: (id: string, data: Partial<Lead>) => mockDataStore.updateLead(id, data),
+  deleteLead: (id: string) => mockDataStore.deleteLead(id),
 
   // Lead Offers (Proposals)
   getLeadOffers: () => mockDataStore.getLeadOffers(),

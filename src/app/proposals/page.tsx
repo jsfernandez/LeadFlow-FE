@@ -13,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -27,24 +26,26 @@ import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { useLeadOffersByManager, useCreateLeadOffer } from "@/hooks/use-lead-offers";
 import { useOffers } from "@/hooks/use-offers";
+import { useLeads } from "@/hooks/use-leads";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus } from "@/types";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "@/hooks/use-translation";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ProposalsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { data: proposals, isLoading: proposalsLoading, error } = useLeadOffersByManager(user?.id || "");
   const { data: offers, isLoading: offersLoading } = useOffers();
+  const { data: leads, isLoading: leadsLoading } = useLeads();
   const createProposal = useCreateLeadOffer();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     offerId: "",
-    customerName: "",
-    customerEmail: "",
-    customerPhone: "",
+    leadId: "",
+    description: "",
   });
 
   const handleSubmitProposal = async (e: React.FormEvent) => {
@@ -52,20 +53,29 @@ export default function ProposalsPage() {
     if (!user) return;
 
     try {
+      // Get lead info to populate deprecated fields for backward compatibility
+      const lead = leads?.find(l => l.id === formData.leadId);
+      if (!lead) {
+        console.error("Selected lead not found");
+        return;
+      }
+
       await createProposal.mutateAsync({
         offerId: formData.offerId,
         leadManagerId: user.id,
-        customerName: formData.customerName,
-        customerEmail: formData.customerEmail,
-        customerPhone: formData.customerPhone,
+        leadId: formData.leadId,
+        description: formData.description,
+        // Deprecated fields for backward compatibility
+        customerName: lead.name,
+        customerEmail: lead.email,
+        customerPhone: lead.phone,
       });
 
       // Reset form and close dialog
       setFormData({
         offerId: "",
-        customerName: "",
-        customerEmail: "",
-        customerPhone: "",
+        leadId: "",
+        description: "",
       });
       setIsCreateDialogOpen(false);
     } catch (error) {
@@ -129,7 +139,7 @@ export default function ProposalsPage() {
         </div>
         <Button 
           onClick={() => setIsCreateDialogOpen(true)}
-          disabled={offersLoading || activeOffers.length === 0}
+          disabled={offersLoading || leadsLoading || activeOffers.length === 0 || !leads || leads.length === 0}
         >
           {t("proposals.submitProposal")}
         </Button>
@@ -235,38 +245,49 @@ export default function ProposalsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerName">{t("proposals.customerName")}</Label>
-                <Input
-                  id="customerName"
-                  placeholder={t("offers.proposalDialog.namePlaceholder")}
-                  value={formData.customerName}
-                  onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
+                <Label htmlFor="leadId">{t("proposals.selectLead")}</Label>
+                <Select
+                  value={formData.leadId}
+                  onValueChange={(value) => setFormData({ ...formData, leadId: value })}
                   required
-                />
+                >
+                  <SelectTrigger id="leadId">
+                    <SelectValue placeholder={t("proposals.chooseLead")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {leads && leads.length > 0 ? (
+                      leads.map((lead) => (
+                        <SelectItem key={lead.id} value={lead.id}>
+                          {lead.companyName || lead.name} - {lead.email}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="none" disabled>
+                        {t("proposals.noLeadsAvailable")}
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerEmail">{t("proposals.customerEmail")}</Label>
-                <Input
-                  id="customerEmail"
-                  type="email"
-                  placeholder={t("offers.proposalDialog.emailPlaceholder")}
-                  value={formData.customerEmail}
-                  onChange={(e) => setFormData({ ...formData, customerEmail: e.target.value })}
-                  required
+                <Label htmlFor="description">{t("proposals.description")}</Label>
+                <Textarea
+                  id="description"
+                  placeholder={t("proposals.descriptionPlaceholder")}
+                  value={formData.description}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 500) {
+                      setFormData({ ...formData, description: value });
+                    }
+                  }}
+                  rows={4}
+                  maxLength={500}
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="customerPhone">{t("offers.proposalDialog.customerPhone")}</Label>
-                <Input
-                  id="customerPhone"
-                  type="tel"
-                  placeholder={t("offers.proposalDialog.phonePlaceholder")}
-                  value={formData.customerPhone}
-                  onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
-                  required
-                />
+                <p className="text-xs text-muted-foreground">
+                  {t("proposals.descriptionHelper")} ({formData.description.length}/500)
+                </p>
               </div>
             </div>
 
@@ -281,9 +302,9 @@ export default function ProposalsPage() {
               </Button>
               <Button
                 type="submit"
-                disabled={createProposal.isPending || activeOffers.length === 0}
+                disabled={createProposal.isPending || activeOffers.length === 0 || !leads || leads.length === 0}
               >
-                {createProposal.isPending ? t("proposals.submitting") : t("proposals.submitProposal")}
+                {createProposal.isPending ? t("proposals.submitting") : t("proposals.submit")}
               </Button>
             </DialogFooter>
           </form>

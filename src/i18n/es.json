@@ -258,6 +258,13 @@
     "selectOffer": "Seleccionar Oferta",
     "chooseOffer": "Elegir una oferta",
     "noActiveOffers": "No hay ofertas activas disponibles",
+    "selectLead": "Seleccionar Lead",
+    "chooseLead": "Elegir un lead",
+    "noLeadsAvailable": "No hay leads disponibles",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Opcional: Agregue una descripción o propuesta de valor para esta propuesta",
+    "descriptionHelper": "Máximo 500 caracteres",
+    "submit": "Enviar",
     "submitting": "Enviando...",
     "loading": "Cargando..."
   },
