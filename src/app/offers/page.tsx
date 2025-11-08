@@ -29,6 +29,7 @@ import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { useOffers, useOffersBySeller, useCreateOffer, useUpdateOfferStatus } from "@/hooks/use-offers";
 import { useCreateLeadOffer } from "@/hooks/use-lead-offers";
+import { useLeads } from "@/hooks/use-leads";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useTranslation } from "@/hooks/use-translation";
 import type { OfferStatus, Offer } from "@/types";
@@ -42,6 +43,7 @@ export default function OffersPage() {
   const { t } = useTranslation();
   const { data: allOffers, isLoading: isLoadingAll, error: errorAll } = useOffers();
   const { data: myOffers, isLoading: isLoadingMy } = useOffersBySeller(user?.id || "");
+  const { data: leads } = useLeads();
   const createOffer = useCreateOffer();
   const createProposal = useCreateLeadOffer();
   const updateStatus = useUpdateOfferStatus();
@@ -64,9 +66,8 @@ export default function OffersPage() {
   });
 
   const [proposalFormData, setProposalFormData] = useState({
-    customerName: "",
-    customerEmail: "",
-    customerPhone: "",
+    leadId: "",
+    description: "",
   });
 
   const isSeller = user?.role === "SELLER";
@@ -123,18 +124,29 @@ export default function OffersPage() {
     if (!user || !selectedOffer) return;
 
     try {
+      // Get lead info to populate deprecated fields for backward compatibility
+      const lead = leads?.find(l => l.id === proposalFormData.leadId);
+      if (!lead) {
+        toast.error(t("offers.proposalDialog.error"), {
+          description: "Selected lead not found",
+        });
+        return;
+      }
+
       await createProposal.mutateAsync({
         offerId: selectedOffer.id,
         leadManagerId: user.id,
-        customerName: proposalFormData.customerName,
-        customerEmail: proposalFormData.customerEmail,
-        customerPhone: proposalFormData.customerPhone,
+        leadId: proposalFormData.leadId,
+        description: proposalFormData.description,
+        // Deprecated fields for backward compatibility
+        customerName: lead.name,
+        customerEmail: lead.email,
+        customerPhone: lead.phone,
       });
 
       setProposalFormData({
-        customerName: "",
-        customerEmail: "",
-        customerPhone: "",
+        leadId: "",
+        description: "",
       });
       setIsProposalDialogOpen(false);
       setIsDetailDialogOpen(false);
@@ -525,38 +537,49 @@ export default function OffersPage() {
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="customerName">{t("offers.proposalDialog.customerName")}</Label>
-                <Input
-                  id="customerName"
-                  placeholder={t("offers.proposalDialog.namePlaceholder")}
-                  value={proposalFormData.customerName}
-                  onChange={(e) => setProposalFormData({ ...proposalFormData, customerName: e.target.value })}
+                <Label htmlFor="leadId">{t("proposals.selectLead")}</Label>
+                <Select
+                  value={proposalFormData.leadId}
+                  onValueChange={(value) => setProposalFormData({ ...proposalFormData, leadId: value })}
                   required
-                />
+                >
+                  <SelectTrigger id="leadId">
+                    <SelectValue placeholder={t("proposals.chooseLead")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {leads && leads.length > 0 ? (
+                      leads.map((lead) => (
+                        <SelectItem key={lead.id} value={lead.id}>
+                          {lead.companyName || lead.name} - {lead.email}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="none" disabled>
+                        {t("proposals.noLeadsAvailable")}
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerEmail">{t("offers.proposalDialog.customerEmail")}</Label>
-                <Input
-                  id="customerEmail"
-                  type="email"
-                  placeholder={t("offers.proposalDialog.emailPlaceholder")}
-                  value={proposalFormData.customerEmail}
-                  onChange={(e) => setProposalFormData({ ...proposalFormData, customerEmail: e.target.value })}
-                  required
+                <Label htmlFor="description">{t("proposals.description")}</Label>
+                <Textarea
+                  id="description"
+                  placeholder={t("proposals.descriptionPlaceholder")}
+                  value={proposalFormData.description}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 500) {
+                      setProposalFormData({ ...proposalFormData, description: value });
+                    }
+                  }}
+                  rows={4}
+                  maxLength={500}
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="customerPhone">{t("offers.proposalDialog.customerPhone")}</Label>
-                <Input
-                  id="customerPhone"
-                  type="tel"
-                  placeholder={t("offers.proposalDialog.phonePlaceholder")}
-                  value={proposalFormData.customerPhone}
-                  onChange={(e) => setProposalFormData({ ...proposalFormData, customerPhone: e.target.value })}
-                  required
-                />
+                <p className="text-xs text-muted-foreground">
+                  {t("proposals.descriptionHelper")} ({proposalFormData.description.length}/500)
+                </p>
               </div>
             </div>
 
@@ -569,7 +592,7 @@ export default function OffersPage() {
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createProposal.isPending}>
+              <Button type="submit" disabled={createProposal.isPending || !leads || leads.length === 0}>
                 {createProposal.isPending ? t("common.loading") : t("offers.proposalDialog.submit")}
               </Button>
             </DialogFooter>

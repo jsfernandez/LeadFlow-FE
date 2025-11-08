@@ -69,15 +69,30 @@ export interface Offer {
 }
 
 /**
+ * Lead entity - represents a customer/prospect
+ */
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
  * Lead proposal
  */
 export interface LeadOffer {
   id: string;
   offerId: string;
   leadManagerId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
+  leadId: string;
+  description?: string;
+  customerName: string; // Deprecated: kept for backward compatibility
+  customerEmail: string; // Deprecated: kept for backward compatibility
+  customerPhone: string; // Deprecated: kept for backward compatibility
   status: LeadStatus;
   assignedAt?: Date;
   qualifiedAt?: Date;

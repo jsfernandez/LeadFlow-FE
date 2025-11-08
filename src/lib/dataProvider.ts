@@ -8,7 +8,7 @@
 
 import { mockProvider } from "./mockProvider";
 import { realProvider } from "./realProvider";
-import type { Offer, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
 
 /**
  * Data provider interface
@@ -22,6 +22,13 @@ export interface DataProvider {
   createOffer(data: Omit<Offer, "id" | "createdAt" | "updatedAt">): Promise<Offer>;
   updateOffer(id: string, data: Partial<Offer>): Promise<Offer | null>;
   deleteOffer(id: string): Promise<boolean>;
+
+  // Lead operations
+  getLeads(): Promise<Lead[]>;
+  getLeadById(id: string): Promise<Lead | null>;
+  createLead(data: Omit<Lead, "id" | "createdAt" | "updatedAt">): Promise<Lead>;
+  updateLead(id: string, data: Partial<Lead>): Promise<Lead | null>;
+  deleteLead(id: string): Promise<boolean>;
 
   // Lead offer operations
   getLeadOffers(): Promise<LeadOffer[]>;

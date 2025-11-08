@@ -258,6 +258,13 @@
     "selectOffer": "Select Offer",
     "chooseOffer": "Choose an offer",
     "noActiveOffers": "No active offers available",
+    "selectLead": "Select Lead",
+    "chooseLead": "Choose a lead",
+    "noLeadsAvailable": "No leads available",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional: Add a description or value proposition for this proposal",
+    "descriptionHelper": "Max 500 characters",
+    "submit": "Submit",
     "submitting": "Submitting...",
     "loading": "Loading..."
   },
