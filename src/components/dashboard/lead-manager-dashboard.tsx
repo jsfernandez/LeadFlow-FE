@@ -5,15 +5,19 @@ import { StatCard } from "@/components/ui/stat-card";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLeadOffersByManager } from "@/hooks/use-lead-offers";
 import { usePayoutsByManager } from "@/hooks/use-payouts";
+import { useOffers } from "@/hooks/use-offers";
 import { Badge } from "@/components/ui/badge";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useTranslation } from "@/hooks/use-translation";
-
+import { useState, useMemo, useEffect } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 // Constants
-const MAX_DISPLAYED_RATINGS = 5;
+const RATINGS_PER_PAGE = 5;
 
 /**
  * LEAD_MANAGER Dashboard Component
@@ -26,6 +30,20 @@ export function LeadManagerDashboard() {
   const { data: myPayouts = [] } = usePayoutsByManager(user?.id || "");
   const { data: myReputation } = useUserReputation(user?.id || "");
   const { data: myRatings = [] } = useUserRatings(user?.id || "");
+  const { data: allOffers = [] } = useOffers();
+
+  // State for ratings filters and pagination
+  const [scoreFilter, setScoreFilter] = useState<string>("all");
+  const [contextFilter, setContextFilter] = useState<string>("all");
+  const [sortOrder, setSortOrder] = useState<string>("newest");
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Create a map of offerId -> Offer for quick lookup
+  const offersMap = useMemo(() => {
+    const map = new Map();
+    allOffers.forEach(offer => map.set(offer.id, offer));
+    return map;
+  }, [allOffers]);
 
   // Calculate metrics
   const totalLeads = myLeads.length;
@@ -35,6 +53,52 @@ export function LeadManagerDashboard() {
   const wonRatio = totalLeads > 0 ? ((wonLeads / totalLeads) * 100).toFixed(1) : "0.0";
   const totalEarnings = myPayouts.reduce((sum, p) => sum + p.amount, 0);
   const pendingPayouts = myPayouts.filter(p => p.status === "PENDING").length;
+
+  // Filter and sort ratings
+  const filteredAndSortedRatings = useMemo(() => {
+    let filtered = [...myRatings];
+
+    // Filter by score
+    if (scoreFilter !== "all") {
+      const score = parseInt(scoreFilter);
+      filtered = filtered.filter(r => r.score === score);
+    }
+
+    // Filter by context
+    if (contextFilter !== "all") {
+      filtered = filtered.filter(r => r.context === contextFilter);
+    }
+
+    // Sort by date
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
+    return filtered;
+  }, [myRatings, scoreFilter, contextFilter, sortOrder]);
+
+  // Paginate ratings
+  const totalPages = Math.ceil(filteredAndSortedRatings.length / RATINGS_PER_PAGE);
+  
+  // Auto-adjust current page if it exceeds available pages
+  const validCurrentPage = Math.min(currentPage, Math.max(0, totalPages - 1));
+  
+  const paginatedRatings = filteredAndSortedRatings.slice(
+    validCurrentPage * RATINGS_PER_PAGE,
+    (validCurrentPage + 1) * RATINGS_PER_PAGE
+  );
+
+  // Reset to first page when filters change (only if needed)
+  useEffect(() => {
+    if (currentPage >= totalPages && totalPages > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCurrentPage(0);
+    }
+  }, [currentPage, totalPages]);
+
+
 
   // Generate performance chart data (using translated labels)
   const performanceData = [
@@ -204,38 +268,41 @@ export function LeadManagerDashboard() {
           </CardContent>
         </Card>
 
-        {/* Recent Leads */}
+        {/* Recent Offers */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("dashboard.leadManager.recentLeads")}</CardTitle>
-            <CardDescription>{t("dashboard.leadManager.yourLatestAssignedLeads")}</CardDescription>
+            <CardTitle>{t("dashboard.leadManager.recentOffers")}</CardTitle>
+            <CardDescription>{t("dashboard.leadManager.yourLatestAssignedOffers")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {myLeads.slice(0, 5).map((lead) => (
-                <div key={lead.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{lead.customerName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(lead.createdAt).toLocaleDateString()}
-                    </p>
+              {myLeads.slice(0, 5).map((lead) => {
+                const offer = offersMap.get(lead.offerId);
+                return (
+                  <div key={lead.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{offer?.title || "Unknown Offer"}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(lead.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <Badge
+                      variant={
+                        lead.status === "WON"
+                          ? "default"
+                          : lead.status === "LOST"
+                            ? "destructive"
+                            : "secondary"
+                      }
+                    >
+                      {t(`common.${lead.status.toLowerCase()}`)}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant={
-                      lead.status === "WON"
-                        ? "default"
-                        : lead.status === "LOST"
-                          ? "destructive"
-                          : "secondary"
-                    }
-                  >
-                    {lead.status}
-                  </Badge>
-                </div>
-              ))}
+                );
+              })}
               {myLeads.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  {t("dashboard.leadManager.noLeadsAssignedYet")}
+                  {t("dashboard.leadManager.noOffersAssignedYet")}
                 </p>
               )}
             </div>
@@ -320,14 +387,118 @@ export function LeadManagerDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RatingsList 
-              ratings={myRatings.slice(0, MAX_DISPLAYED_RATINGS)} 
-              showRaterInfo={true}
-              showRatedInfo={false}
-            />
-            {myRatings.length > MAX_DISPLAYED_RATINGS && (
-              <p className="text-sm text-muted-foreground text-center mt-4">
-                {t("dashboard.leadManager.showing")} {MAX_DISPLAYED_RATINGS} {t("dashboard.leadManager.of")} {myRatings.length} {t("dashboard.leadManager.ratings")}
+            {/* Filters and Sorting */}
+            <div className="mb-6 flex flex-wrap gap-4">
+              <div className="flex-1 min-w-[150px]">
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  {t("dashboard.leadManager.filterByScore")}
+                </label>
+                <Select value={scoreFilter} onValueChange={setScoreFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("dashboard.leadManager.allScores")}</SelectItem>
+                    <SelectItem value="5">5 {t("ratings.stars")}</SelectItem>
+                    <SelectItem value="4">4 {t("ratings.stars")}</SelectItem>
+                    <SelectItem value="3">3 {t("ratings.stars")}</SelectItem>
+                    <SelectItem value="2">2 {t("ratings.stars")}</SelectItem>
+                    <SelectItem value="1">1 {t("ratings.star")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1 min-w-[150px]">
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  {t("dashboard.leadManager.filterByContext")}
+                </label>
+                <Select value={contextFilter} onValueChange={setContextFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("dashboard.leadManager.allContexts")}</SelectItem>
+                    <SelectItem value="PROPOSAL_ACCEPTED">{t("ratings.contextAcceptedProposal")}</SelectItem>
+                    <SelectItem value="PROPOSAL_REJECTED">{t("ratings.contextRejectedProposal")}</SelectItem>
+                    <SelectItem value="LEAD_MANAGER_RATED">{t("ratings.contextLeadManagerRated")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1 min-w-[150px]">
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  {t("dashboard.leadManager.sortBy")}
+                </label>
+                <Select value={sortOrder} onValueChange={setSortOrder}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">{t("dashboard.leadManager.sortNewest")}</SelectItem>
+                    <SelectItem value="oldest">{t("dashboard.leadManager.sortOldest")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Carousel Container */}
+            {filteredAndSortedRatings.length > 0 ? (
+              <>
+                <div className="relative">
+                  <RatingsList 
+                    ratings={paginatedRatings} 
+                    showRaterInfo={true}
+                    showRatedInfo={false}
+                  />
+                </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-4 mt-6">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                      disabled={validCurrentPage === 0}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" />
+                      {t("common.previous") || "Previous"}
+                    </Button>
+                    
+                    <div className="flex items-center gap-2">
+                      {Array.from({ length: totalPages }).map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setCurrentPage(i)}
+                          className={`h-2 w-2 rounded-full transition-all ${
+                            i === validCurrentPage 
+                              ? "bg-primary w-6" 
+                              : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                          }`}
+                          aria-label={`Go to page ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                      disabled={validCurrentPage === totalPages - 1}
+                    >
+                      {t("common.next") || "Next"}
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                )}
+
+                <p className="text-sm text-muted-foreground text-center mt-4">
+                  {t("dashboard.leadManager.showing")} {paginatedRatings.length} {t("dashboard.leadManager.of")} {filteredAndSortedRatings.length} {t("dashboard.leadManager.ratings")}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-8">
+                {t("ratings.noRatingsYet")}
               </p>
             )}
           </CardContent>
