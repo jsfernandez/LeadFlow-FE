@@ -137,73 +137,166 @@ class MockDataStore {
     const leads: Lead[] = [
       {
         id: "lead-1",
-        name: "Acme Corp",
+        fullName: "John Smith",
+        leadId: "LEAD-001",
         email: "contact@acme.com",
         phone: "+1-555-0101",
         companyName: "Acme Corporation",
+        title: "MBA",
+        country: "USA",
+        city: "New York",
+        industry: "Technology",
+        profileUrl: "https://linkedin.com/in/johnsmith",
+        positionCode: "CEO",
+        gender: "MALE",
+        minRevenue: 1000,
+        maxRevenue: 5000,
+        source: "LinkedIn",
+        tags: ["enterprise", "tech"],
         createdAt: new Date("2024-10-15"),
         updatedAt: new Date("2024-10-15"),
       },
       {
         id: "lead-2",
-        name: "TechStart Inc",
+        fullName: "Jane Doe",
+        leadId: "LEAD-002",
         email: "hello@techstart.io",
         phone: "+1-555-0102",
         companyName: "TechStart Innovations",
+        title: "BSc Computer Science",
+        country: "USA",
+        city: "San Francisco",
+        industry: "Software",
+        profileUrl: "https://techstart.io",
+        positionCode: "CTO",
+        gender: "FEMALE",
+        minRevenue: 800,
+        maxRevenue: 3000,
+        source: "Referral",
+        tags: ["startup", "saas"],
         createdAt: new Date("2024-10-20"),
         updatedAt: new Date("2024-10-20"),
       },
       {
         id: "lead-3",
-        name: "ShopZone LLC",
+        fullName: "Robert Johnson",
+        leadId: "LEAD-003",
         email: "info@shopzone.com",
         phone: "+1-555-0103",
         companyName: "ShopZone E-commerce",
+        title: "BA Business Administration",
+        country: "USA",
+        city: "Chicago",
+        industry: "E-commerce",
+        positionCode: "Director",
+        gender: "MALE",
+        minRevenue: 500,
+        maxRevenue: 2000,
+        source: "Website",
+        tags: ["retail", "online"],
         createdAt: new Date("2024-10-21"),
         updatedAt: new Date("2024-10-21"),
       },
       {
         id: "lead-4",
-        name: "MegaStore Co",
+        fullName: "Maria Garcia",
+        leadId: "LEAD-004",
         email: "sales@megastore.com",
         phone: "+1-555-0104",
         companyName: "MegaStore Company",
+        title: "MSc Marketing",
+        country: "USA",
+        city: "Los Angeles",
+        industry: "Retail",
+        positionCode: "VP Sales",
+        gender: "FEMALE",
+        minRevenue: 1500,
+        maxRevenue: 6000,
+        source: "Trade Show",
+        tags: ["retail", "b2c"],
         createdAt: new Date("2024-10-25"),
         updatedAt: new Date("2024-10-25"),
       },
       {
         id: "lead-5",
-        name: "Global Enterprises",
+        fullName: "Michael Brown",
+        leadId: "LEAD-005",
         email: "contact@globalent.com",
         phone: "+1-555-0105",
         companyName: "Global Enterprises Ltd",
+        title: "PhD Economics",
+        country: "UK",
+        city: "London",
+        industry: "Consulting",
+        profileUrl: "https://globalent.com",
+        positionCode: "CEO",
+        gender: "MALE",
+        minRevenue: 2000,
+        maxRevenue: 10000,
+        source: "Direct",
+        tags: ["enterprise", "consulting"],
         createdAt: new Date("2024-11-01"),
         updatedAt: new Date("2024-11-01"),
       },
       {
         id: "lead-6",
-        name: "BigCorp Industries",
+        fullName: "Sarah Wilson",
+        leadId: "LEAD-006",
         email: "reach@bigcorp.com",
         phone: "+1-555-0106",
         companyName: "BigCorp Industries Inc",
+        title: "BA Engineering",
+        country: "USA",
+        city: "Boston",
+        industry: "Manufacturing",
+        positionCode: "COO",
+        gender: "FEMALE",
+        minRevenue: 1200,
+        maxRevenue: 5000,
+        source: "Partner",
+        tags: ["manufacturing", "b2b"],
         createdAt: new Date("2024-11-02"),
         updatedAt: new Date("2024-11-02"),
       },
       {
         id: "lead-7",
-        name: "InnovateLab",
+        fullName: "David Lee",
+        leadId: "LEAD-007",
         email: "team@innovatelab.io",
         phone: "+1-555-0107",
         companyName: "InnovateLab Research",
+        title: "PhD Computer Science",
+        country: "USA",
+        city: "Seattle",
+        industry: "Research",
+        profileUrl: "https://innovatelab.io",
+        positionCode: "Director",
+        gender: "MALE",
+        minRevenue: 600,
+        maxRevenue: 2500,
+        source: "Academic",
+        tags: ["research", "innovation"],
         createdAt: new Date("2024-11-03"),
         updatedAt: new Date("2024-11-03"),
       },
       {
         id: "lead-8",
-        name: "CloudTech Solutions",
+        fullName: "Emily Chen",
+        leadId: "LEAD-008",
         email: "info@cloudtech.com",
         phone: "+1-555-0108",
         companyName: "CloudTech Solutions Group",
+        title: "MSc Cloud Computing",
+        country: "Canada",
+        city: "Toronto",
+        industry: "Cloud Services",
+        profileUrl: "https://cloudtech.com",
+        positionCode: "VP Technology",
+        gender: "FEMALE",
+        minRevenue: 1000,
+        maxRevenue: 4000,
+        source: "Conference",
+        tags: ["cloud", "saas"],
         createdAt: new Date("2024-10-28"),
         updatedAt: new Date("2024-10-28"),
       },
@@ -219,9 +312,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-1",
         description: "High-value prospect interested in SaaS solutions",
-        customerName: "Acme Corp", // Deprecated
-        customerEmail: "contact@acme.com", // Deprecated
-        customerPhone: "+1-555-0101", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-10-16"),
         qualifiedAt: new Date("2024-10-18"),
@@ -233,9 +323,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-2",
         description: "Startup looking for enterprise solutions",
-        customerName: "TechStart Inc", // Deprecated
-        customerEmail: "hello@techstart.io", // Deprecated
-        customerPhone: "+1-555-0102", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-10-22"),
         qualifiedAt: new Date("2024-10-25"),
@@ -247,9 +334,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-3",
         description: "E-commerce platform seeking qualified leads",
-        customerName: "ShopZone LLC", // Deprecated
-        customerEmail: "info@shopzone.com", // Deprecated
-        customerPhone: "+1-555-0103", // Deprecated
         status: "LOST",
         assignedAt: new Date("2024-10-21"),
         qualifiedAt: new Date("2024-10-23"),
@@ -261,9 +345,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-4",
         description: "Large retail chain interested in e-commerce leads",
-        customerName: "MegaStore Co", // Deprecated
-        customerEmail: "sales@megastore.com", // Deprecated
-        customerPhone: "+1-555-0104", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-11-01"),
         qualifiedAt: new Date("2024-11-02"),
@@ -275,9 +356,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-5",
         description: "Enterprise client seeking B2B leads",
-        customerName: "Global Enterprises", // Deprecated
-        customerEmail: "contact@globalent.com", // Deprecated
-        customerPhone: "+1-555-0105", // Deprecated
         status: "PENDING",
         assignedAt: new Date("2024-11-02"),
         createdAt: new Date("2024-11-02"),
@@ -288,9 +366,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-6",
         description: "Fortune 500 company interested in decision-maker contacts",
-        customerName: "BigCorp Industries", // Deprecated
-        customerEmail: "reach@bigcorp.com", // Deprecated
-        customerPhone: "+1-555-0106", // Deprecated
         status: "PENDING",
         assignedAt: new Date("2024-11-04"),
         createdAt: new Date("2024-11-04"),
@@ -301,9 +376,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-7",
         description: "Research lab looking for startup leads",
-        customerName: "InnovateLab", // Deprecated
-        customerEmail: "team@innovatelab.io", // Deprecated
-        customerPhone: "+1-555-0107", // Deprecated
         status: "WON",
         assignedAt: new Date("2024-11-03"),
         qualifiedAt: new Date("2024-11-04"),
@@ -315,9 +387,6 @@ class MockDataStore {
         leadManagerId: leadManager1.id,
         leadId: "lead-8",
         description: "Cloud solutions provider interested in SaaS leads",
-        customerName: "CloudTech Solutions", // Deprecated
-        customerEmail: "info@cloudtech.com", // Deprecated
-        customerPhone: "+1-555-0108", // Deprecated
         status: "LOST",
         assignedAt: new Date("2024-10-28"),
         qualifiedAt: new Date("2024-10-30"),
@@ -549,7 +618,7 @@ class MockDataStore {
   ): Promise<LeadOffer> {
     await delay();
     
-    // Fetch lead details to populate deprecated fields for backward compatibility
+    // Verify lead exists
     const lead = this.leads.get(data.leadId);
     if (!lead) {
       throw new Error(`Lead with id ${data.leadId} not found`);
@@ -558,9 +627,6 @@ class MockDataStore {
     const newLeadOffer: LeadOffer = {
       ...data,
       id: `lead-offer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      customerName: lead.name, // Populate from lead for backward compatibility
-      customerEmail: lead.email, // Populate from lead for backward compatibility
-      customerPhone: lead.phone, // Populate from lead for backward compatibility
       status: "PENDING",
       createdAt: new Date(),
     };

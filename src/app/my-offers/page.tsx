@@ -22,6 +22,21 @@ import type { OfferStatus, LeadOffer } from "@/types";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
 
+// Helper component to fetch and display lead field
+const LeadCell = ({ leadId, field }: { leadId: string; field: "fullName" | "email" | "phone" }) => {
+  const { data: lead } = useQuery({
+    queryKey: ["lead", leadId],
+    queryFn: () => dataProvider.getLeadById(leadId),
+    enabled: !!leadId,
+  });
+
+  if (!lead) {
+    return <span className="text-sm text-muted-foreground">Loading...</span>;
+  }
+
+  return <span>{lead[field]}</span>;
+};
+
 export default function MyOffersPage() {
   const { user } = useAuth();
   const { data: offers, isLoading } = useOffersBySeller(user?.id || "");
@@ -210,9 +225,15 @@ export default function MyOffersPage() {
                       const offer = offers?.find((o) => o.id === proposal.offerId);
                       return (
                         <TableRow key={proposal.id}>
-                          <TableCell className="font-medium">{proposal.customerName}</TableCell>
-                          <TableCell>{proposal.customerEmail}</TableCell>
-                          <TableCell>{proposal.customerPhone}</TableCell>
+                          <TableCell className="font-medium">
+                            <LeadCell leadId={proposal.leadId} field="fullName" />
+                          </TableCell>
+                          <TableCell>
+                            <LeadCell leadId={proposal.leadId} field="email" />
+                          </TableCell>
+                          <TableCell>
+                            <LeadCell leadId={proposal.leadId} field="phone" />
+                          </TableCell>
                           <TableCell className="max-w-xs truncate">
                             {offer?.title || "Unknown Offer"}
                           </TableCell>

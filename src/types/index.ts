@@ -73,16 +73,31 @@ export interface Offer {
  */
 export interface Lead {
   id: string;
-  name: string;
+  fullName: string;
+  leadId: string;
   email: string;
   phone: string;
-  companyName?: string;
+  companyName: string;
+  title: string;       // profesión o grado académico
+  country: string;
+  city: string;
+  industry: string;
+  profileUrl?: string; // página web o red social
+  partialPreviewJson?: string;
+  positionCode?: string; // cargo (CEO, Director, etc.)
+  gender?: string;       // "UNSPECIFIED" si se omite
+  minRevenue: number;    // precio mínimo (equivale a cobro mínimo)
+  maxRevenue: number;    // precio máximo (cobro máximo)
+  source?: string;       // fuente del lead
+  tags?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
 
 /**
  * Lead proposal
+ * Note: customerName, customerEmail, customerPhone are deprecated
+ * and should be retrieved from the associated Lead entity via leadId
  */
 export interface LeadOffer {
   id: string;
@@ -90,9 +105,6 @@ export interface LeadOffer {
   leadManagerId: string;
   leadId: string;
   description?: string;
-  customerName: string; // Deprecated: kept for backward compatibility
-  customerEmail: string; // Deprecated: kept for backward compatibility
-  customerPhone: string; // Deprecated: kept for backward compatibility
   status: LeadStatus;
   assignedAt?: Date;
   qualifiedAt?: Date;
