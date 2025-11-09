@@ -13,6 +13,7 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
+    "select": "Select",
     "search": "Search",
     "filter": "Filter",
     "all": "All",
@@ -261,7 +262,12 @@
     "submit": "Submit",
     "submitting": "Submitting...",
     "loading": "Loading...",
-    "lead": "Lead"
+    "lead": "Lead",
+    "selectLead": "Select Lead",
+    "chooseLead": "Choose a lead",
+    "searchLead": "Search leads...",
+    "noLeadsAvailable": "No leads available",
+    "selectedLead": "Selected Lead"
   },
   "payouts": {
     "title": "Payouts",
@@ -549,6 +555,33 @@
     "failedToLoad": "Failed to load leads. Please try again.",
     "confirmDelete": "Are you sure you want to delete this lead?",
     "creating": "Creating...",
-    "updating": "Updating..."
+    "updating": "Updating...",
+    "filter": {
+      "search": "Search",
+      "searchPlaceholder": "Search by name, company, or email...",
+      "industry": "Industry",
+      "country": "Country",
+      "city": "City",
+      "gender": "Gender",
+      "revenueRange": "Revenue Range",
+      "allIndustries": "All Industries",
+      "allCountries": "All Countries",
+      "allCities": "All Cities",
+      "allGenders": "All Genders",
+      "clearFilters": "Clear Filters",
+      "filters": "Filters"
+    },
+    "sort": {
+      "sortBy": "Sort by",
+      "companyName": "Company Name",
+      "fullName": "Full Name",
+      "industry": "Industry",
+      "country": "Country",
+      "createdAt": "Created Date",
+      "minRevenue": "Min Revenue",
+      "maxRevenue": "Max Revenue",
+      "ascending": "Ascending",
+      "descending": "Descending"
+    }
   }
 }

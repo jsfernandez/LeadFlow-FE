@@ -32,11 +32,12 @@ import { useCreateLeadOffer } from "@/hooks/use-lead-offers";
 import { useLeads } from "@/hooks/use-leads";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useTranslation } from "@/hooks/use-translation";
-import type { OfferStatus, Offer } from "@/types";
+import type { OfferStatus, Offer, Lead } from "@/types";
 import { createOfferSchema } from "@/lib/schemas/offer.schema";
 import { toast } from "sonner";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
+import { LeadSelector } from "@/components/leads/LeadSelector";
 
 export default function OffersPage() {
   const { user } = useAuth();
@@ -50,6 +51,7 @@ export default function OffersPage() {
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isProposalDialogOpen, setIsProposalDialogOpen] = useState(false);
+  const [isLeadSelectorOpen, setIsLeadSelectorOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
@@ -168,6 +170,23 @@ export default function OffersPage() {
 
   const handleCreateProposal = (offer: Offer) => {
     setSelectedOffer(offer);
+    // Reset proposal form
+    setProposalFormData({
+      leadId: "",
+      description: "",
+    });
+    // Open lead selector modal
+    setIsLeadSelectorOpen(true);
+  };
+
+  const handleLeadSelected = (lead: Lead) => {
+    // Set the selected lead ID
+    setProposalFormData((prev) => ({
+      ...prev,
+      leadId: lead.id,
+    }));
+    // Close lead selector and open proposal dialog
+    setIsLeadSelectorOpen(false);
     setIsProposalDialogOpen(true);
   };
 
@@ -520,6 +539,16 @@ export default function OffersPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Lead Selector Modal */}
+      <LeadSelector
+        open={isLeadSelectorOpen}
+        onOpenChange={setIsLeadSelectorOpen}
+        leads={leads}
+        isLoading={false}
+        onSelectLead={handleLeadSelected}
+        selectedLeadId={proposalFormData.leadId}
+      />
+
       {/* Create Proposal Dialog */}
       <Dialog open={isProposalDialogOpen} onOpenChange={setIsProposalDialogOpen}>
         <DialogContent>
@@ -532,31 +561,35 @@ export default function OffersPage() {
             </DialogHeader>
 
             <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="leadId">{t("proposals.selectLead")}</Label>
-                <Select
-                  value={proposalFormData.leadId}
-                  onValueChange={(value) => setProposalFormData({ ...proposalFormData, leadId: value })}
-                  required
-                >
-                  <SelectTrigger id="leadId">
-                    <SelectValue placeholder={t("proposals.chooseLead")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {leads && leads.length > 0 ? (
-                      leads.map((lead) => (
-                        <SelectItem key={lead.id} value={lead.id}>
-                          {lead.companyName} - {lead.fullName} ({lead.email})
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="none" disabled>
-                        {t("proposals.noLeadsAvailable")}
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Display selected lead info */}
+              {proposalFormData.leadId && leads && (
+                <div className="space-y-2">
+                  <Label>{t("proposals.selectedLead")}</Label>
+                  {(() => {
+                    const selectedLead = leads.find(l => l.id === proposalFormData.leadId);
+                    return selectedLead ? (
+                      <div className="p-3 border rounded-md bg-muted/50">
+                        <p className="font-medium">{selectedLead.companyName}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedLead.fullName} - {selectedLead.email}
+                        </p>
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          className="px-0 h-auto"
+                          onClick={() => {
+                            setIsProposalDialogOpen(false);
+                            setIsLeadSelectorOpen(true);
+                          }}
+                        >
+                          Change Lead
+                        </Button>
+                      </div>
+                    ) : null;
+                  })()}
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="description">{t("proposals.description")}</Label>
@@ -588,7 +621,7 @@ export default function OffersPage() {
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createProposal.isPending || !leads || leads.length === 0}>
+              <Button type="submit" disabled={createProposal.isPending || !proposalFormData.leadId}>
                 {createProposal.isPending ? t("common.loading") : t("offers.proposalDialog.submit")}
               </Button>
             </DialogFooter>

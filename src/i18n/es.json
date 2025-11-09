@@ -13,6 +13,7 @@
     "close": "Cerrar",
     "yes": "Sí",
     "no": "No",
+    "select": "Seleccionar",
     "search": "Buscar",
     "filter": "Filtrar",
     "all": "Todos",
@@ -261,7 +262,12 @@
     "submit": "Enviar",
     "submitting": "Enviando...",
     "loading": "Cargando...",
-    "lead": "Lead"
+    "lead": "Lead",
+    "selectLead": "Seleccionar Lead",
+    "chooseLead": "Elegir un lead",
+    "searchLead": "Buscar leads...",
+    "noLeadsAvailable": "No hay leads disponibles",
+    "selectedLead": "Lead Seleccionado"
   },
   "payouts": {
     "title": "Pagos",
@@ -549,6 +555,33 @@
     "failedToLoad": "Error al cargar los leads. Por favor, inténtelo de nuevo.",
     "confirmDelete": "¿Está seguro de que desea eliminar este lead?",
     "creating": "Creando...",
-    "updating": "Actualizando..."
+    "updating": "Actualizando...",
+    "filter": {
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre, empresa o email...",
+      "industry": "Industria",
+      "country": "País",
+      "city": "Ciudad",
+      "gender": "Género",
+      "revenueRange": "Rango de Ingresos",
+      "allIndustries": "Todas las Industrias",
+      "allCountries": "Todos los Países",
+      "allCities": "Todas las Ciudades",
+      "allGenders": "Todos los Géneros",
+      "clearFilters": "Limpiar Filtros",
+      "filters": "Filtros"
+    },
+    "sort": {
+      "sortBy": "Ordenar por",
+      "companyName": "Nombre de Empresa",
+      "fullName": "Nombre Completo",
+      "industry": "Industria",
+      "country": "País",
+      "createdAt": "Fecha de Creación",
+      "minRevenue": "Ingreso Mínimo",
+      "maxRevenue": "Ingreso Máximo",
+      "ascending": "Ascendente",
+      "descending": "Descendente"
+    }
   }
 }
