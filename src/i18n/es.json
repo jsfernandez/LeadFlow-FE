@@ -271,18 +271,41 @@
   },
   "payouts": {
     "title": "Pagos",
-    "subtitle": "Rastree ganancias y estado de pagos",
+    "subtitle": "Rastree sus ganancias e historial de pagos",
     "allPayouts": "Todos los Pagos",
     "listDescription": "Lista de todos los pagos en el sistema",
     "leadManager": "Gestor de Leads",
-    "amount": "Cantidad",
+    "amount": "Monto",
     "status": "Estado",
     "lead": "Lead",
     "createdAt": "Creado el",
     "paidAt": "Pagado el",
     "noPayouts": "Aún no hay pagos",
     "waitForWonLeads": "Complete leads para generar pagos.",
-    "failedToLoad": "Error al cargar los pagos. Por favor, inténtelo de nuevo."
+    "failedToLoad": "Error al cargar los pagos. Por favor, inténtelo de nuevo.",
+    "statusBadges": {
+      "pending": "PENDIENTE",
+      "paid": "PAGADO"
+    },
+    "cards": {
+      "pending": "Pendiente",
+      "paid": "Pagado",
+      "totalEarnings": "Ganancias Totales"
+    },
+    "payoutCount": "pago(s)",
+    "totalPayoutCount": "pago(s) totales",
+    "payoutHistory": "Historial de Pagos",
+    "payoutHistoryDescription": "Todos sus pagos pasados y pendientes",
+    "payoutId": "ID de Pago",
+    "paidDate": "Fecha de Pago",
+    "actions": "Acciones",
+    "markAsPaid": "Marcar como Pagado",
+    "processing": "Procesando...",
+    "emptyStateTitle": "Aún no hay historial de pagos",
+    "emptyStateDescription": "Los pagos se generan cuando los leads se marcan como GANADOS. ¡Comience a calificar sus leads para obtener pagos!",
+    "errorLoading": "Error al cargar los pagos. Por favor, inténtelo de nuevo.",
+    "successMarkedPaid": "Pago marcado como pagado exitosamente",
+    "errorMarkingPaid": "Error al actualizar el estado del pago. Por favor, inténtelo de nuevo."
   },
   "users": {
     "title": "Usuarios",

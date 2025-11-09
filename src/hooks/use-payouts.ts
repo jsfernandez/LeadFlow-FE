@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { dataProvider } from "@/lib/dataProvider";
-import { toast } from "sonner";
 
 /**
  * Hook for fetching all payouts
@@ -47,6 +46,7 @@ export function usePayoutsByManager(managerId: string) {
 
 /**
  * Hook for updating payout status (admin only) with optimistic update
+ * Note: Success/error toasts should be handled by the consuming component for i18n support
  */
 export function useUpdatePayoutStatus() {
   const queryClient = useQueryClient();
@@ -54,16 +54,6 @@ export function useUpdatePayoutStatus() {
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: "PENDING" | "PAID" }) =>
       dataProvider.updatePayoutStatus(id, status),
-    onSuccess: () => {
-      toast.success("Success", {
-        description: "Payout marked as paid successfully",
-      });
-    },
-    onError: () => {
-      toast.error("Error", {
-        description: "Failed to update payout status. Please try again.",
-      });
-    },
     onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({ queryKey: ["payouts", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["payouts"] });

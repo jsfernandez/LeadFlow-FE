@@ -8,8 +8,11 @@ import { TableSkeleton, StatsCardSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { usePayoutsByManager, useUpdatePayoutStatus } from "@/hooks/use-payouts";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useTranslation } from "@/hooks/use-translation";
+import { toast } from "sonner";
 
 export default function PayoutsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { data: payouts, isLoading, error } = usePayoutsByManager(user?.id || "");
   const updatePayoutStatus = useUpdatePayoutStatus();
@@ -22,8 +25,13 @@ export default function PayoutsPage() {
         id: payoutId,
         status: "PAID",
       });
+      toast.success(t("common.submit"), {
+        description: t("payouts.successMarkedPaid"),
+      });
     } catch (error) {
-      // Error is handled by the mutation hook
+      toast.error(t("common.error"), {
+        description: t("payouts.errorMarkingPaid"),
+      });
       console.error("Failed to update payout status:", error);
     }
   };
@@ -34,7 +42,12 @@ export default function PayoutsPage() {
       PAID: "bg-green-600 text-white",
     };
 
-    return <Badge className={variants[status]}>{status}</Badge>;
+    const statusLabels = {
+      PENDING: t("payouts.statusBadges.pending"),
+      PAID: t("payouts.statusBadges.paid"),
+    };
+
+    return <Badge className={variants[status]}>{statusLabels[status]}</Badge>;
   };
 
   // Calculate totals
@@ -45,8 +58,8 @@ export default function PayoutsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Payouts</h1>
-        <p className="text-muted-foreground">Track your earnings and payout history</p>
+        <h1 className="text-3xl font-bold">{t("payouts.title")}</h1>
+        <p className="text-muted-foreground">{t("payouts.subtitle")}</p>
       </div>
 
       {isLoading ? (
@@ -59,36 +72,36 @@ export default function PayoutsPage() {
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Pending</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("payouts.cards.pending")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-yellow-500">${pendingTotal.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {payouts?.filter((p) => p.status === "PENDING").length || 0} payout(s)
+                {payouts?.filter((p) => p.status === "PENDING").length || 0} {t("payouts.payoutCount")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Paid</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("payouts.cards.paid")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-500">${paidTotal.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {payouts?.filter((p) => p.status === "PAID").length || 0} payout(s)
+                {payouts?.filter((p) => p.status === "PAID").length || 0} {t("payouts.payoutCount")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Total Earnings</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("payouts.cards.totalEarnings")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {payouts?.length || 0} total payout(s)
+                {payouts?.length || 0} {t("payouts.totalPayoutCount")}
               </p>
             </CardContent>
           </Card>
@@ -97,26 +110,26 @@ export default function PayoutsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Payout History</CardTitle>
-          <CardDescription>All your past and pending payouts</CardDescription>
+          <CardTitle>{t("payouts.payoutHistory")}</CardTitle>
+          <CardDescription>{t("payouts.payoutHistoryDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <TableSkeleton rows={5} />
           ) : error ? (
             <div className="text-center py-8">
-              <p className="text-sm text-red-400">Failed to load payouts. Please try again.</p>
+              <p className="text-sm text-red-400">{t("payouts.errorLoading")}</p>
             </div>
           ) : payouts && payouts.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Payout ID</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Paid Date</TableHead>
-                  {isAdmin && <TableHead>Actions</TableHead>}
+                  <TableHead>{t("payouts.payoutId")}</TableHead>
+                  <TableHead>{t("payouts.amount")}</TableHead>
+                  <TableHead>{t("payouts.status")}</TableHead>
+                  <TableHead>{t("payouts.createdAt")}</TableHead>
+                  <TableHead>{t("payouts.paidDate")}</TableHead>
+                  {isAdmin && <TableHead>{t("payouts.actions")}</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -141,7 +154,7 @@ export default function PayoutsPage() {
                             onClick={() => handleMarkAsPaid(payout.id)}
                             disabled={updatePayoutStatus.isPending}
                           >
-                            {updatePayoutStatus.isPending ? "Processing..." : "Mark as Paid"}
+                            {updatePayoutStatus.isPending ? t("payouts.processing") : t("payouts.markAsPaid")}
                           </Button>
                         )}
                       </TableCell>
@@ -153,8 +166,8 @@ export default function PayoutsPage() {
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Cash}
-              title="No payout history yet"
-              description="Payouts are generated when leads are marked as WON. Start qualifying your leads to earn payouts!"
+              title={t("payouts.emptyStateTitle")}
+              description={t("payouts.emptyStateDescription")}
             />
           )}
         </CardContent>

@@ -271,7 +271,7 @@
   },
   "payouts": {
     "title": "Payouts",
-    "subtitle": "Track earnings and payment status",
+    "subtitle": "Track your earnings and payout history",
     "allPayouts": "All Payouts",
     "listDescription": "List of all payouts in the system",
     "leadManager": "Lead Manager",
@@ -282,7 +282,30 @@
     "paidAt": "Paid At",
     "noPayouts": "No payouts yet",
     "waitForWonLeads": "Complete leads to generate payouts.",
-    "failedToLoad": "Failed to load payouts. Please try again."
+    "failedToLoad": "Failed to load payouts. Please try again.",
+    "statusBadges": {
+      "pending": "PENDING",
+      "paid": "PAID"
+    },
+    "cards": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "totalEarnings": "Total Earnings"
+    },
+    "payoutCount": "payout(s)",
+    "totalPayoutCount": "total payout(s)",
+    "payoutHistory": "Payout History",
+    "payoutHistoryDescription": "All your past and pending payouts",
+    "payoutId": "Payout ID",
+    "paidDate": "Paid Date",
+    "actions": "Actions",
+    "markAsPaid": "Mark as Paid",
+    "processing": "Processing...",
+    "emptyStateTitle": "No payout history yet",
+    "emptyStateDescription": "Payouts are generated when leads are marked as WON. Start qualifying your leads to earn payouts!",
+    "errorLoading": "Failed to load payouts. Please try again.",
+    "successMarkedPaid": "Payout marked as paid successfully",
+    "errorMarkingPaid": "Failed to update payout status. Please try again."
   },
   "users": {
     "title": "Users",
