@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Dialog,
@@ -12,14 +13,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useLeads, useCreateLead, useUpdateLead, useDeleteLead } from "@/hooks/use-leads";
+import { useFilteredLeads, useLeadFilterOptions, type LeadFilters, type LeadSort } from "@/hooks/use-filtered-leads";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { Lead } from "@/types";
 import { useTranslation } from "@/hooks/use-translation";
+import { Search, Filter, ArrowUpDown, X } from "lucide-react";
 
 export default function LeadsPage() {
   const { t } = useTranslation();
@@ -49,6 +67,61 @@ export default function LeadsPage() {
     maxRevenue: 0,
     source: "",
   });
+
+  // Filter and sort state
+  const [filters, setFilters] = useState<LeadFilters>({
+    search: "",
+    industry: "all",
+    country: "all",
+    city: "all",
+    gender: "all",
+  });
+
+  // Sort state - default to createdAt DESC
+  const [sort, setSort] = useState<LeadSort>({
+    field: "createdAt",
+    direction: "desc",
+  });
+
+  // Get filter options from leads
+  const filterOptions = useLeadFilterOptions(leads);
+
+  // Apply filters and sorting
+  const filteredLeads = useFilteredLeads(leads, filters, sort);
+
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return (
+      filters.search !== "" ||
+      filters.industry !== "all" ||
+      filters.country !== "all" ||
+      filters.city !== "all" ||
+      filters.gender !== "all"
+    );
+  }, [filters]);
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setFilters({
+      search: "",
+      industry: "all",
+      country: "all",
+      city: "all",
+      gender: "all",
+    });
+  };
+
+  // Toggle sort direction or change sort field
+  const handleSort = (field: LeadSort["field"]) => {
+    setSort((prev) => {
+      if (prev.field === field) {
+        // Toggle direction if same field
+        return { field, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      // Default to ascending for new field
+      return { field, direction: "asc" };
+    });
+  };
 
   const handleCreateLead = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,13 +229,196 @@ export default function LeadsPage() {
           <CardDescription>{t("leads.listDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Filter and Sort Bar */}
+          <div className="space-y-4 mb-6">
+            {/* Search Bar */}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t("leads.filter.searchPlaceholder")}
+                  value={filters.search}
+                  onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                  className="pl-9"
+                />
+              </div>
+              {hasActiveFilters && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearFilters}
+                  className="gap-1"
+                >
+                  <X className="h-4 w-4" />
+                  {t("leads.filter.clearFilters")}
+                </Button>
+              )}
+            </div>
+
+            {/* Filters and Sort */}
+            <div className="flex flex-wrap gap-2">
+              {/* Industry Filter */}
+              <Select
+                value={filters.industry}
+                onValueChange={(value) => setFilters({ ...filters, industry: value })}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={t("leads.filter.industry")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("leads.filter.allIndustries")}</SelectItem>
+                  {filterOptions.industries.map((industry) => (
+                    <SelectItem key={industry} value={industry}>
+                      {industry}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Country Filter */}
+              <Select
+                value={filters.country}
+                onValueChange={(value) => setFilters({ ...filters, country: value })}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={t("leads.filter.country")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("leads.filter.allCountries")}</SelectItem>
+                  {filterOptions.countries.map((country) => (
+                    <SelectItem key={country} value={country}>
+                      {country}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* City Filter */}
+              <Select
+                value={filters.city}
+                onValueChange={(value) => setFilters({ ...filters, city: value })}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={t("leads.filter.city")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("leads.filter.allCities")}</SelectItem>
+                  {filterOptions.cities.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Gender Filter */}
+              <Select
+                value={filters.gender}
+                onValueChange={(value) => setFilters({ ...filters, gender: value })}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={t("leads.filter.gender")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("leads.filter.allGenders")}</SelectItem>
+                  {filterOptions.genders.map((gender) => (
+                    <SelectItem key={gender} value={gender}>
+                      {gender}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Sort Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-1">
+                    <ArrowUpDown className="h-4 w-4" />
+                    {t("leads.sort.sortBy")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[200px]">
+                  <DropdownMenuLabel>{t("leads.sort.sortBy")}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleSort("companyName")}>
+                    {t("leads.sort.companyName")}
+                    {sort.field === "companyName" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("fullName")}>
+                    {t("leads.sort.fullName")}
+                    {sort.field === "fullName" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("industry")}>
+                    {t("leads.sort.industry")}
+                    {sort.field === "industry" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("country")}>
+                    {t("leads.sort.country")}
+                    {sort.field === "country" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("createdAt")}>
+                    {t("leads.sort.createdAt")}
+                    {sort.field === "createdAt" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("minRevenue")}>
+                    {t("leads.sort.minRevenue")}
+                    {sort.field === "minRevenue" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSort("maxRevenue")}>
+                    {t("leads.sort.maxRevenue")}
+                    {sort.field === "maxRevenue" && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {sort.direction === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Results count */}
+            {!isLoading && filteredLeads && (
+              <p className="text-sm text-muted-foreground">
+                {filteredLeads.length} {filteredLeads.length === 1 ? "lead" : "leads"}
+              </p>
+            )}
+          </div>
+
           {isLoading ? (
             <TableSkeleton rows={5} />
           ) : error ? (
             <div className="text-center py-8">
               <p className="text-sm text-red-400">{t("leads.failedToLoad")}</p>
             </div>
-          ) : leads && leads.length > 0 ? (
+          ) : filteredLeads && filteredLeads.length > 0 ? (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -178,14 +434,16 @@ export default function LeadsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {leads.map((lead) => (
+                  {filteredLeads.map((lead) => (
                     <TableRow key={lead.id}>
                       <TableCell className="font-medium">{lead.companyName}</TableCell>
                       <TableCell>{lead.fullName}</TableCell>
                       <TableCell>{lead.email}</TableCell>
                       <TableCell>{lead.phone}</TableCell>
                       <TableCell>{`${lead.city}, ${lead.country}`}</TableCell>
-                      <TableCell>{lead.industry}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{lead.industry}</Badge>
+                      </TableCell>
                       <TableCell>
                         ${lead.minRevenue} - ${lead.maxRevenue}
                       </TableCell>
@@ -216,11 +474,15 @@ export default function LeadsPage() {
             <EmptyState
               icon={EmptyStateIcons.Clipboard}
               title={t("leads.noLeads")}
-              description={t("leads.noLeadsDescription")}
-              action={{
-                label: t("leads.createLead"),
-                onClick: () => setIsCreateDialogOpen(true),
-              }}
+              description={hasActiveFilters ? t("leads.filter.clearFilters") : t("leads.noLeadsDescription")}
+              action={
+                !hasActiveFilters
+                  ? {
+                      label: t("leads.createLead"),
+                      onClick: () => setIsCreateDialogOpen(true),
+                    }
+                  : undefined
+              }
             />
           )}
         </CardContent>
