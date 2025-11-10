@@ -95,11 +95,13 @@ export function SellerDashboard() {
         <Card className="border-primary/50 bg-gradient-to-br from-card to-card/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              Your Reputation
+              {t("dashboard.seller.yourReputation")}
               <ReputationBadge reputation={myReputation} variant="detailed" size="lg" />
             </CardTitle>
             <CardDescription>
-              Based on {myReputation.totalRatings} {myReputation.totalRatings === 1 ? 'rating' : 'ratings'} from lead managers
+              {t("dashboard.seller.basedOnRatingsFrom")
+                .replace("{count}", String(myReputation.totalRatings))
+                .replace("{rating}", myReputation.totalRatings === 1 ? t("dashboard.seller.rating") : t("dashboard.seller.ratings"))}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -235,7 +237,7 @@ export function SellerDashboard() {
                   }}
                   labelStyle={{ color: "rgb(226, 232, 240)" }}
                   itemStyle={{ color: "rgb(251, 191, 36)" }}
-                  formatter={(value) => [`$${value}`, "Revenue"]}
+                  formatter={(value) => [`$${value}`, t("dashboard.seller.revenue")]}
                 />
                 <Area
                   type="monotone"
@@ -333,13 +335,13 @@ export function SellerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>Your Ratings & Reviews</span>
+              <span>{t("dashboard.seller.yourRatingsAndReviews")}</span>
               {myReputation && (
                 <ReputationBadge reputation={myReputation} size="md" />
               )}
             </CardTitle>
             <CardDescription>
-              Feedback from lead managers who worked with your offers
+              {t("dashboard.seller.feedbackFromLeadManagers")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -350,7 +352,9 @@ export function SellerDashboard() {
             />
             {myRatings.length > MAX_DISPLAYED_RATINGS && (
               <p className="text-sm text-muted-foreground text-center mt-4">
-                Showing {MAX_DISPLAYED_RATINGS} of {myRatings.length} ratings
+                {t("dashboard.seller.showingOf")
+                  .replace("{current}", String(MAX_DISPLAYED_RATINGS))
+                  .replace("{total}", String(myRatings.length))}
               </p>
             )}
           </CardContent>

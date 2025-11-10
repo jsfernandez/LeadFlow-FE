@@ -30,7 +30,9 @@
     "viewDetails": "Ver Detalles",
     "createProposal": "Crear Propuesta",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "noDataAvailable": "No hay datos disponibles",
+    "unknownOffer": "Oferta Desconocida"
   },
   "header": {
     "title": "LeadManager"
@@ -94,7 +96,15 @@
       "proposalsSummary": "Resumen de Propuestas",
       "recentProposalsForOffers": "Propuestas recientes para sus ofertas",
       "noOffersCreated": "Aún no se han creado ofertas",
-      "noProposalsReceived": "Aún no se han recibido propuestas"
+      "noProposalsReceived": "Aún no se han recibido propuestas",
+      "yourReputation": "Su Reputación",
+      "basedOnRatingsFrom": "Basado en {count} {rating} de gestores de leads",
+      "rating": "calificación",
+      "ratings": "calificaciones",
+      "yourRatingsAndReviews": "Sus Calificaciones y Reseñas",
+      "feedbackFromLeadManagers": "Comentarios de gestores de leads que trabajaron con sus ofertas",
+      "showingOf": "Mostrando {current} de {total} calificaciones",
+      "revenue": "Ingresos"
     },
     "leadManager": {
       "title": "Panel del Gestor de Leads",
@@ -207,7 +217,27 @@
       "offerPrice": "Precio",
       "titlePlaceholder": "ej., Paquete de Leads Premium",
       "descriptionPlaceholder": "Describa lo que incluye la oferta...",
-      "pricePlaceholder": "0.00"
+      "pricePlaceholder": "0.00",
+      "optionalDetails": "Detalles Opcionales",
+      "leadType": "Tipo de Lead",
+      "leadTypePlaceholder": "ej., B2B Empresarial, B2C Minorista",
+      "leadQuantity": "Cantidad de Leads",
+      "leadQuantityPlaceholder": "Número de leads",
+      "clientType": "Tipo de Cliente",
+      "clientTypePlaceholder": "ej., Empresas SaaS, Plataformas de E-commerce",
+      "acceptanceCriteria": "Criterios de Aceptación",
+      "acceptanceCriteriaPlaceholder": "Defina los criterios para aceptar esta oferta",
+      "offerDuration": "Duración de la Oferta (días)",
+      "offerDurationPlaceholder": "Número de días que la oferta es válida",
+      "allowConsultations": "Permitir Consultas",
+      "selectOption": "Seleccionar opción",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "detailDialog": {
+      "title": "Detalles de la Oferta",
+      "description": "Información completa sobre esta oferta",
+      "basicInformation": "Información Básica"
     },
     "proposalDialog": {
       "title": "Enviar Propuesta",
@@ -220,13 +250,40 @@
       "phonePlaceholder": "+34-555-0100",
       "submit": "Enviar Propuesta",
       "success": "Propuesta enviada exitosamente",
-      "error": "Error al enviar la propuesta"
+      "error": "Error al enviar la propuesta",
+      "leadNotFound": "Lead seleccionado no encontrado"
     }
   },
   "myOffers": {
     "title": "Mis Ofertas",
-    "subtitle": "Gestione sus ofertas creadas",
-    "createOffer": "Crear Oferta"
+    "subtitle": "Gestione sus ofertas creadas y propuestas",
+    "createOffer": "Crear Oferta",
+    "yourOffers": "Sus Ofertas",
+    "offersYouCreated": "Ofertas que ha creado",
+    "loadingYourOffers": "Cargando sus ofertas...",
+    "haventCreatedOffers": "Aún no ha creado ninguna oferta",
+    "createYourFirstOffer": "Crear Su Primera Oferta",
+    "proposalsReceived": "Propuestas Recibidas",
+    "proposalsReceivedDescription": "Propuestas de leads enviadas para sus ofertas",
+    "loadingProposals": "Cargando propuestas...",
+    "noProposalsReceived": "Aún no se han recibido propuestas",
+    "table": {
+      "title": "Título",
+      "description": "Descripción",
+      "price": "Precio",
+      "status": "Estado",
+      "created": "Creado",
+      "actions": "Acciones",
+      "customer": "Cliente",
+      "email": "Email",
+      "phone": "Teléfono",
+      "offer": "Oferta",
+      "submitted": "Enviado",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "archived": "Archivado"
+    },
+    "rateLeadManager": "Calificar Gestor de Leads"
   },
   "proposals": {
     "title": "Propuestas",
@@ -542,7 +599,12 @@
     "contextAcceptedProposal": "Propuesta Aceptada",
     "contextRejectedProposal": "Propuesta Rechazada",
     "contextLeadManagerRated": "Reseña del Gestor de Leads",
-    "contextReview": "Reseña"
+    "contextReview": "Reseña",
+    "modal": {
+      "title": "Calificar Gestor de Leads",
+      "subtitle": "Calificar a este Gestor de Leads",
+      "rateForProposal": "Califique a {name} por su envío de propuesta"
+    }
   },
   "leads": {
     "title": "Gestiona tus Leads",

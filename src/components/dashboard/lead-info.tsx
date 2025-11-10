@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { dataProvider } from "@/lib/dataProvider";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface LeadInfoProps {
   leadId: string;
@@ -13,6 +14,7 @@ interface LeadInfoProps {
  * Used in dashboards to show lead details from LeadOffers
  */
 export function LeadInfo({ leadId, showFullDetails = false }: LeadInfoProps) {
+  const { t } = useTranslation();
   const { data: lead } = useQuery({
     queryKey: ["lead", leadId],
     queryFn: () => dataProvider.getLeadById(leadId),
@@ -20,7 +22,7 @@ export function LeadInfo({ leadId, showFullDetails = false }: LeadInfoProps) {
   });
 
   if (!lead) {
-    return <span className="text-sm text-muted-foreground">Loading...</span>;
+    return <span className="text-sm text-muted-foreground">{t("common.loading")}</span>;
   }
 
   if (showFullDetails) {

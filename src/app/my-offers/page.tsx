@@ -18,12 +18,14 @@ import { useOffersBySeller, useUpdateOfferStatus } from "@/hooks/use-offers";
 import { useLeadOffers } from "@/hooks/use-lead-offers";
 import { useCreateRating } from "@/hooks/use-ratings";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useTranslation } from "@/hooks/use-translation";
 import type { OfferStatus, LeadOffer } from "@/types";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
 
 // Helper component to fetch and display lead field
 const LeadCell = ({ leadId, field }: { leadId: string; field: "fullName" | "email" | "phone" }) => {
+  const { t } = useTranslation();
   const { data: lead } = useQuery({
     queryKey: ["lead", leadId],
     queryFn: () => dataProvider.getLeadById(leadId),
@@ -31,7 +33,7 @@ const LeadCell = ({ leadId, field }: { leadId: string; field: "fullName" | "emai
   });
 
   if (!lead) {
-    return <span className="text-sm text-muted-foreground">Loading...</span>;
+    return <span className="text-sm text-muted-foreground">{t("common.loading")}</span>;
   }
 
   return <span>{lead[field]}</span>;
@@ -111,23 +113,26 @@ export default function MyOffersPage() {
       LOST: "bg-red-600 text-white",
     };
 
-    return <Badge className={variants[status] || "bg-gray-600 text-white"}>{status}</Badge>;
+    const statusTranslationKey = status.toLowerCase();
+    return <Badge className={variants[status] || "bg-gray-600 text-white"}>{t(`common.${statusTranslationKey}`)}</Badge>;
   };
+
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">My Offers</h1>
-          <p className="text-muted-foreground">Manage your created offers and proposals</p>
+          <h1 className="text-3xl font-bold">{t("myOffers.title")}</h1>
+          <p className="text-muted-foreground">{t("myOffers.subtitle")}</p>
         </div>
       </div>
 
       <Tabs defaultValue="offers" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="offers">My Offers</TabsTrigger>
+          <TabsTrigger value="offers">{t("myOffers.title")}</TabsTrigger>
           <TabsTrigger value="proposals">
-            Proposals Received
+            {t("myOffers.proposalsReceived")}
             {myProposals.length > 0 && (
               <Badge className="ml-2 bg-primary/20 text-primary">{myProposals.length}</Badge>
             )}
@@ -137,22 +142,22 @@ export default function MyOffersPage() {
         <TabsContent value="offers">
           <Card>
             <CardHeader>
-              <CardTitle>Your Offers</CardTitle>
-              <CardDescription>Offers you have created</CardDescription>
+              <CardTitle>{t("myOffers.yourOffers")}</CardTitle>
+              <CardDescription>{t("myOffers.offersYouCreated")}</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
-                <p className="text-sm text-muted-foreground">Loading your offers...</p>
+                <p className="text-sm text-muted-foreground">{t("myOffers.loadingYourOffers")}</p>
               ) : offers && offers.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{t("myOffers.table.title")}</TableHead>
+                      <TableHead>{t("myOffers.table.description")}</TableHead>
+                      <TableHead>{t("myOffers.table.price")}</TableHead>
+                      <TableHead>{t("myOffers.table.status")}</TableHead>
+                      <TableHead>{t("myOffers.table.created")}</TableHead>
+                      <TableHead>{t("myOffers.table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -176,9 +181,9 @@ export default function MyOffersPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="ACTIVE">Active</SelectItem>
-                              <SelectItem value="INACTIVE">Inactive</SelectItem>
-                              <SelectItem value="ARCHIVED">Archived</SelectItem>
+                              <SelectItem value="ACTIVE">{t("myOffers.table.active")}</SelectItem>
+                              <SelectItem value="INACTIVE">{t("myOffers.table.inactive")}</SelectItem>
+                              <SelectItem value="ARCHIVED">{t("myOffers.table.archived")}</SelectItem>
                             </SelectContent>
                           </Select>
                         </TableCell>
@@ -189,9 +194,9 @@ export default function MyOffersPage() {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground mb-4">
-                    You haven&apos;t created any offers yet
+                    {t("myOffers.haventCreatedOffers")}
                   </p>
-                  <Button onClick={() => (window.location.href = "/offers")}>Create Your First Offer</Button>
+                  <Button onClick={() => (window.location.href = "/offers")}>{t("myOffers.createYourFirstOffer")}</Button>
                 </div>
               )}
             </CardContent>
@@ -201,23 +206,23 @@ export default function MyOffersPage() {
         <TabsContent value="proposals">
           <Card>
             <CardHeader>
-              <CardTitle>Proposals Received</CardTitle>
-              <CardDescription>Lead proposals submitted for your offers</CardDescription>
+              <CardTitle>{t("myOffers.proposalsReceived")}</CardTitle>
+              <CardDescription>{t("myOffers.proposalsReceivedDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoadingProposals ? (
-                <p className="text-sm text-muted-foreground">Loading proposals...</p>
+                <p className="text-sm text-muted-foreground">{t("myOffers.loadingProposals")}</p>
               ) : myProposals.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Offer</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Submitted</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{t("myOffers.table.customer")}</TableHead>
+                      <TableHead>{t("myOffers.table.email")}</TableHead>
+                      <TableHead>{t("myOffers.table.phone")}</TableHead>
+                      <TableHead>{t("myOffers.table.offer")}</TableHead>
+                      <TableHead>{t("myOffers.table.status")}</TableHead>
+                      <TableHead>{t("myOffers.table.submitted")}</TableHead>
+                      <TableHead>{t("myOffers.table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -235,7 +240,7 @@ export default function MyOffersPage() {
                             <LeadCell leadId={proposal.leadId} field="phone" />
                           </TableCell>
                           <TableCell className="max-w-xs truncate">
-                            {offer?.title || "Unknown Offer"}
+                            {offer?.title || t("common.unknownOffer")}
                           </TableCell>
                           <TableCell>{getStatusBadge(proposal.status)}</TableCell>
                           <TableCell className="text-sm text-muted-foreground">
@@ -248,7 +253,7 @@ export default function MyOffersPage() {
                                 variant="outline"
                                 onClick={() => handleRateLeadManager(proposal)}
                               >
-                                Rate Lead Manager
+                                {t("myOffers.rateLeadManager")}
                               </Button>
                             )}
                           </TableCell>
@@ -260,7 +265,7 @@ export default function MyOffersPage() {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground">
-                    No proposals received yet
+                    {t("myOffers.noProposalsReceived")}
                   </p>
                 </div>
               )}
@@ -274,11 +279,11 @@ export default function MyOffersPage() {
         open={isRatingModalOpen}
         onOpenChange={setIsRatingModalOpen}
         onSubmit={handleSubmitRating}
-        title="Rate Lead Manager"
+        title={t("ratings.modal.title")}
         description={
           leadManagerForRating
-            ? `Rate ${leadManagerForRating.name} for their proposal submission`
-            : "Rate this Lead Manager"
+            ? t("ratings.modal.rateForProposal").replace("{name}", leadManagerForRating.name)
+            : t("ratings.modal.subtitle")
         }
       />
     </div>

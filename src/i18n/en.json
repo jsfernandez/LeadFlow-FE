@@ -30,7 +30,9 @@
     "viewDetails": "View Details",
     "createProposal": "Create Proposal",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "noDataAvailable": "No data available",
+    "unknownOffer": "Unknown Offer"
   },
   "header": {
     "title": "LeadManager"
@@ -94,7 +96,15 @@
       "proposalsSummary": "Proposals Summary",
       "recentProposalsForOffers": "Recent proposals for your offers",
       "noOffersCreated": "No offers created yet",
-      "noProposalsReceived": "No proposals received yet"
+      "noProposalsReceived": "No proposals received yet",
+      "yourReputation": "Your Reputation",
+      "basedOnRatingsFrom": "Based on {count} {rating} from lead managers",
+      "rating": "rating",
+      "ratings": "ratings",
+      "yourRatingsAndReviews": "Your Ratings & Reviews",
+      "feedbackFromLeadManagers": "Feedback from lead managers who worked with your offers",
+      "showingOf": "Showing {current} of {total} ratings",
+      "revenue": "Revenue"
     },
     "leadManager": {
       "title": "Lead Manager Dashboard",
@@ -207,7 +217,27 @@
       "offerPrice": "Price",
       "titlePlaceholder": "e.g., Premium Lead Package",
       "descriptionPlaceholder": "Describe what the offer includes...",
-      "pricePlaceholder": "0.00"
+      "pricePlaceholder": "0.00",
+      "optionalDetails": "Optional Details",
+      "leadType": "Lead Type",
+      "leadTypePlaceholder": "e.g., B2B Enterprise, B2C Retail",
+      "leadQuantity": "Lead Quantity",
+      "leadQuantityPlaceholder": "Number of leads",
+      "clientType": "Client Type",
+      "clientTypePlaceholder": "e.g., SaaS Companies, E-commerce Platforms",
+      "acceptanceCriteria": "Acceptance Criteria",
+      "acceptanceCriteriaPlaceholder": "Define the criteria for accepting this offer",
+      "offerDuration": "Offer Duration (days)",
+      "offerDurationPlaceholder": "Number of days the offer is valid",
+      "allowConsultations": "Allow Consultations",
+      "selectOption": "Select option",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "detailDialog": {
+      "title": "Offer Details",
+      "description": "Complete information about this offer",
+      "basicInformation": "Basic Information"
     },
     "proposalDialog": {
       "title": "Submit Proposal",
@@ -220,13 +250,40 @@
       "phonePlaceholder": "+1-555-0100",
       "submit": "Submit Proposal",
       "success": "Proposal submitted successfully",
-      "error": "Failed to submit proposal"
+      "error": "Failed to submit proposal",
+      "leadNotFound": "Selected lead not found"
     }
   },
   "myOffers": {
     "title": "My Offers",
-    "subtitle": "Manage your created offers",
-    "createOffer": "Create Offer"
+    "subtitle": "Manage your created offers and proposals",
+    "createOffer": "Create Offer",
+    "yourOffers": "Your Offers",
+    "offersYouCreated": "Offers you have created",
+    "loadingYourOffers": "Loading your offers...",
+    "haventCreatedOffers": "You haven't created any offers yet",
+    "createYourFirstOffer": "Create Your First Offer",
+    "proposalsReceived": "Proposals Received",
+    "proposalsReceivedDescription": "Lead proposals submitted for your offers",
+    "loadingProposals": "Loading proposals...",
+    "noProposalsReceived": "No proposals received yet",
+    "table": {
+      "title": "Title",
+      "description": "Description",
+      "price": "Price",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions",
+      "customer": "Customer",
+      "email": "Email",
+      "phone": "Phone",
+      "offer": "Offer",
+      "submitted": "Submitted",
+      "active": "Active",
+      "inactive": "Inactive",
+      "archived": "Archived"
+    },
+    "rateLeadManager": "Rate Lead Manager"
   },
   "proposals": {
     "title": "Proposals",
@@ -542,7 +599,12 @@
     "contextAcceptedProposal": "Accepted Proposal",
     "contextRejectedProposal": "Rejected Proposal",
     "contextLeadManagerRated": "Lead Manager Review",
-    "contextReview": "Review"
+    "contextReview": "Review",
+    "modal": {
+      "title": "Rate Lead Manager",
+      "subtitle": "Rate this Lead Manager",
+      "rateForProposal": "Rate {name} for their proposal submission"
+    }
   },
   "leads": {
     "title": "Make changes to your leads",
