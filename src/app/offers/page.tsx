@@ -212,7 +212,7 @@ export default function OffersPage() {
     });
 
     if (!seller) {
-      return <span className="text-sm text-muted-foreground">Loading...</span>;
+      return <span className="text-sm text-muted-foreground">{t("common.loading")}</span>;
     }
 
     return (

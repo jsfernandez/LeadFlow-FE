@@ -282,7 +282,7 @@ export function LeadManagerDashboard() {
                 return (
                   <div key={lead.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
                     <div className="flex-1">
-                      <p className="font-medium text-sm">{offer?.title || "Unknown Offer"}</p>
+                      <p className="font-medium text-sm">{offer?.title || t("common.unknownOffer")}</p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(lead.createdAt).toLocaleDateString()}
                       </p>

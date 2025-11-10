@@ -25,7 +25,8 @@ export default function ProposalsPage() {
       LOST: "bg-red-600 text-white",
     };
 
-    return <Badge className={variants[status]}>{status}</Badge>;
+    const statusTranslationKey = status.toLowerCase();
+    return <Badge className={variants[status]}>{t(`common.${statusTranslationKey}`)}</Badge>;
   };
 
   // Component to display offer with seller reputation

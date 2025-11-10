@@ -103,7 +103,8 @@
       "ratings": "ratings",
       "yourRatingsAndReviews": "Your Ratings & Reviews",
       "feedbackFromLeadManagers": "Feedback from lead managers who worked with your offers",
-      "showingOf": "Showing {current} of {total} ratings"
+      "showingOf": "Showing {current} of {total} ratings",
+      "revenue": "Revenue"
     },
     "leadManager": {
       "title": "Lead Manager Dashboard",

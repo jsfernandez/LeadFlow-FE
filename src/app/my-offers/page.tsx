@@ -113,7 +113,8 @@ export default function MyOffersPage() {
       LOST: "bg-red-600 text-white",
     };
 
-    return <Badge className={variants[status] || "bg-gray-600 text-white"}>{status}</Badge>;
+    const statusTranslationKey = status.toLowerCase();
+    return <Badge className={variants[status] || "bg-gray-600 text-white"}>{t(`common.${statusTranslationKey}`)}</Badge>;
   };
 
   const { t } = useTranslation();

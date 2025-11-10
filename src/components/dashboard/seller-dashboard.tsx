@@ -237,7 +237,7 @@ export function SellerDashboard() {
                   }}
                   labelStyle={{ color: "rgb(226, 232, 240)" }}
                   itemStyle={{ color: "rgb(251, 191, 36)" }}
-                  formatter={(value) => [`$${value}`, "Revenue"]}
+                  formatter={(value) => [`$${value}`, t("dashboard.seller.revenue")]}
                 />
                 <Area
                   type="monotone"

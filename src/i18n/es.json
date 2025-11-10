@@ -103,7 +103,8 @@
       "ratings": "calificaciones",
       "yourRatingsAndReviews": "Sus Calificaciones y Reseñas",
       "feedbackFromLeadManagers": "Comentarios de gestores de leads que trabajaron con sus ofertas",
-      "showingOf": "Mostrando {current} de {total} calificaciones"
+      "showingOf": "Mostrando {current} de {total} calificaciones",
+      "revenue": "Ingresos"
     },
     "leadManager": {
       "title": "Panel del Gestor de Leads",
