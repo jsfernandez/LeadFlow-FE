@@ -250,7 +250,8 @@
       "phonePlaceholder": "+34-555-0100",
       "submit": "Enviar Propuesta",
       "success": "Propuesta enviada exitosamente",
-      "error": "Error al enviar la propuesta"
+      "error": "Error al enviar la propuesta",
+      "leadNotFound": "Lead seleccionado no encontrado"
     }
   },
   "myOffers": {

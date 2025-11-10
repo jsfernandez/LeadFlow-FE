@@ -130,7 +130,7 @@ export default function OffersPage() {
       const lead = leads?.find(l => l.id === proposalFormData.leadId);
       if (!lead) {
         toast.error(t("offers.proposalDialog.error"), {
-          description: "Selected lead not found",
+          description: t("offers.proposalDialog.leadNotFound"),
         });
         return;
       }

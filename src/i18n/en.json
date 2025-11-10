@@ -250,7 +250,8 @@
       "phonePlaceholder": "+1-555-0100",
       "submit": "Submit Proposal",
       "success": "Proposal submitted successfully",
-      "error": "Failed to submit proposal"
+      "error": "Failed to submit proposal",
+      "leadNotFound": "Selected lead not found"
     }
   },
   "myOffers": {
