@@ -437,46 +437,46 @@ export default function OffersPage() {
               </div>
 
               <div className="border-t border-border pt-4 mt-4">
-                <h3 className="text-sm font-semibold mb-3 text-foreground">Optional Details</h3>
+                <h3 className="text-sm font-semibold mb-3 text-foreground">{t("offers.createDialog.optionalDetails")}</h3>
                 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="leadType">Lead Type</Label>
+                    <Label htmlFor="leadType">{t("offers.createDialog.leadType")}</Label>
                     <Input
                       id="leadType"
-                      placeholder="e.g., B2B Enterprise, B2C Retail"
+                      placeholder={t("offers.createDialog.leadTypePlaceholder")}
                       value={offerFormData.leadType}
                       onChange={(e) => setOfferFormData({ ...offerFormData, leadType: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="leadQuantity">Lead Quantity</Label>
+                    <Label htmlFor="leadQuantity">{t("offers.createDialog.leadQuantity")}</Label>
                     <Input
                       id="leadQuantity"
                       type="number"
                       min="1"
-                      placeholder="Number of leads"
+                      placeholder={t("offers.createDialog.leadQuantityPlaceholder")}
                       value={offerFormData.leadQuantity}
                       onChange={(e) => setOfferFormData({ ...offerFormData, leadQuantity: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="clientType">Client Type</Label>
+                    <Label htmlFor="clientType">{t("offers.createDialog.clientType")}</Label>
                     <Input
                       id="clientType"
-                      placeholder="e.g., SaaS Companies, E-commerce Platforms"
+                      placeholder={t("offers.createDialog.clientTypePlaceholder")}
                       value={offerFormData.clientType}
                       onChange={(e) => setOfferFormData({ ...offerFormData, clientType: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="acceptanceCriteria">Acceptance Criteria</Label>
+                    <Label htmlFor="acceptanceCriteria">{t("offers.createDialog.acceptanceCriteria")}</Label>
                     <Textarea
                       id="acceptanceCriteria"
-                      placeholder="Define the criteria for accepting this offer"
+                      placeholder={t("offers.createDialog.acceptanceCriteriaPlaceholder")}
                       value={offerFormData.acceptanceCriteria}
                       onChange={(e) => setOfferFormData({ ...offerFormData, acceptanceCriteria: e.target.value })}
                       rows={3}
@@ -484,29 +484,29 @@ export default function OffersPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="offerDuration">Offer Duration (days)</Label>
+                    <Label htmlFor="offerDuration">{t("offers.createDialog.offerDuration")}</Label>
                     <Input
                       id="offerDuration"
                       type="number"
                       min="1"
-                      placeholder="Number of days the offer is valid"
+                      placeholder={t("offers.createDialog.offerDurationPlaceholder")}
                       value={offerFormData.offerDuration}
                       onChange={(e) => setOfferFormData({ ...offerFormData, offerDuration: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="allowConsultations">Allow Consultations</Label>
+                    <Label htmlFor="allowConsultations">{t("offers.createDialog.allowConsultations")}</Label>
                     <Select
                       value={offerFormData.allowConsultations}
                       onValueChange={(value) => setOfferFormData({ ...offerFormData, allowConsultations: value })}
                     >
                       <SelectTrigger id="allowConsultations">
-                        <SelectValue placeholder="Select option" />
+                        <SelectValue placeholder={t("offers.createDialog.selectOption")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="no">No</SelectItem>
-                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">{t("offers.createDialog.no")}</SelectItem>
+                        <SelectItem value="yes">{t("offers.createDialog.yes")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -633,9 +633,9 @@ export default function OffersPage() {
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Offer Details</DialogTitle>
+            <DialogTitle>{t("offers.detailDialog.title")}</DialogTitle>
             <DialogDescription>
-              Complete information about this offer
+              {t("offers.detailDialog.description")}
             </DialogDescription>
           </DialogHeader>
 
@@ -643,7 +643,7 @@ export default function OffersPage() {
             <div className="space-y-4 py-4">
               <div className="space-y-3">
                 <h3 className="text-sm font-semibold text-foreground border-b border-border pb-2">
-                  Basic Information
+                  {t("offers.detailDialog.basicInformation")}
                 </h3>
                 
                 <div className="grid grid-cols-2 gap-4">

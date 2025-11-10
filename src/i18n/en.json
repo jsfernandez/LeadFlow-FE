@@ -217,7 +217,27 @@
       "offerPrice": "Price",
       "titlePlaceholder": "e.g., Premium Lead Package",
       "descriptionPlaceholder": "Describe what the offer includes...",
-      "pricePlaceholder": "0.00"
+      "pricePlaceholder": "0.00",
+      "optionalDetails": "Optional Details",
+      "leadType": "Lead Type",
+      "leadTypePlaceholder": "e.g., B2B Enterprise, B2C Retail",
+      "leadQuantity": "Lead Quantity",
+      "leadQuantityPlaceholder": "Number of leads",
+      "clientType": "Client Type",
+      "clientTypePlaceholder": "e.g., SaaS Companies, E-commerce Platforms",
+      "acceptanceCriteria": "Acceptance Criteria",
+      "acceptanceCriteriaPlaceholder": "Define the criteria for accepting this offer",
+      "offerDuration": "Offer Duration (days)",
+      "offerDurationPlaceholder": "Number of days the offer is valid",
+      "allowConsultations": "Allow Consultations",
+      "selectOption": "Select option",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "detailDialog": {
+      "title": "Offer Details",
+      "description": "Complete information about this offer",
+      "basicInformation": "Basic Information"
     },
     "proposalDialog": {
       "title": "Submit Proposal",

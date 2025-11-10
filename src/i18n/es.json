@@ -217,7 +217,27 @@
       "offerPrice": "Precio",
       "titlePlaceholder": "ej., Paquete de Leads Premium",
       "descriptionPlaceholder": "Describa lo que incluye la oferta...",
-      "pricePlaceholder": "0.00"
+      "pricePlaceholder": "0.00",
+      "optionalDetails": "Detalles Opcionales",
+      "leadType": "Tipo de Lead",
+      "leadTypePlaceholder": "ej., B2B Empresarial, B2C Minorista",
+      "leadQuantity": "Cantidad de Leads",
+      "leadQuantityPlaceholder": "Número de leads",
+      "clientType": "Tipo de Cliente",
+      "clientTypePlaceholder": "ej., Empresas SaaS, Plataformas de E-commerce",
+      "acceptanceCriteria": "Criterios de Aceptación",
+      "acceptanceCriteriaPlaceholder": "Defina los criterios para aceptar esta oferta",
+      "offerDuration": "Duración de la Oferta (días)",
+      "offerDurationPlaceholder": "Número de días que la oferta es válida",
+      "allowConsultations": "Permitir Consultas",
+      "selectOption": "Seleccionar opción",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "detailDialog": {
+      "title": "Detalles de la Oferta",
+      "description": "Información completa sobre esta oferta",
+      "basicInformation": "Información Básica"
     },
     "proposalDialog": {
       "title": "Enviar Propuesta",
