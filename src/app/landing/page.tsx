@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useLanguage } from "@/contexts/language-context";
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 
 /**
  * Public Landing Page Component
