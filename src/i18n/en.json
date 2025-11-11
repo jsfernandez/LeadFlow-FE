@@ -232,12 +232,36 @@
       "allowConsultations": "Allow Consultations",
       "selectOption": "Select option",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "internalMessageChannel": "Internal Message Channel:",
+      "consultationsEnabledMessage": "When consultations are enabled, an internal messaging channel will be available for communication between the seller and lead manager."
     },
     "detailDialog": {
       "title": "Offer Details",
       "description": "Complete information about this offer",
-      "basicInformation": "Basic Information"
+      "basicInformation": "Basic Information",
+      "extendedDetails": "Extended Details",
+      "fields": {
+        "title": "Title",
+        "status": "Status",
+        "price": "Price",
+        "created": "Created",
+        "description": "Description",
+        "leadType": "Lead Type",
+        "leadQuantity": "Lead Quantity",
+        "clientType": "Client Type",
+        "offerDuration": "Offer Duration",
+        "allowConsultations": "Allow Consultations",
+        "acceptanceCriteria": "Acceptance Criteria",
+        "yes": "Yes",
+        "no": "No",
+        "days": "days"
+      },
+      "messages": {
+        "consultationsAvailable": "Internal Message Channel Available:",
+        "consultationsEnabled": "Consultations are enabled for this offer, allowing communication between seller and lead manager.",
+        "changeLead": "Change Lead"
+      }
     },
     "proposalDialog": {
       "title": "Submit Proposal",
