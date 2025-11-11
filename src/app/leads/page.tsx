@@ -66,8 +66,12 @@ export default function LeadsPage() {
     gender: "",
     minRevenue: 0,
     maxRevenue: 0,
-    source: "",
   });
+  
+  const [formErrors, setFormErrors] = useState<{
+    minRevenue?: string;
+    maxRevenue?: string;
+  }>({});
 
   // Filter and sort state
   const [filters, setFilters] = useState<LeadFilters>({
@@ -124,13 +128,35 @@ export default function LeadsPage() {
     });
   };
 
+  const validateForm = () => {
+    const errors: { minRevenue?: string; maxRevenue?: string } = {};
+    const minRev = Number(formData.minRevenue);
+    const maxRev = Number(formData.maxRevenue);
+
+    if (minRev > maxRev) {
+      errors.minRevenue = t("form.errors.minGreaterThanMax");
+      errors.maxRevenue = t("form.errors.maxLessThanMin");
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleCreateLead = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
+      // Sanitize profileUrl
+      const sanitizedProfileUrl = formData.profileUrl.trim();
+      
       await createLead.mutateAsync({
         ...formData,
+        profileUrl: sanitizedProfileUrl,
         minRevenue: Number(formData.minRevenue),
         maxRevenue: Number(formData.maxRevenue),
       });
@@ -151,8 +177,8 @@ export default function LeadsPage() {
         gender: "",
         minRevenue: 0,
         maxRevenue: 0,
-        source: "",
       });
+      setFormErrors({});
       setIsCreateDialogOpen(false);
     } catch (error) {
       console.error("Failed to create lead:", error);
@@ -163,11 +189,19 @@ export default function LeadsPage() {
     e.preventDefault();
     if (!selectedLead) return;
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
+      // Sanitize profileUrl
+      const sanitizedProfileUrl = formData.profileUrl.trim();
+      
       await updateLead.mutateAsync({
         id: selectedLead.id,
         data: {
           ...formData,
+          profileUrl: sanitizedProfileUrl,
           minRevenue: Number(formData.minRevenue),
           maxRevenue: Number(formData.maxRevenue),
         },
@@ -175,6 +209,7 @@ export default function LeadsPage() {
       
       setIsEditDialogOpen(false);
       setSelectedLead(null);
+      setFormErrors({});
     } catch (error) {
       console.error("Failed to update lead:", error);
     }
@@ -207,8 +242,8 @@ export default function LeadsPage() {
       gender: lead.gender || "",
       minRevenue: lead.minRevenue,
       maxRevenue: lead.maxRevenue,
-      source: lead.source || "",
     });
+    setFormErrors({});
     setIsEditDialogOpen(true);
   };
 
@@ -328,7 +363,7 @@ export default function LeadsPage() {
                   <SelectItem value="all">{t("leads.filter.allGenders")}</SelectItem>
                   {filterOptions.genders.map((gender) => (
                     <SelectItem key={gender} value={gender}>
-                      {gender}
+                      {gender === "MALE" ? t("leads.genderMale") : gender === "FEMALE" ? t("leads.genderFemale") : gender === "OTHER" ? t("leads.genderOther") : gender}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -430,7 +465,7 @@ export default function LeadsPage() {
                     <TableHead>{t("leads.phone")}</TableHead>
                     <TableHead>{t("leads.location")}</TableHead>
                     <TableHead>{t("leads.industry")}</TableHead>
-                    <TableHead>{t("leads.revenueRange")}</TableHead>
+                    <TableHead>{t("leads.compensationRange")}</TableHead>
                     <TableHead>{t("leads.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -512,11 +547,12 @@ export default function LeadsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="leadId">{t("leads.leadId")} *</Label>
+                  <Label htmlFor="leadId">{t("leads.identityDocument")} *</Label>
                   <Input
                     id="leadId"
                     value={formData.leadId}
                     onChange={(e) => setFormData({ ...formData, leadId: e.target.value })}
+                    placeholder={t("leads.identityDocumentPlaceholder")}
                     required
                   />
                 </div>
@@ -556,12 +592,12 @@ export default function LeadsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="title">{t("leads.title")} *</Label>
+                  <Label htmlFor="title">{t("leads.academicDegree")} *</Label>
                   <Input
                     id="title"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder={t("leads.titlePlaceholder")}
+                    placeholder={t("leads.academicDegreePlaceholder")}
                     required
                   />
                 </div>
@@ -609,57 +645,65 @@ export default function LeadsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="gender">{t("leads.gender")}</Label>
-                  <Input
-                    id="gender"
+                  <Select
                     value={formData.gender}
-                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    placeholder={t("leads.genderPlaceholder")}
-                  />
+                    onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                  >
+                    <SelectTrigger id="gender">
+                      <SelectValue placeholder={t("leads.gender")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MALE">{t("leads.genderMale")}</SelectItem>
+                      <SelectItem value="FEMALE">{t("leads.genderFemale")}</SelectItem>
+                      <SelectItem value="OTHER">{t("leads.genderOther")}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="minRevenue">{t("leads.minRevenue")} *</Label>
+                  <Label htmlFor="minRevenue">{t("leads.minCompensation")} *</Label>
                   <NumericInput
                     id="minRevenue"
                     decimalPlaces={2}
                     value={formData.minRevenue}
-                    onChange={(e) => setFormData({ ...formData, minRevenue: Number(e.target.value) })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, minRevenue: Number(e.target.value) });
+                      if (formErrors.minRevenue) setFormErrors({ ...formErrors, minRevenue: undefined });
+                    }}
                     required
                   />
+                  {formErrors.minRevenue && (
+                    <p className="text-sm text-red-500">{formErrors.minRevenue}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="maxRevenue">{t("leads.maxRevenue")} *</Label>
+                  <Label htmlFor="maxRevenue">{t("leads.maxCompensation")} *</Label>
                   <NumericInput
                     id="maxRevenue"
                     decimalPlaces={2}
                     value={formData.maxRevenue}
-                    onChange={(e) => setFormData({ ...formData, maxRevenue: Number(e.target.value) })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, maxRevenue: Number(e.target.value) });
+                      if (formErrors.maxRevenue) setFormErrors({ ...formErrors, maxRevenue: undefined });
+                    }}
                     required
                   />
+                  {formErrors.maxRevenue && (
+                    <p className="text-sm text-red-500">{formErrors.maxRevenue}</p>
+                  )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="profileUrl">{t("leads.profileUrl")}</Label>
-                  <Input
-                    id="profileUrl"
-                    type="url"
-                    value={formData.profileUrl}
-                    onChange={(e) => setFormData({ ...formData, profileUrl: e.target.value })}
-                    placeholder="https://..."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="source">{t("leads.source")}</Label>
-                  <Input
-                    id="source"
-                    value={formData.source}
-                    onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="profileUrl">{t("leads.profileUrl")}</Label>
+                <Input
+                  id="profileUrl"
+                  value={formData.profileUrl}
+                  onChange={(e) => setFormData({ ...formData, profileUrl: e.target.value })}
+                  placeholder={t("leads.profileUrlPlaceholder")}
+                />
               </div>
             </div>
 
@@ -706,11 +750,12 @@ export default function LeadsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="edit-leadId">{t("leads.leadId")} *</Label>
+                  <Label htmlFor="edit-leadId">{t("leads.identityDocument")} *</Label>
                   <Input
                     id="edit-leadId"
                     value={formData.leadId}
                     onChange={(e) => setFormData({ ...formData, leadId: e.target.value })}
+                    placeholder={t("leads.identityDocumentPlaceholder")}
                     required
                   />
                 </div>
@@ -750,12 +795,12 @@ export default function LeadsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="edit-title">{t("leads.title")} *</Label>
+                  <Label htmlFor="edit-title">{t("leads.academicDegree")} *</Label>
                   <Input
                     id="edit-title"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder={t("leads.titlePlaceholder")}
+                    placeholder={t("leads.academicDegreePlaceholder")}
                     required
                   />
                 </div>
@@ -803,57 +848,65 @@ export default function LeadsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="edit-gender">{t("leads.gender")}</Label>
-                  <Input
-                    id="edit-gender"
+                  <Select
                     value={formData.gender}
-                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    placeholder={t("leads.genderPlaceholder")}
-                  />
+                    onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                  >
+                    <SelectTrigger id="edit-gender">
+                      <SelectValue placeholder={t("leads.gender")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MALE">{t("leads.genderMale")}</SelectItem>
+                      <SelectItem value="FEMALE">{t("leads.genderFemale")}</SelectItem>
+                      <SelectItem value="OTHER">{t("leads.genderOther")}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="edit-minRevenue">{t("leads.minRevenue")} *</Label>
+                  <Label htmlFor="edit-minRevenue">{t("leads.minCompensation")} *</Label>
                   <NumericInput
                     id="edit-minRevenue"
                     decimalPlaces={2}
                     value={formData.minRevenue}
-                    onChange={(e) => setFormData({ ...formData, minRevenue: Number(e.target.value) })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, minRevenue: Number(e.target.value) });
+                      if (formErrors.minRevenue) setFormErrors({ ...formErrors, minRevenue: undefined });
+                    }}
                     required
                   />
+                  {formErrors.minRevenue && (
+                    <p className="text-sm text-red-500">{formErrors.minRevenue}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="edit-maxRevenue">{t("leads.maxRevenue")} *</Label>
+                  <Label htmlFor="edit-maxRevenue">{t("leads.maxCompensation")} *</Label>
                   <NumericInput
                     id="edit-maxRevenue"
                     decimalPlaces={2}
                     value={formData.maxRevenue}
-                    onChange={(e) => setFormData({ ...formData, maxRevenue: Number(e.target.value) })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, maxRevenue: Number(e.target.value) });
+                      if (formErrors.maxRevenue) setFormErrors({ ...formErrors, maxRevenue: undefined });
+                    }}
                     required
                   />
+                  {formErrors.maxRevenue && (
+                    <p className="text-sm text-red-500">{formErrors.maxRevenue}</p>
+                  )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-profileUrl">{t("leads.profileUrl")}</Label>
-                  <Input
-                    id="edit-profileUrl"
-                    type="url"
-                    value={formData.profileUrl}
-                    onChange={(e) => setFormData({ ...formData, profileUrl: e.target.value })}
-                    placeholder="https://..."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-source">{t("leads.source")}</Label>
-                  <Input
-                    id="edit-source"
-                    value={formData.source}
-                    onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-profileUrl">{t("leads.profileUrl")}</Label>
+                <Input
+                  id="edit-profileUrl"
+                  value={formData.profileUrl}
+                  onChange={(e) => setFormData({ ...formData, profileUrl: e.target.value })}
+                  placeholder={t("leads.profileUrlPlaceholder")}
+                />
               </div>
             </div>
 
