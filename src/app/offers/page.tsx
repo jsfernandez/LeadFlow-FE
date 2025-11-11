@@ -285,37 +285,41 @@ export default function OffersPage() {
                 <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
                   {new Date(offer.createdAt).toLocaleDateString()}
                 </TableCell>
-                <TableCell className="text-right space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleViewDetails(offer)}
-                >
-                  {t("common.viewDetails")}
-                </Button>
-                {showActions && (
-                  <Select
-                    value={offer.status}
-                    onValueChange={(value) => handleStatusChange(offer.id, value as OfferStatus)}
-                  >
-                    <SelectTrigger className="w-32 inline-flex">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ACTIVE">{t("common.active")}</SelectItem>
-                      <SelectItem value="INACTIVE">{t("common.inactive")}</SelectItem>
-                      <SelectItem value="ARCHIVED">{t("common.archived")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-                {isLeadManager && !showActions && (
+                <TableCell className="text-right">
+                <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2 sm:justify-end">
                   <Button
+                    variant="outline"
                     size="sm"
-                    onClick={() => handleCreateProposal(offer)}
+                    onClick={() => handleViewDetails(offer)}
+                    className="w-full sm:w-auto"
                   >
-                    {t("common.createProposal")}
+                    {t("common.viewDetails")}
                   </Button>
-                )}
+                  {showActions && (
+                    <Select
+                      value={offer.status}
+                      onValueChange={(value) => handleStatusChange(offer.id, value as OfferStatus)}
+                    >
+                      <SelectTrigger className="w-full sm:w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ACTIVE">{t("common.active")}</SelectItem>
+                        <SelectItem value="INACTIVE">{t("common.inactive")}</SelectItem>
+                        <SelectItem value="ARCHIVED">{t("common.archived")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                  {isLeadManager && !showActions && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleCreateProposal(offer)}
+                      className="w-full sm:w-auto"
+                    >
+                      {t("common.createProposal")}
+                    </Button>
+                  )}
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -496,16 +500,17 @@ export default function OffersPage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => setIsCreateDialogOpen(false)}
                 disabled={createOffer.isPending}
+                className="w-full sm:w-auto"
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createOffer.isPending}>
+              <Button type="submit" disabled={createOffer.isPending} className="w-full sm:w-auto">
                 {createOffer.isPending ? t("common.loading") : t("offers.createOffer")}
               </Button>
             </DialogFooter>
@@ -586,16 +591,17 @@ export default function OffersPage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => setIsProposalDialogOpen(false)}
                 disabled={createProposal.isPending}
+                className="w-full sm:w-auto"
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createProposal.isPending || !proposalFormData.leadId}>
+              <Button type="submit" disabled={createProposal.isPending || !proposalFormData.leadId} className="w-full sm:w-auto">
                 {createProposal.isPending ? t("common.loading") : t("offers.proposalDialog.submit")}
               </Button>
             </DialogFooter>
@@ -713,16 +719,19 @@ export default function OffersPage() {
             </div>
           )}
 
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             {isLeadManager && selectedOffer && (
-              <Button onClick={() => {
-                setIsDetailDialogOpen(false);
-                handleCreateProposal(selectedOffer);
-              }}>
+              <Button 
+                onClick={() => {
+                  setIsDetailDialogOpen(false);
+                  handleCreateProposal(selectedOffer);
+                }}
+                className="w-full sm:w-auto"
+              >
                 {t("common.createProposal")}
               </Button>
             )}
-            <Button variant="secondary" onClick={() => setIsDetailDialogOpen(false)}>
+            <Button variant="secondary" onClick={() => setIsDetailDialogOpen(false)} className="w-full sm:w-auto">
               {t("common.close")}
             </Button>
           </DialogFooter>

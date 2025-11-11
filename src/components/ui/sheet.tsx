@@ -77,8 +77,8 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
     if (!open) return null;
 
     const sideClasses = {
-      left: "left-0 top-0 h-full w-72 border-r",
-      right: "right-0 top-0 h-full w-72 border-l",
+      left: "left-0 top-0 h-full w-[70vw] max-w-72 border-r",
+      right: "right-0 top-0 h-full w-[70vw] max-w-72 border-l",
       top: "left-0 top-0 w-full h-72 border-b",
       bottom: "left-0 bottom-0 w-full h-72 border-t",
     };
