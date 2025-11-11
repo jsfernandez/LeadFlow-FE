@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useLeads, useCreateLead, useUpdateLead, useDeleteLead } from "@/hooks/use-leads";
@@ -620,24 +621,22 @@ export default function LeadsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="minRevenue">{t("leads.minRevenue")} *</Label>
-                  <Input
+                  <NumericInput
                     id="minRevenue"
-                    type="number"
+                    decimalPlaces={2}
                     value={formData.minRevenue}
                     onChange={(e) => setFormData({ ...formData, minRevenue: Number(e.target.value) })}
                     required
-                    min="0"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="maxRevenue">{t("leads.maxRevenue")} *</Label>
-                  <Input
+                  <NumericInput
                     id="maxRevenue"
-                    type="number"
+                    decimalPlaces={2}
                     value={formData.maxRevenue}
                     onChange={(e) => setFormData({ ...formData, maxRevenue: Number(e.target.value) })}
                     required
-                    min="0"
                   />
                 </div>
               </div>
@@ -816,24 +815,22 @@ export default function LeadsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-minRevenue">{t("leads.minRevenue")} *</Label>
-                  <Input
+                  <NumericInput
                     id="edit-minRevenue"
-                    type="number"
+                    decimalPlaces={2}
                     value={formData.minRevenue}
                     onChange={(e) => setFormData({ ...formData, minRevenue: Number(e.target.value) })}
                     required
-                    min="0"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="edit-maxRevenue">{t("leads.maxRevenue")} *</Label>
-                  <Input
+                  <NumericInput
                     id="edit-maxRevenue"
-                    type="number"
+                    decimalPlaces={2}
                     value={formData.maxRevenue}
                     onChange={(e) => setFormData({ ...formData, maxRevenue: Number(e.target.value) })}
                     required
-                    min="0"
                   />
                 </div>
               </div>

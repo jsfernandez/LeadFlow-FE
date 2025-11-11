@@ -232,12 +232,36 @@
       "allowConsultations": "Permitir Consultas",
       "selectOption": "Seleccionar opción",
       "yes": "Sí",
-      "no": "No"
+      "no": "No",
+      "internalMessageChannel": "Canal de Mensajes Interno:",
+      "consultationsEnabledMessage": "Cuando las consultas están habilitadas, habrá un canal de mensajería interno disponible para la comunicación entre el vendedor y el gestor de leads."
     },
     "detailDialog": {
       "title": "Detalles de la Oferta",
       "description": "Información completa sobre esta oferta",
-      "basicInformation": "Información Básica"
+      "basicInformation": "Información Básica",
+      "extendedDetails": "Detalles Extendidos",
+      "fields": {
+        "title": "Título",
+        "status": "Estado",
+        "price": "Precio",
+        "created": "Creado",
+        "description": "Descripción",
+        "leadType": "Tipo de Lead",
+        "leadQuantity": "Cantidad de Leads",
+        "clientType": "Tipo de Cliente",
+        "offerDuration": "Duración de la Oferta",
+        "allowConsultations": "Permitir Consultas",
+        "acceptanceCriteria": "Criterios de Aceptación",
+        "yes": "Sí",
+        "no": "No",
+        "days": "días"
+      },
+      "messages": {
+        "consultationsAvailable": "Canal de Mensajes Interno Disponible:",
+        "consultationsEnabled": "Las consultas están habilitadas para esta oferta, permitiendo la comunicación entre vendedor y gestor de leads.",
+        "changeLead": "Cambiar Lead"
+      }
     },
     "proposalDialog": {
       "title": "Enviar Propuesta",

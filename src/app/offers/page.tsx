@@ -21,9 +21,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
@@ -299,9 +299,9 @@ export default function OffersPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="ACTIVE">Active</SelectItem>
-                      <SelectItem value="INACTIVE">Inactive</SelectItem>
-                      <SelectItem value="ARCHIVED">Archived</SelectItem>
+                      <SelectItem value="ACTIVE">{t("common.active")}</SelectItem>
+                      <SelectItem value="INACTIVE">{t("common.inactive")}</SelectItem>
+                      <SelectItem value="ARCHIVED">{t("common.archived")}</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
@@ -334,42 +334,15 @@ export default function OffersPage() {
       </div>
 
       {isSeller ? (
-        <Tabs defaultValue="all" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="all">{t("offers.allOffers")}</TabsTrigger>
-            <TabsTrigger value="my">{t("offers.myOffers")}</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("offers.allOffers")}</CardTitle>
-                <CardDescription>{t("offers.listDescription")}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {errorAll ? (
-                  <div className="text-center py-8">
-                    <p className="text-sm text-red-400">{t("offers.failedToLoad")}</p>
-                  </div>
-                ) : (
-                  renderOffersTable(allOffers, isLoadingAll, false)
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="my">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("offers.myOffers")}</CardTitle>
-                <CardDescription>{t("myOffers.subtitle")}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {renderOffersTable(myOffers, isLoadingMy, true)}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("offers.myOffers")}</CardTitle>
+            <CardDescription>{t("myOffers.subtitle")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {renderOffersTable(myOffers, isLoadingMy, true)}
+          </CardContent>
+        </Card>
       ) : (
         <Card>
           <CardHeader>
@@ -424,11 +397,9 @@ export default function OffersPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="price">{t("offers.createDialog.offerPrice")} ($)</Label>
-                <Input
+                <NumericInput
                   id="price"
-                  type="number"
-                  step="0.01"
-                  min="0"
+                  decimalPlaces={2}
                   placeholder={t("offers.createDialog.pricePlaceholder")}
                   value={offerFormData.price}
                   onChange={(e) => setOfferFormData({ ...offerFormData, price: e.target.value })}
@@ -452,10 +423,9 @@ export default function OffersPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="leadQuantity">{t("offers.createDialog.leadQuantity")}</Label>
-                    <Input
+                    <NumericInput
                       id="leadQuantity"
-                      type="number"
-                      min="1"
+                      decimalPlaces={0}
                       placeholder={t("offers.createDialog.leadQuantityPlaceholder")}
                       value={offerFormData.leadQuantity}
                       onChange={(e) => setOfferFormData({ ...offerFormData, leadQuantity: e.target.value })}
@@ -485,10 +455,9 @@ export default function OffersPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="offerDuration">{t("offers.createDialog.offerDuration")}</Label>
-                    <Input
+                    <NumericInput
                       id="offerDuration"
-                      type="number"
-                      min="1"
+                      decimalPlaces={0}
                       placeholder={t("offers.createDialog.offerDurationPlaceholder")}
                       value={offerFormData.offerDuration}
                       onChange={(e) => setOfferFormData({ ...offerFormData, offerDuration: e.target.value })}
@@ -514,7 +483,7 @@ export default function OffersPage() {
                   {offerFormData.allowConsultations === "yes" && (
                     <div className="bg-muted p-3 rounded-md border border-border">
                       <p className="text-sm text-muted-foreground">
-                        <span className="font-semibold text-foreground">Internal Message Channel:</span> When consultations are enabled, an internal messaging channel will be available for communication between the seller and lead manager.
+                        <span className="font-semibold text-foreground">{t("offers.createDialog.internalMessageChannel")}</span> {t("offers.createDialog.consultationsEnabledMessage")}
                       </p>
                     </div>
                   )}
@@ -583,7 +552,7 @@ export default function OffersPage() {
                             setIsLeadSelectorOpen(true);
                           }}
                         >
-                          Change Lead
+                          {t("offers.detailDialog.messages.changeLead")}
                         </Button>
                       </div>
                     ) : null;
@@ -648,25 +617,25 @@ export default function OffersPage() {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Title</p>
+                    <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.title")}</p>
                     <p className="text-sm font-medium">{selectedOffer.title}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Status</p>
+                    <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.status")}</p>
                     <div className="mt-1">{getStatusBadge(selectedOffer.status)}</div>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Price</p>
+                    <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.price")}</p>
                     <p className="text-sm font-semibold text-primary">${selectedOffer.price.toFixed(2)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Created</p>
+                    <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.created")}</p>
                     <p className="text-sm">{new Date(selectedOffer.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm text-muted-foreground">Description</p>
+                  <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.description")}</p>
                   <p className="text-sm mt-1">{selectedOffer.description}</p>
                 </div>
               </div>
@@ -676,42 +645,42 @@ export default function OffersPage() {
                 selectedOffer.allowConsultations !== undefined) && (
                 <div className="space-y-3 border-t border-border pt-4">
                   <h3 className="text-sm font-semibold text-foreground border-b border-border pb-2">
-                    Extended Details
+                    {t("offers.detailDialog.extendedDetails")}
                   </h3>
                   
                   <div className="grid grid-cols-2 gap-4">
                     {selectedOffer.leadType && (
                       <div>
-                        <p className="text-sm text-muted-foreground">Lead Type</p>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.leadType")}</p>
                         <p className="text-sm font-medium">{selectedOffer.leadType}</p>
                       </div>
                     )}
                     {selectedOffer.leadQuantity && (
                       <div>
-                        <p className="text-sm text-muted-foreground">Lead Quantity</p>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.leadQuantity")}</p>
                         <p className="text-sm font-medium">{selectedOffer.leadQuantity}</p>
                       </div>
                     )}
                     {selectedOffer.clientType && (
                       <div>
-                        <p className="text-sm text-muted-foreground">Client Type</p>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.clientType")}</p>
                         <p className="text-sm font-medium">{selectedOffer.clientType}</p>
                       </div>
                     )}
                     {selectedOffer.offerDuration && (
                       <div>
-                        <p className="text-sm text-muted-foreground">Offer Duration</p>
-                        <p className="text-sm font-medium">{selectedOffer.offerDuration} days</p>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.offerDuration")}</p>
+                        <p className="text-sm font-medium">{selectedOffer.offerDuration} {t("offers.detailDialog.fields.days")}</p>
                       </div>
                     )}
                     {selectedOffer.allowConsultations !== undefined && (
                       <div>
-                        <p className="text-sm text-muted-foreground">Allow Consultations</p>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.allowConsultations")}</p>
                         <p className="text-sm font-medium">
                           {selectedOffer.allowConsultations ? (
-                            <Badge className="bg-green-600 text-white">Yes</Badge>
+                            <Badge className="bg-green-600 text-white">{t("offers.detailDialog.fields.yes")}</Badge>
                           ) : (
-                            <Badge className="bg-gray-600 text-white">No</Badge>
+                            <Badge className="bg-gray-600 text-white">{t("offers.detailDialog.fields.no")}</Badge>
                           )}
                         </p>
                       </div>
@@ -720,7 +689,7 @@ export default function OffersPage() {
 
                   {selectedOffer.acceptanceCriteria && (
                     <div>
-                      <p className="text-sm text-muted-foreground">Acceptance Criteria</p>
+                      <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.acceptanceCriteria")}</p>
                       <p className="text-sm mt-1 bg-muted p-3 rounded-md">
                         {selectedOffer.acceptanceCriteria}
                       </p>
@@ -730,7 +699,7 @@ export default function OffersPage() {
                   {selectedOffer.allowConsultations && (
                     <div className="bg-amber-950/20 border border-amber-900/30 p-3 rounded-md">
                       <p className="text-sm text-amber-400">
-                        <span className="font-semibold">Internal Message Channel Available:</span> Consultations are enabled for this offer, allowing communication between seller and lead manager.
+                        <span className="font-semibold">{t("offers.detailDialog.messages.consultationsAvailable")}</span> {t("offers.detailDialog.messages.consultationsEnabled")}
                       </p>
                     </div>
                   )}
