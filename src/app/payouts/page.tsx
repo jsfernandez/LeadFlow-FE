@@ -9,6 +9,7 @@ import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { usePayoutsByManager, useUpdatePayoutStatus } from "@/hooks/use-payouts";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useTranslation } from "@/hooks/use-translation";
+import { formatCurrencyCLP } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function PayoutsPage() {
@@ -75,7 +76,7 @@ export default function PayoutsPage() {
               <CardTitle className="text-sm font-medium">{t("payouts.cards.pending")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-500">${pendingTotal.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-yellow-500">{formatCurrencyCLP(pendingTotal)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 {payouts?.filter((p) => p.status === "PENDING").length || 0} {t("payouts.payoutCount")}
               </p>
@@ -87,7 +88,7 @@ export default function PayoutsPage() {
               <CardTitle className="text-sm font-medium">{t("payouts.cards.paid")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-500">${paidTotal.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-green-500">{formatCurrencyCLP(paidTotal)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 {payouts?.filter((p) => p.status === "PAID").length || 0} {t("payouts.payoutCount")}
               </p>
@@ -99,7 +100,7 @@ export default function PayoutsPage() {
               <CardTitle className="text-sm font-medium">{t("payouts.cards.totalEarnings")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-primary">{formatCurrencyCLP(totalAmount)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 {payouts?.length || 0} {t("payouts.totalPayoutCount")}
               </p>
@@ -137,7 +138,7 @@ export default function PayoutsPage() {
                   <TableRow key={payout.id}>
                     <TableCell className="font-mono text-xs">{payout.id.substring(0, 20)}...</TableCell>
                     <TableCell className="font-semibold text-primary">
-                      ${payout.amount.toFixed(2)}
+                      {formatCurrencyCLP(payout.amount)}
                     </TableCell>
                     <TableCell>{getStatusBadge(payout.status)}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">

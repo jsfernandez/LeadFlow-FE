@@ -12,6 +12,7 @@ import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { LeadInfo } from "./lead-info";
+import { formatCurrencyCLP } from "@/lib/utils";
 
 // Constants
 const MAX_DISPLAYED_RATINGS = 5;
@@ -176,7 +177,7 @@ export function SellerDashboard() {
 
         <StatCard
           title={t("dashboard.seller.estimatedRevenue")}
-          value={`$${totalRevenue.toFixed(0)}`}
+          value={formatCurrencyCLP(totalRevenue)}
           description={t("dashboard.seller.fromWonProposals")}
           icon={
             <svg
@@ -237,7 +238,7 @@ export function SellerDashboard() {
                   }}
                   labelStyle={{ color: "rgb(226, 232, 240)" }}
                   itemStyle={{ color: "rgb(251, 191, 36)" }}
-                  formatter={(value) => [`$${value}`, t("dashboard.seller.revenue")]}
+                  formatter={(value) => [formatCurrencyCLP(Number(value)), t("dashboard.seller.revenue")]}
                 />
                 <Area
                   type="monotone"
@@ -270,7 +271,7 @@ export function SellerDashboard() {
                   <div className="flex items-center gap-3">
                     <div className="text-right">
                       <p className="font-semibold text-primary text-sm">
-                        ${offer.price.toFixed(0)}
+                        {formatCurrencyCLP(offer.price)}
                       </p>
                     </div>
                     <Badge variant={offer.status === "ACTIVE" ? "default" : "secondary"}>
