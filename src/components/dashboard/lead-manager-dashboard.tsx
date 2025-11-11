@@ -110,10 +110,10 @@ export function LeadManagerDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">{t("dashboard.leadManager.title")}</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold">{t("dashboard.leadManager.title")}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           {t("dashboard.leadManager.subtitle")}
         </p>
       </div>
@@ -136,7 +136,7 @@ export function LeadManagerDashboard() {
       )}
 
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title={t("dashboard.leadManager.assignedLeads")}
           value={totalLeads}

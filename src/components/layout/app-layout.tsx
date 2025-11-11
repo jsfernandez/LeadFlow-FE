@@ -54,11 +54,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Sidebar */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetContent side="left" className="w-64 p-0">
+          <SheetContent side="left" className="w-64 p-0 flex flex-col">
             <SheetHeader className="p-6 pb-4">
               <SheetTitle>{t("navigation.menu")}</SheetTitle>
             </SheetHeader>
-            <Sidebar />
+            <div className="flex-1 overflow-y-auto">
+              <Sidebar />
+            </div>
           </SheetContent>
         </Sheet>
 

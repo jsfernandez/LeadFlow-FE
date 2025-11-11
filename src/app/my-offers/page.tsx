@@ -120,21 +120,21 @@ export default function MyOffersPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{t("myOffers.title")}</h1>
-          <p className="text-muted-foreground">{t("myOffers.subtitle")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("myOffers.title")}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">{t("myOffers.subtitle")}</p>
         </div>
       </div>
 
       <Tabs defaultValue="offers" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="offers">{t("myOffers.title")}</TabsTrigger>
-          <TabsTrigger value="proposals">
+        <TabsList className="grid w-full grid-cols-2 sm:w-auto sm:inline-flex">
+          <TabsTrigger value="offers" className="text-sm sm:text-base">{t("myOffers.title")}</TabsTrigger>
+          <TabsTrigger value="proposals" className="text-sm sm:text-base">
             {t("myOffers.proposalsReceived")}
             {myProposals.length > 0 && (
-              <Badge className="ml-2 bg-primary/20 text-primary">{myProposals.length}</Badge>
+              <Badge className="ml-2 bg-primary/20 text-primary text-xs">{myProposals.length}</Badge>
             )}
           </TabsTrigger>
         </TabsList>
@@ -149,48 +149,50 @@ export default function MyOffersPage() {
               {isLoading ? (
                 <p className="text-sm text-muted-foreground">{t("myOffers.loadingYourOffers")}</p>
               ) : offers && offers.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t("myOffers.table.title")}</TableHead>
-                      <TableHead>{t("myOffers.table.description")}</TableHead>
-                      <TableHead>{t("myOffers.table.price")}</TableHead>
-                      <TableHead>{t("myOffers.table.status")}</TableHead>
-                      <TableHead>{t("myOffers.table.created")}</TableHead>
-                      <TableHead>{t("myOffers.table.actions")}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {offers.map((offer) => (
-                      <TableRow key={offer.id}>
-                        <TableCell className="font-medium">{offer.title}</TableCell>
-                        <TableCell className="max-w-md truncate">{offer.description}</TableCell>
-                        <TableCell className="font-semibold text-primary">
-                          ${offer.price.toFixed(2)}
-                        </TableCell>
-                        <TableCell>{getStatusBadge(offer.status)}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {new Date(offer.createdAt).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={offer.status}
-                            onValueChange={(value) => handleStatusChange(offer.id, value as OfferStatus)}
-                          >
-                            <SelectTrigger className="w-32">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="ACTIVE">{t("myOffers.table.active")}</SelectItem>
-                              <SelectItem value="INACTIVE">{t("myOffers.table.inactive")}</SelectItem>
-                              <SelectItem value="ARCHIVED">{t("myOffers.table.archived")}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[150px]">{t("myOffers.table.title")}</TableHead>
+                        <TableHead className="min-w-[200px]">{t("myOffers.table.description")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("myOffers.table.price")}</TableHead>
+                        <TableHead className="min-w-[100px]">{t("myOffers.table.status")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("myOffers.table.created")}</TableHead>
+                        <TableHead className="min-w-[150px]">{t("myOffers.table.actions")}</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {offers.map((offer) => (
+                        <TableRow key={offer.id}>
+                          <TableCell className="font-medium text-sm md:text-base">{offer.title}</TableCell>
+                          <TableCell className="max-w-md truncate text-sm md:text-base">{offer.description}</TableCell>
+                          <TableCell className="font-semibold text-primary text-sm md:text-base whitespace-nowrap">
+                            ${offer.price.toFixed(2)}
+                          </TableCell>
+                          <TableCell>{getStatusBadge(offer.status)}</TableCell>
+                          <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                            {new Date(offer.createdAt).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={offer.status}
+                              onValueChange={(value) => handleStatusChange(offer.id, value as OfferStatus)}
+                            >
+                              <SelectTrigger className="w-full sm:w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="ACTIVE">{t("myOffers.table.active")}</SelectItem>
+                                <SelectItem value="INACTIVE">{t("myOffers.table.inactive")}</SelectItem>
+                                <SelectItem value="ARCHIVED">{t("myOffers.table.archived")}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground mb-4">
@@ -213,55 +215,58 @@ export default function MyOffersPage() {
               {isLoadingProposals ? (
                 <p className="text-sm text-muted-foreground">{t("myOffers.loadingProposals")}</p>
               ) : myProposals.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t("myOffers.table.customer")}</TableHead>
-                      <TableHead>{t("myOffers.table.email")}</TableHead>
-                      <TableHead>{t("myOffers.table.phone")}</TableHead>
-                      <TableHead>{t("myOffers.table.offer")}</TableHead>
-                      <TableHead>{t("myOffers.table.status")}</TableHead>
-                      <TableHead>{t("myOffers.table.submitted")}</TableHead>
-                      <TableHead>{t("myOffers.table.actions")}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {myProposals.map((proposal) => {
-                      const offer = offers?.find((o) => o.id === proposal.offerId);
-                      return (
-                        <TableRow key={proposal.id}>
-                          <TableCell className="font-medium">
-                            <LeadCell leadId={proposal.leadId} field="fullName" />
-                          </TableCell>
-                          <TableCell>
-                            <LeadCell leadId={proposal.leadId} field="email" />
-                          </TableCell>
-                          <TableCell>
-                            <LeadCell leadId={proposal.leadId} field="phone" />
-                          </TableCell>
-                          <TableCell className="max-w-xs truncate">
-                            {offer?.title || t("common.unknownOffer")}
-                          </TableCell>
-                          <TableCell>{getStatusBadge(proposal.status)}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {new Date(proposal.createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>
-                            {proposal.status !== "PENDING" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleRateLeadManager(proposal)}
-                              >
-                                {t("myOffers.rateLeadManager")}
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[150px]">{t("myOffers.table.customer")}</TableHead>
+                        <TableHead className="min-w-[180px]">{t("myOffers.table.email")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("myOffers.table.phone")}</TableHead>
+                        <TableHead className="min-w-[150px]">{t("myOffers.table.offer")}</TableHead>
+                        <TableHead className="min-w-[100px]">{t("myOffers.table.status")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("myOffers.table.submitted")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("myOffers.table.actions")}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {myProposals.map((proposal) => {
+                        const offer = offers?.find((o) => o.id === proposal.offerId);
+                        return (
+                          <TableRow key={proposal.id}>
+                            <TableCell className="font-medium text-sm md:text-base">
+                              <LeadCell leadId={proposal.leadId} field="fullName" />
+                            </TableCell>
+                            <TableCell className="text-sm md:text-base">
+                              <LeadCell leadId={proposal.leadId} field="email" />
+                            </TableCell>
+                            <TableCell className="text-sm md:text-base">
+                              <LeadCell leadId={proposal.leadId} field="phone" />
+                            </TableCell>
+                            <TableCell className="max-w-xs truncate text-sm md:text-base">
+                              {offer?.title || t("common.unknownOffer")}
+                            </TableCell>
+                            <TableCell>{getStatusBadge(proposal.status)}</TableCell>
+                            <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                              {new Date(proposal.createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                              {proposal.status !== "PENDING" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleRateLeadManager(proposal)}
+                                  className="text-xs sm:text-sm whitespace-nowrap"
+                                >
+                                  {t("myOffers.rateLeadManager")}
+                                </Button>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground">

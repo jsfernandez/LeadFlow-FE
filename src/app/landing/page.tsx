@@ -4,9 +4,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useLanguage } from "@/contexts/language-context";
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
+import { Menu } from "lucide-react";
 
 /**
  * Public Landing Page Component
@@ -19,15 +21,18 @@ export default function LandingPage() {
   const { t, language, setLanguage } = useLanguage();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const openLoginDialog = () => {
     setAuthMode("login");
     setAuthDialogOpen(true);
+    setMobileMenuOpen(false);
   };
 
   const openRegisterDialog = () => {
     setAuthMode("register");
     setAuthDialogOpen(true);
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -58,7 +63,8 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <nav className="hidden items-center gap-6 md:flex">
+          {/* Desktop Navigation - Hidden on mobile */}
+          <nav className="hidden md:flex items-center gap-6">
             <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("landing.nav.features")}
             </a>
@@ -73,7 +79,8 @@ export default function LandingPage() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Desktop Actions - Hidden on mobile */}
+          <div className="hidden md:flex items-center gap-3">
             {/* Language Toggle */}
             <div className="flex items-center gap-1 rounded-lg border border-border bg-secondary p-1">
               <button
@@ -104,20 +111,108 @@ export default function LandingPage() {
               {t("landing.nav.getStarted")}
             </Button>
           </div>
+
+          {/* Mobile Menu Button - Only visible on mobile */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex md:hidden rounded-md p-2 hover:bg-accent"
+            aria-label="Toggle menu"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
         </div>
       </header>
 
+      {/* Mobile Menu Sheet */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+          <SheetHeader>
+            <SheetTitle>{t("landing.nav.menu") || "Menu"}</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col gap-6 mt-6">
+            {/* Mobile Navigation Links */}
+            <nav className="flex flex-col gap-4">
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t("landing.nav.features")}
+              </a>
+              <a
+                href="#how-it-works"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t("landing.nav.howItWorks")}
+              </a>
+              <a
+                href="#benefits"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t("landing.nav.benefits")}
+              </a>
+              <a
+                href="#testimonials"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t("landing.nav.testimonials")}
+              </a>
+            </nav>
+
+            {/* Language Toggle Mobile */}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium">{t("common.language") || "Language"}</span>
+              <div className="flex items-center gap-2 rounded-lg border border-border bg-secondary p-1">
+                <button
+                  onClick={() => setLanguage("en")}
+                  className={`flex-1 rounded px-3 py-2 text-sm font-medium transition-colors ${
+                    language === "en"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  ENG
+                </button>
+                <button
+                  onClick={() => setLanguage("es")}
+                  className={`flex-1 rounded px-3 py-2 text-sm font-medium transition-colors ${
+                    language === "es"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  ESP
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Action Buttons */}
+            <div className="flex flex-col gap-3 pt-4 border-t border-border">
+              <Button onClick={openLoginDialog} variant="ghost" className="w-full">
+                {t("auth.login.title")}
+              </Button>
+              <Button onClick={openRegisterDialog} className="w-full">
+                {t("landing.nav.getStarted")}
+              </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       {/* Hero Section */}
       <section className="border-b border-border bg-gradient-to-b from-background to-secondary/20">
-        <div className="container mx-auto px-4 py-20 md:py-32">
+        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-32">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               {t("landing.hero.title")}
             </h1>
-            <p className="mb-10 text-lg text-muted-foreground sm:text-xl md:text-2xl">
+            <p className="mb-8 sm:mb-10 text-base sm:text-lg md:text-2xl text-muted-foreground px-2 sm:px-0">
               {t("landing.hero.subtitle")}
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row px-4 sm:px-0">
               <Button size="lg" onClick={openRegisterDialog} className="w-full sm:w-auto">
                 {t("landing.hero.cta")}
               </Button>
@@ -130,18 +225,18 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="border-b border-border bg-background py-20 md:py-32">
+      <section id="how-it-works" className="border-b border-border bg-background py-12 sm:py-16 md:py-32">
         <div className="container mx-auto px-4">
-          <div className="mb-16 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+          <div className="mb-12 sm:mb-16 text-center">
+            <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">
               {t("landing.howItWorks.title")}
             </h2>
-            <p className="text-lg text-muted-foreground md:text-xl">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-2 sm:px-0">
               {t("landing.howItWorks.subtitle")}
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-5">
+          <div className="mx-auto grid max-w-5xl gap-6 sm:gap-8 grid-cols-1 md:grid-cols-5">
             {/* Step 1 */}
             <div className="flex flex-col items-center text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-2xl font-bold text-primary">
@@ -184,7 +279,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mx-auto mt-8 grid max-w-5xl gap-8 md:grid-cols-3 md:px-16">
+          <div className="mx-auto mt-6 sm:mt-8 grid max-w-5xl gap-6 sm:gap-8 grid-cols-1 md:grid-cols-3 md:px-16">
             {/* Arrow Down on Mobile */}
             <div className="flex items-center justify-center md:hidden">
               <svg className="h-6 w-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,20 +316,20 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="border-b border-border bg-secondary/20 py-20 md:py-32">
+      <section id="benefits" className="border-b border-border bg-secondary/20 py-12 sm:py-16 md:py-32">
         <div className="container mx-auto px-4">
-          <div className="mb-16 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+          <div className="mb-12 sm:mb-16 text-center">
+            <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">
               {t("landing.benefits.title")}
             </h2>
           </div>
 
-          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl gap-8 sm:gap-12 grid-cols-1 lg:grid-cols-2">
             {/* Benefits for Sellers */}
             <div>
-              <div className="mb-8">
-                <h3 className="mb-2 text-2xl font-bold md:text-3xl">{t("landing.benefits.sellers.title")}</h3>
-                <p className="text-muted-foreground">{t("landing.benefits.sellers.subtitle")}</p>
+              <div className="mb-6 sm:mb-8">
+                <h3 className="mb-2 text-xl sm:text-2xl md:text-3xl font-bold">{t("landing.benefits.sellers.title")}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground">{t("landing.benefits.sellers.subtitle")}</p>
               </div>
               <div className="space-y-4">
                 <Card>
@@ -282,9 +377,9 @@ export default function LandingPage() {
 
             {/* Benefits for Lead Managers */}
             <div>
-              <div className="mb-8">
-                <h3 className="mb-2 text-2xl font-bold md:text-3xl">{t("landing.benefits.leadManagers.title")}</h3>
-                <p className="text-muted-foreground">{t("landing.benefits.leadManagers.subtitle")}</p>
+              <div className="mb-6 sm:mb-8">
+                <h3 className="mb-2 text-xl sm:text-2xl md:text-3xl font-bold">{t("landing.benefits.leadManagers.title")}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground">{t("landing.benefits.leadManagers.subtitle")}</p>
               </div>
               <div className="space-y-4">
                 <Card>
@@ -334,18 +429,18 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="border-b border-border bg-background py-20 md:py-32">
+      <section id="testimonials" className="border-b border-border bg-background py-12 sm:py-16 md:py-32">
         <div className="container mx-auto px-4">
-          <div className="mb-16 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+          <div className="mb-12 sm:mb-16 text-center">
+            <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">
               {t("landing.testimonials.title")}
             </h2>
-            <p className="text-lg text-muted-foreground md:text-xl">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-2 sm:px-0">
               {t("landing.testimonials.subtitle")}
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
+          <div className="mx-auto grid max-w-6xl gap-6 sm:gap-8 grid-cols-1 md:grid-cols-3">
             {/* Testimonial 1 */}
             <Card>
               <CardHeader>
@@ -416,9 +511,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-secondary/30 py-12 md:py-16">
+      <footer className="bg-secondary/30 py-8 sm:py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-center gap-8">
+          <div className="flex flex-col items-center justify-center gap-6 sm:gap-8">
             {/* Brand */}
             <div className="text-center">
               <div className="mb-4 flex items-center justify-center gap-2">
@@ -448,8 +543,8 @@ export default function LandingPage() {
 
             {/* Legal */}
             <div className="text-center">
-              <h4 className="mb-4 font-semibold">{t("legal.title")}</h4>
-              <ul className="flex flex-wrap justify-center gap-4 text-sm">
+              <h4 className="mb-3 sm:mb-4 font-semibold text-sm sm:text-base">{t("legal.title")}</h4>
+              <ul className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
                 <li>
                   <a href="/legal/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t("legal.privacyPolicy")}
@@ -469,7 +564,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
+          <div className="mt-8 sm:mt-12 border-t border-border pt-6 sm:pt-8 text-center text-xs sm:text-sm text-muted-foreground">
             {t("landing.footer.copyright")}
           </div>
         </div>
@@ -477,7 +572,7 @@ export default function LandingPage() {
 
       {/* Authentication Dialog */}
       <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="w-[95vw] max-w-[400px] sm:max-w-md">
           {authMode === "login" ? (
             <LoginForm
               onToggleToRegister={() => setAuthMode("register")}

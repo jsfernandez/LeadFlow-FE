@@ -84,10 +84,10 @@ export default function ProposalsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">{t("proposals.title")}</h1>
-        <p className="text-muted-foreground">{t("proposals.subtitle")}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t("proposals.title")}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">{t("proposals.subtitle")}</p>
       </div>
 
       <Card>
@@ -103,38 +103,40 @@ export default function ProposalsPage() {
               <p className="text-sm text-red-400">{t("proposals.failedToLoad")}</p>
             </div>
           ) : proposals && proposals.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("proposals.lead")}</TableHead>
-                  <TableHead>{t("proposals.offerCompany")}</TableHead>
-                  <TableHead>{t("proposals.status")}</TableHead>
-                  <TableHead>{t("proposals.submitted")}</TableHead>
-                  <TableHead>{t("proposals.qualified")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {proposals.map((proposal) => (
-                  <TableRow key={proposal.id}>
-                    <TableCell>
-                      <LeadCell leadId={proposal.leadId} />
-                    </TableCell>
-                    <TableCell>
-                      <OfferCell offerId={proposal.offerId} />
-                    </TableCell>
-                    <TableCell>{getStatusBadge(proposal.status)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {new Date(proposal.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {proposal.qualifiedAt
-                        ? new Date(proposal.qualifiedAt).toLocaleDateString()
-                        : "-"}
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[150px]">{t("proposals.lead")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("proposals.offerCompany")}</TableHead>
+                    <TableHead className="min-w-[100px]">{t("proposals.status")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("proposals.submitted")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("proposals.qualified")}</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {proposals.map((proposal) => (
+                    <TableRow key={proposal.id}>
+                      <TableCell>
+                        <LeadCell leadId={proposal.leadId} />
+                      </TableCell>
+                      <TableCell>
+                        <OfferCell offerId={proposal.offerId} />
+                      </TableCell>
+                      <TableCell>{getStatusBadge(proposal.status)}</TableCell>
+                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        {new Date(proposal.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        {proposal.qualifiedAt
+                          ? new Date(proposal.qualifiedAt).toLocaleDateString()
+                          : "-"}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Clipboard}

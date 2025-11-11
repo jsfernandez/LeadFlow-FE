@@ -57,20 +57,20 @@ export default function PayoutsPage() {
   const totalAmount = pendingTotal + paidTotal;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">{t("payouts.title")}</h1>
-        <p className="text-muted-foreground">{t("payouts.subtitle")}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t("payouts.title")}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">{t("payouts.subtitle")}</p>
       </div>
 
       {isLoading ? (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           <StatsCardSkeleton />
           <StatsCardSkeleton />
           <StatsCardSkeleton />
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium">{t("payouts.cards.pending")}</CardTitle>
@@ -122,48 +122,50 @@ export default function PayoutsPage() {
               <p className="text-sm text-red-400">{t("payouts.errorLoading")}</p>
             </div>
           ) : payouts && payouts.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("payouts.payoutId")}</TableHead>
-                  <TableHead>{t("payouts.amount")}</TableHead>
-                  <TableHead>{t("payouts.status")}</TableHead>
-                  <TableHead>{t("payouts.createdAt")}</TableHead>
-                  <TableHead>{t("payouts.paidDate")}</TableHead>
-                  {isAdmin && <TableHead>{t("payouts.actions")}</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payouts.map((payout) => (
-                  <TableRow key={payout.id}>
-                    <TableCell className="font-mono text-xs">{payout.id.substring(0, 20)}...</TableCell>
-                    <TableCell className="font-semibold text-primary">
-                      {formatCurrencyCLP(payout.amount)}
-                    </TableCell>
-                    <TableCell>{getStatusBadge(payout.status)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {new Date(payout.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {payout.paidAt ? new Date(payout.paidAt).toLocaleDateString() : "-"}
-                    </TableCell>
-                    {isAdmin && (
-                      <TableCell>
-                        {payout.status === "PENDING" && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleMarkAsPaid(payout.id)}
-                            disabled={updatePayoutStatus.isPending}
-                          >
-                            {updatePayoutStatus.isPending ? t("payouts.processing") : t("payouts.markAsPaid")}
-                          </Button>
-                        )}
-                      </TableCell>
-                    )}
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[150px]">{t("payouts.payoutId")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("payouts.amount")}</TableHead>
+                    <TableHead className="min-w-[100px]">{t("payouts.status")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("payouts.createdAt")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("payouts.paidDate")}</TableHead>
+                    {isAdmin && <TableHead className="min-w-[120px]">{t("payouts.actions")}</TableHead>}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {payouts.map((payout) => (
+                    <TableRow key={payout.id}>
+                      <TableCell className="font-mono text-xs">{payout.id.substring(0, 20)}...</TableCell>
+                      <TableCell className="font-semibold text-primary text-sm md:text-base whitespace-nowrap">
+                        {formatCurrencyCLP(payout.amount)}
+                      </TableCell>
+                      <TableCell>{getStatusBadge(payout.status)}</TableCell>
+                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        {new Date(payout.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        {payout.paidAt ? new Date(payout.paidAt).toLocaleDateString() : "-"}
+                      </TableCell>
+                      {isAdmin && (
+                        <TableCell>
+                          {payout.status === "PENDING" && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleMarkAsPaid(payout.id)}
+                              disabled={updatePayoutStatus.isPending}
+                            >
+                              {updatePayoutStatus.isPending ? t("payouts.processing") : t("payouts.markAsPaid")}
+                            </Button>
+                          )}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <EmptyState
               icon={EmptyStateIcons.Cash}

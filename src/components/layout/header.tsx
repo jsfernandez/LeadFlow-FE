@@ -78,18 +78,18 @@ export function Header({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
 
         {/* User info */}
         {user && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="hidden md:flex flex-col items-end">
               <span className="text-sm font-medium">{user.name}</span>
               <span className="text-xs text-muted-foreground">{user.email}</span>
             </div>
-            <Badge className={roleColors[user.role]}>{user.role.replace("_", " ")}</Badge>
+            <Badge className={`${roleColors[user.role]} text-xs sm:text-sm`}>{user.role.replace("_", " ")}</Badge>
           </div>
         )}
 
         {/* Logout button */}
         {user && (
-          <Button onClick={logout} variant="outline" size="sm">
+          <Button onClick={logout} variant="outline" size="sm" className="hidden sm:flex">
             {t("common.logout")}
           </Button>
         )}
