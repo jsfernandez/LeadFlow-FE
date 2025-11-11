@@ -540,7 +540,7 @@
   "auth": {
     "login": {
       "title": "Sign In",
-      "subtitle": "Welcome back to LeadFlow",
+      "subtitle": "Welcome back to LeadManager",
       "email": "Email",
       "emailPlaceholder": "Enter your email",
       "password": "Password",
@@ -552,7 +552,7 @@
     },
     "register": {
       "title": "Create Account",
-      "subtitle": "Join LeadFlow today",
+      "subtitle": "Join LeadManager today",
       "name": "Full Name",
       "namePlaceholder": "Enter your full name",
       "email": "Email",

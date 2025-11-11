@@ -2,7 +2,7 @@
 
 ## Overview
 
-The LeadFlow application **already has a fully functional rating system** that works as an opinion/review system with star ratings (1-5) and text comments.
+The LeadManager application **already has a fully functional rating system** that works as an opinion/review system with star ratings (1-5) and text comments.
 
 ## Features
 

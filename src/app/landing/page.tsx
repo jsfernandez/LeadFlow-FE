@@ -54,7 +54,7 @@ export default function LandingPage() {
               </svg>
             </div>
             <span className="text-xl font-bold">
-              Lead<span className="text-primary">Flow</span>
+              Lead<span className="text-primary">Manager</span>
             </span>
           </div>
 
@@ -418,10 +418,10 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-secondary/30 py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+          <div className="flex flex-col items-center justify-center gap-8">
             {/* Brand */}
-            <div className="lg:col-span-1">
-              <div className="mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <div className="mb-4 flex items-center justify-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -440,109 +440,28 @@ export default function LandingPage() {
                   </svg>
                 </div>
                 <span className="text-xl font-bold">
-                  Lead<span className="text-primary">Flow</span>
+                  Lead<span className="text-primary">Manager</span>
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">{t("landing.footer.tagline")}</p>
             </div>
 
-            {/* Product */}
-            <div>
-              <h4 className="mb-4 font-semibold">{t("landing.footer.product.title")}</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.product.features")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.product.pricing")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.product.security")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.product.roadmap")}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h4 className="mb-4 font-semibold">{t("landing.footer.company.title")}</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.company.about")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.company.careers")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.company.contact")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.company.blog")}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h4 className="mb-4 font-semibold">{t("landing.footer.resources.title")}</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.resources.documentation")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.resources.guides")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.resources.support")}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.resources.api")}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
             {/* Legal */}
-            <div>
+            <div className="text-center">
               <h4 className="mb-4 font-semibold">{t("landing.footer.legal.title")}</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="flex flex-wrap justify-center gap-4 text-sm">
                 <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <a href="/legal/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t("landing.footer.legal.privacy")}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <a href="/legal/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t("landing.footer.legal.terms")}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                  <a href="/legal/cookies" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t("landing.footer.legal.cookies")}
                   </a>
                 </li>
