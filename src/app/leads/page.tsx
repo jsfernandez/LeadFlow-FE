@@ -30,7 +30,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { NumericInput } from "@/components/ui/numeric-input";
 import { MoneyInput } from "@/components/ui/money-input";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { formatCurrencyCLP } from "@/lib/utils";

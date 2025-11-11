@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn, formatThousands, parseThousands, isValidMoneyInput } from "@/lib/utils";
+import { cn, formatThousands, parseThousands } from "@/lib/utils";
 
 export type MoneyInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange' | 'value'> & {
   value?: string | number;
