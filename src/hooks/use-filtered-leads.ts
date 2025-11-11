@@ -41,13 +41,15 @@ export function useFilteredLeads(
 
     // Step 1: Apply filters
     const filtered = leads.filter((lead) => {
-      // Search filter (fullName, companyName, email)
+      // Search filter (fullName, companyName, email, city, country)
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =
           lead.fullName.toLowerCase().includes(searchLower) ||
           lead.companyName.toLowerCase().includes(searchLower) ||
-          lead.email.toLowerCase().includes(searchLower);
+          lead.email.toLowerCase().includes(searchLower) ||
+          lead.city.toLowerCase().includes(searchLower) ||
+          lead.country.toLowerCase().includes(searchLower);
         if (!matchesSearch) return false;
       }
 

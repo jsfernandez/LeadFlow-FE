@@ -637,8 +637,8 @@
     }
   },
   "leads": {
-    "title": "Make changes to your leads",
-    "subtitle": "Manage your lead database",
+    "title": "Leads (Your potential contacts directory)",
+    "subtitle": "A lead is a contact who might be interested in a product or service. Here you can register and organize these contacts to include them in proposals.",
     "allLeads": "All Leads",
     "listDescription": "List of all leads in the system",
     "createLead": "Create Lead",
@@ -646,11 +646,13 @@
     "createLeadDescription": "Fill in the lead information",
     "editLeadDescription": "Update the lead information",
     "fullName": "Full Name",
-    "leadId": "Lead ID",
+    "identityDocument": "Identity Document",
+    "identityDocumentPlaceholder": "ID, SSN, Passport...",
     "email": "Email",
     "phone": "Phone",
     "company": "Company",
-    "titlePlaceholder": "e.g., MBA, PhD, Engineer",
+    "academicDegree": "Academic Degree",
+    "academicDegreePlaceholder": "e.g., MBA, PhD, Engineer",
     "position": "Position",
     "positionPlaceholder": "e.g., CEO, Director, VP",
     "country": "Country",
@@ -658,12 +660,14 @@
     "location": "Location",
     "industry": "Industry",
     "gender": "Gender",
-    "genderPlaceholder": "MALE, FEMALE, UNSPECIFIED",
-    "minRevenue": "Minimum Charge",
-    "maxRevenue": "Maximum Charge",
-    "revenueRange": "Charge Range",
-    "profileUrl": "Website/Social Profile",
-    "source": "Source",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other",
+    "minCompensation": "Minimum compensation",
+    "maxCompensation": "Maximum compensation",
+    "compensationRange": "Compensation Range",
+    "profileUrl": "Website / Social Profile",
+    "profileUrlPlaceholder": "Ex: linkedin.com/davidlee",
     "actions": "Actions",
     "noLeads": "No leads yet",
     "noLeadsDescription": "Start by creating your first lead",
@@ -673,12 +677,12 @@
     "updating": "Updating...",
     "filter": {
       "search": "Search",
-      "searchPlaceholder": "Search by name, company, or email...",
+      "searchPlaceholder": "Search by name, company, email, city or country...",
       "industry": "Industry",
       "country": "Country",
       "city": "City",
       "gender": "Gender",
-      "revenueRange": "Revenue Range",
+      "revenueRange": "Compensation Range",
       "allIndustries": "All Industries",
       "allCountries": "All Countries",
       "allCities": "All Cities",
@@ -693,10 +697,17 @@
       "industry": "Industry",
       "country": "Country",
       "createdAt": "Created Date",
-      "minRevenue": "Min Revenue",
-      "maxRevenue": "Max Revenue",
+      "minRevenue": "Minimum Compensation",
+      "maxRevenue": "Maximum Compensation",
       "ascending": "Ascending",
       "descending": "Descending"
+    }
+  },
+  "form": {
+    "errors": {
+      "minGreaterThanMax": "Minimum compensation cannot be greater than maximum",
+      "maxLessThanMin": "Maximum compensation cannot be less than minimum",
+      "decimalPointRequired": "Use dot (.) as decimal separator, not comma (,)"
     }
   }
 }

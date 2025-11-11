@@ -637,8 +637,8 @@
     }
   },
   "leads": {
-    "title": "Gestiona tus Leads",
-    "subtitle": "Gestione su base de datos de leads",
+    "title": "Leads (Tu agenda de contactos potenciales)",
+    "subtitle": "Un lead es un contacto que podría estar interesado en un producto o servicio. Aquí puedes registrar y organizar esos contactos para enviarlos en propuestas.",
     "allLeads": "Todos los Leads",
     "listDescription": "Lista de todos los leads en el sistema",
     "createLead": "Crear Lead",
@@ -646,11 +646,13 @@
     "createLeadDescription": "Complete la información del lead",
     "editLeadDescription": "Actualice la información del lead",
     "fullName": "Nombre Completo",
-    "leadId": "ID de Lead",
+    "identityDocument": "Documento de identidad",
+    "identityDocumentPlaceholder": "DNI, RUT, Pasaporte...",
     "email": "Email",
     "phone": "Teléfono",
     "company": "Empresa",
-    "titlePlaceholder": "Ej: MBA, PhD, Ingeniero",
+    "academicDegree": "Título académico",
+    "academicDegreePlaceholder": "Ej: MBA, PhD, Ingeniero",
     "position": "Cargo",
     "positionPlaceholder": "Ej: CEO, Director, VP",
     "country": "País",
@@ -658,12 +660,14 @@
     "location": "Ubicación",
     "industry": "Industria",
     "gender": "Género",
-    "genderPlaceholder": "MALE, FEMALE, UNSPECIFIED",
-    "minRevenue": "Cobro Mínimo",
-    "maxRevenue": "Cobro Máximo",
-    "revenueRange": "Rango de Cobro",
-    "profileUrl": "Perfil Web/Red Social",
-    "source": "Fuente",
+    "genderMale": "Hombre",
+    "genderFemale": "Mujer",
+    "genderOther": "Otro",
+    "minCompensation": "Remuneración mínima",
+    "maxCompensation": "Remuneración máxima",
+    "compensationRange": "Rango de Remuneración",
+    "profileUrl": "Perfil Web / Red Social",
+    "profileUrlPlaceholder": "Ej: linkedin.com/davidlee",
     "actions": "Acciones",
     "noLeads": "Aún no hay leads",
     "noLeadsDescription": "Comience creando su primer lead",
@@ -673,12 +677,12 @@
     "updating": "Actualizando...",
     "filter": {
       "search": "Buscar",
-      "searchPlaceholder": "Buscar por nombre, empresa o email...",
+      "searchPlaceholder": "Buscar por nombre, empresa, email, ciudad o país...",
       "industry": "Industria",
       "country": "País",
       "city": "Ciudad",
       "gender": "Género",
-      "revenueRange": "Rango de Ingresos",
+      "revenueRange": "Rango de Remuneración",
       "allIndustries": "Todas las Industrias",
       "allCountries": "Todos los Países",
       "allCities": "Todas las Ciudades",
@@ -693,10 +697,17 @@
       "industry": "Industria",
       "country": "País",
       "createdAt": "Fecha de Creación",
-      "minRevenue": "Ingreso Mínimo",
-      "maxRevenue": "Ingreso Máximo",
+      "minRevenue": "Remuneración Mínima",
+      "maxRevenue": "Remuneración Máxima",
       "ascending": "Ascendente",
       "descending": "Descendente"
+    }
+  },
+  "form": {
+    "errors": {
+      "minGreaterThanMax": "La remuneración mínima no puede ser mayor que la máxima",
+      "maxLessThanMin": "La remuneración máxima no puede ser menor que la mínima",
+      "decimalPointRequired": "Use punto (.) como separador decimal, no coma (,)"
     }
   }
 }
