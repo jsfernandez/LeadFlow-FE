@@ -707,7 +707,11 @@
     "errors": {
       "minGreaterThanMax": "Minimum compensation cannot be greater than maximum",
       "maxLessThanMin": "Maximum compensation cannot be less than minimum",
-      "decimalPointRequired": "Use dot (.) as decimal separator, not comma (,)"
+      "decimalPointRequired": "Use dot (.) as decimal separator, not comma (,)",
+      "onlyNumbers": "Only numbers are allowed",
+      "invalidMoneyFormat": "Invalid money format. Use only numbers without symbols",
+      "priceRequired": "Price is required",
+      "pricePositive": "Price must be greater than 0"
     }
   }
 }

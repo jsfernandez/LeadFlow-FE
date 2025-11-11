@@ -8,6 +8,7 @@ import { usePayouts } from "@/hooks/use-payouts";
 import { Badge } from "@/components/ui/badge";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { LeadInfo } from "./lead-info";
+import { formatCurrencyCLP } from "@/lib/utils";
 
 /**
  * ADMIN Dashboard Component
@@ -85,7 +86,7 @@ export function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Payouts"
-          value={`$${totalPayouts.toFixed(0)}`}
+          value={formatCurrencyCLP(totalPayouts)}
           description="All time"
           icon={
             <svg
@@ -275,7 +276,7 @@ export function AdminDashboard() {
                   <span className="text-sm text-muted-foreground">Pending Payouts</span>
                 </div>
                 <span className="font-semibold text-yellow-500">
-                  ${pendingPayouts.toFixed(2)}
+                  {formatCurrencyCLP(pendingPayouts)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -284,13 +285,13 @@ export function AdminDashboard() {
                   <span className="text-sm text-muted-foreground">Paid Payouts</span>
                 </div>
                 <span className="font-semibold text-green-500">
-                  ${paidPayouts.toFixed(2)}
+                  {formatCurrencyCLP(paidPayouts)}
                 </span>
               </div>
               <div className="border-t pt-4 flex items-center justify-between">
                 <span className="text-sm font-medium">Total Payouts</span>
                 <span className="font-bold text-primary text-lg">
-                  ${totalPayouts.toFixed(2)}
+                  {formatCurrencyCLP(totalPayouts)}
                 </span>
               </div>
               <div className="flex items-center justify-between">

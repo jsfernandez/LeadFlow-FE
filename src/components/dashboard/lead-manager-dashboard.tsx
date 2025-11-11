@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LeadInfo } from "./lead-info";
+import { formatCurrencyCLP } from "@/lib/utils";
 // Constants
 const RATINGS_PER_PAGE = 5;
 
@@ -207,7 +208,7 @@ export function LeadManagerDashboard() {
 
         <StatCard
           title={t("dashboard.leadManager.totalEarnings")}
-          value={`$${totalEarnings.toFixed(0)}`}
+          value={formatCurrencyCLP(totalEarnings)}
           description={`${pendingPayouts} ${t("dashboard.leadManager.pendingPayouts")}`}
           icon={
             <svg
@@ -351,19 +352,19 @@ export function LeadManagerDashboard() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">{t("dashboard.leadManager.pendingPayoutsLabel")}</span>
               <span className="font-semibold text-yellow-500">
-                ${myPayouts.filter(p => p.status === "PENDING").reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
+                {formatCurrencyCLP(myPayouts.filter(p => p.status === "PENDING").reduce((sum, p) => sum + p.amount, 0))}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">{t("dashboard.leadManager.paidPayouts")}</span>
               <span className="font-semibold text-green-500">
-                ${myPayouts.filter(p => p.status === "PAID").reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
+                {formatCurrencyCLP(myPayouts.filter(p => p.status === "PAID").reduce((sum, p) => sum + p.amount, 0))}
               </span>
             </div>
             <div className="border-t pt-4 flex items-center justify-between">
               <span className="text-sm font-medium">{t("dashboard.leadManager.totalEarnings")}</span>
               <span className="font-bold text-primary text-lg">
-                ${totalEarnings.toFixed(2)}
+                {formatCurrencyCLP(totalEarnings)}
               </span>
             </div>
           </div>

@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { MoneyInput } from "@/components/ui/money-input";
 import { Textarea } from "@/components/ui/textarea";
+import { formatCurrencyCLP } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
@@ -58,7 +60,7 @@ export default function OffersPage() {
   const [offerFormData, setOfferFormData] = useState({
     title: "",
     description: "",
-    price: "",
+    price: 0,
     leadType: "",
     leadQuantity: "",
     clientType: "",
@@ -83,7 +85,7 @@ export default function OffersPage() {
       const offerData: Omit<Offer, "id" | "createdAt" | "updatedAt"> = {
         title: offerFormData.title,
         description: offerFormData.description,
-        price: parseFloat(offerFormData.price),
+        price: offerFormData.price,
         status: "ACTIVE" as OfferStatus,
         sellerId: user.id,
         ...(offerFormData.leadType && { leadType: offerFormData.leadType }),
@@ -102,7 +104,7 @@ export default function OffersPage() {
       setOfferFormData({
         title: "",
         description: "",
-        price: "",
+        price: 0,
         leadType: "",
         leadQuantity: "",
         clientType: "",
@@ -271,7 +273,7 @@ export default function OffersPage() {
               <TableCell className="font-medium">{offer.title}</TableCell>
               <TableCell className="max-w-md truncate">{offer.description}</TableCell>
               <TableCell className="font-semibold text-primary">
-                ${offer.price.toFixed(2)}
+                {formatCurrencyCLP(offer.price)}
               </TableCell>
               <TableCell>{getStatusBadge(offer.status)}</TableCell>
               {!showActions && (
@@ -396,13 +398,12 @@ export default function OffersPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="price">{t("offers.createDialog.offerPrice")} ($)</Label>
-                <NumericInput
+                <Label htmlFor="price">{t("offers.createDialog.offerPrice")} (CLP)</Label>
+                <MoneyInput
                   id="price"
-                  decimalPlaces={2}
                   placeholder={t("offers.createDialog.pricePlaceholder")}
                   value={offerFormData.price}
-                  onChange={(e) => setOfferFormData({ ...offerFormData, price: e.target.value })}
+                  onChange={(value) => setOfferFormData({ ...offerFormData, price: value })}
                   required
                 />
               </div>
@@ -626,7 +627,7 @@ export default function OffersPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.price")}</p>
-                    <p className="text-sm font-semibold text-primary">${selectedOffer.price.toFixed(2)}</p>
+                    <p className="text-sm font-semibold text-primary">{formatCurrencyCLP(selectedOffer.price)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.created")}</p>

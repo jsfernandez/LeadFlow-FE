@@ -707,7 +707,11 @@
     "errors": {
       "minGreaterThanMax": "La remuneración mínima no puede ser mayor que la máxima",
       "maxLessThanMin": "La remuneración máxima no puede ser menor que la mínima",
-      "decimalPointRequired": "Use punto (.) como separador decimal, no coma (,)"
+      "decimalPointRequired": "Use punto (.) como separador decimal, no coma (,)",
+      "onlyNumbers": "Solo se permiten números",
+      "invalidMoneyFormat": "Formato de dinero inválido. Use solo números sin símbolos",
+      "priceRequired": "El precio es requerido",
+      "pricePositive": "El precio debe ser mayor a 0"
     }
   }
 }

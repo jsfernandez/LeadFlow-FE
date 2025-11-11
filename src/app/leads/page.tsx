@@ -31,7 +31,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { MoneyInput } from "@/components/ui/money-input";
 import { TableSkeleton } from "@/components/ui/skeleton";
+import { formatCurrencyCLP } from "@/lib/utils";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { useLeads, useCreateLead, useUpdateLead, useDeleteLead } from "@/hooks/use-leads";
 import { useFilteredLeads, useLeadFilterOptions, type LeadFilters, type LeadSort } from "@/hooks/use-filtered-leads";
@@ -481,7 +483,7 @@ export default function LeadsPage() {
                         <Badge variant="outline">{lead.industry}</Badge>
                       </TableCell>
                       <TableCell>
-                        ${lead.minRevenue} - ${lead.maxRevenue}
+                        {formatCurrencyCLP(lead.minRevenue)} - {formatCurrencyCLP(lead.maxRevenue)}
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
@@ -663,13 +665,12 @@ export default function LeadsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="minRevenue">{t("leads.minCompensation")} *</Label>
-                  <NumericInput
+                  <Label htmlFor="minRevenue">{t("leads.minCompensation")} (CLP) *</Label>
+                  <MoneyInput
                     id="minRevenue"
-                    decimalPlaces={2}
                     value={formData.minRevenue}
-                    onChange={(e) => {
-                      setFormData({ ...formData, minRevenue: Number(e.target.value) });
+                    onChange={(value) => {
+                      setFormData({ ...formData, minRevenue: value });
                       if (formErrors.minRevenue) setFormErrors({ ...formErrors, minRevenue: undefined });
                     }}
                     required
@@ -679,13 +680,12 @@ export default function LeadsPage() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="maxRevenue">{t("leads.maxCompensation")} *</Label>
-                  <NumericInput
+                  <Label htmlFor="maxRevenue">{t("leads.maxCompensation")} (CLP) *</Label>
+                  <MoneyInput
                     id="maxRevenue"
-                    decimalPlaces={2}
                     value={formData.maxRevenue}
-                    onChange={(e) => {
-                      setFormData({ ...formData, maxRevenue: Number(e.target.value) });
+                    onChange={(value) => {
+                      setFormData({ ...formData, maxRevenue: value });
                       if (formErrors.maxRevenue) setFormErrors({ ...formErrors, maxRevenue: undefined });
                     }}
                     required
@@ -866,13 +866,12 @@ export default function LeadsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="edit-minRevenue">{t("leads.minCompensation")} *</Label>
-                  <NumericInput
+                  <Label htmlFor="edit-minRevenue">{t("leads.minCompensation")} (CLP) *</Label>
+                  <MoneyInput
                     id="edit-minRevenue"
-                    decimalPlaces={2}
                     value={formData.minRevenue}
-                    onChange={(e) => {
-                      setFormData({ ...formData, minRevenue: Number(e.target.value) });
+                    onChange={(value) => {
+                      setFormData({ ...formData, minRevenue: value });
                       if (formErrors.minRevenue) setFormErrors({ ...formErrors, minRevenue: undefined });
                     }}
                     required
@@ -882,13 +881,12 @@ export default function LeadsPage() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="edit-maxRevenue">{t("leads.maxCompensation")} *</Label>
-                  <NumericInput
+                  <Label htmlFor="edit-maxRevenue">{t("leads.maxCompensation")} (CLP) *</Label>
+                  <MoneyInput
                     id="edit-maxRevenue"
-                    decimalPlaces={2}
                     value={formData.maxRevenue}
-                    onChange={(e) => {
-                      setFormData({ ...formData, maxRevenue: Number(e.target.value) });
+                    onChange={(value) => {
+                      setFormData({ ...formData, maxRevenue: value });
                       if (formErrors.maxRevenue) setFormErrors({ ...formErrors, maxRevenue: undefined });
                     }}
                     required
