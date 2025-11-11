@@ -255,36 +255,37 @@ export default function OffersPage() {
     }
 
     return (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("offers.offerTitle")}</TableHead>
-            <TableHead>{t("offers.description")}</TableHead>
-            <TableHead>{t("offers.price")}</TableHead>
-            <TableHead>{t("offers.status")}</TableHead>
-            {!showActions && <TableHead>{t("offers.company")}</TableHead>}
-            <TableHead>{t("offers.createdAt")}</TableHead>
-            <TableHead className="text-right">{t("offers.actions")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {offers.map((offer) => (
-            <TableRow key={offer.id}>
-              <TableCell className="font-medium">{offer.title}</TableCell>
-              <TableCell className="max-w-md truncate">{offer.description}</TableCell>
-              <TableCell className="font-semibold text-primary">
-                {formatCurrencyCLP(offer.price)}
-              </TableCell>
-              <TableCell>{getStatusBadge(offer.status)}</TableCell>
-              {!showActions && (
-                <TableCell>
-                  <SellerCell sellerId={offer.sellerId} />
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="min-w-[150px]">{t("offers.offerTitle")}</TableHead>
+              <TableHead className="min-w-[200px]">{t("offers.description")}</TableHead>
+              <TableHead className="min-w-[120px]">{t("offers.price")}</TableHead>
+              <TableHead className="min-w-[100px]">{t("offers.status")}</TableHead>
+              {!showActions && <TableHead className="min-w-[150px]">{t("offers.company")}</TableHead>}
+              <TableHead className="min-w-[120px]">{t("offers.createdAt")}</TableHead>
+              <TableHead className="text-right min-w-[200px]">{t("offers.actions")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {offers.map((offer) => (
+              <TableRow key={offer.id}>
+                <TableCell className="font-medium text-sm md:text-base">{offer.title}</TableCell>
+                <TableCell className="max-w-md truncate text-sm md:text-base">{offer.description}</TableCell>
+                <TableCell className="font-semibold text-primary text-sm md:text-base whitespace-nowrap">
+                  {formatCurrencyCLP(offer.price)}
                 </TableCell>
-              )}
-              <TableCell className="text-sm text-muted-foreground">
-                {new Date(offer.createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-right space-x-2">
+                <TableCell>{getStatusBadge(offer.status)}</TableCell>
+                {!showActions && (
+                  <TableCell>
+                    <SellerCell sellerId={offer.sellerId} />
+                  </TableCell>
+                )}
+                <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                  {new Date(offer.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
@@ -320,18 +321,19 @@ export default function OffersPage() {
           ))}
         </TableBody>
       </Table>
+      </div>
     );
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">{t("offers.title")}</h1>
-          <p className="text-muted-foreground">{t("offers.subtitle")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("offers.title")}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">{t("offers.subtitle")}</p>
         </div>
         {isSeller && (
-          <Button onClick={() => setIsCreateDialogOpen(true)}>{t("offers.createOffer")}</Button>
+          <Button onClick={() => setIsCreateDialogOpen(true)} className="w-full sm:w-auto">{t("offers.createOffer")}</Button>
         )}
       </div>
 
@@ -365,7 +367,7 @@ export default function OffersPage() {
 
       {/* Create Offer Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleCreateOffer}>
             <DialogHeader>
               <DialogTitle>{t("offers.createDialog.title")}</DialogTitle>
@@ -412,38 +414,67 @@ export default function OffersPage() {
                 <h3 className="text-sm font-semibold mb-3 text-foreground">{t("offers.createDialog.optionalDetails")}</h3>
                 
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="leadType">{t("offers.createDialog.leadType")}</Label>
-                    <Input
-                      id="leadType"
-                      placeholder={t("offers.createDialog.leadTypePlaceholder")}
-                      value={offerFormData.leadType}
-                      onChange={(e) => setOfferFormData({ ...offerFormData, leadType: e.target.value })}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="leadType">{t("offers.createDialog.leadType")}</Label>
+                      <Input
+                        id="leadType"
+                        placeholder={t("offers.createDialog.leadTypePlaceholder")}
+                        value={offerFormData.leadType}
+                        onChange={(e) => setOfferFormData({ ...offerFormData, leadType: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="leadQuantity">{t("offers.createDialog.leadQuantity")}</Label>
+                      <NumericInput
+                        id="leadQuantity"
+                        decimalPlaces={0}
+                        placeholder={t("offers.createDialog.leadQuantityPlaceholder")}
+                        value={offerFormData.leadQuantity}
+                        onChange={(e) => setOfferFormData({ ...offerFormData, leadQuantity: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="clientType">{t("offers.createDialog.clientType")}</Label>
+                      <Input
+                        id="clientType"
+                        placeholder={t("offers.createDialog.clientTypePlaceholder")}
+                        value={offerFormData.clientType}
+                        onChange={(e) => setOfferFormData({ ...offerFormData, clientType: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="offerDuration">{t("offers.createDialog.offerDuration")}</Label>
+                      <NumericInput
+                        id="offerDuration"
+                        decimalPlaces={0}
+                        placeholder={t("offers.createDialog.offerDurationPlaceholder")}
+                        value={offerFormData.offerDuration}
+                        onChange={(e) => setOfferFormData({ ...offerFormData, offerDuration: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="allowConsultations">{t("offers.createDialog.allowConsultations")}</Label>
+                      <Select
+                        value={offerFormData.allowConsultations}
+                        onValueChange={(value) => setOfferFormData({ ...offerFormData, allowConsultations: value })}
+                      >
+                        <SelectTrigger id="allowConsultations">
+                          <SelectValue placeholder={t("offers.createDialog.selectOption")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="no">{t("offers.createDialog.no")}</SelectItem>
+                          <SelectItem value="yes">{t("offers.createDialog.yes")}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="leadQuantity">{t("offers.createDialog.leadQuantity")}</Label>
-                    <NumericInput
-                      id="leadQuantity"
-                      decimalPlaces={0}
-                      placeholder={t("offers.createDialog.leadQuantityPlaceholder")}
-                      value={offerFormData.leadQuantity}
-                      onChange={(e) => setOfferFormData({ ...offerFormData, leadQuantity: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="clientType">{t("offers.createDialog.clientType")}</Label>
-                    <Input
-                      id="clientType"
-                      placeholder={t("offers.createDialog.clientTypePlaceholder")}
-                      value={offerFormData.clientType}
-                      onChange={(e) => setOfferFormData({ ...offerFormData, clientType: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
+                  <div className="space-y-2 sm:col-span-2">
                     <Label htmlFor="acceptanceCriteria">{t("offers.createDialog.acceptanceCriteria")}</Label>
                     <Textarea
                       id="acceptanceCriteria"
@@ -454,35 +485,8 @@ export default function OffersPage() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="offerDuration">{t("offers.createDialog.offerDuration")}</Label>
-                    <NumericInput
-                      id="offerDuration"
-                      decimalPlaces={0}
-                      placeholder={t("offers.createDialog.offerDurationPlaceholder")}
-                      value={offerFormData.offerDuration}
-                      onChange={(e) => setOfferFormData({ ...offerFormData, offerDuration: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="allowConsultations">{t("offers.createDialog.allowConsultations")}</Label>
-                    <Select
-                      value={offerFormData.allowConsultations}
-                      onValueChange={(value) => setOfferFormData({ ...offerFormData, allowConsultations: value })}
-                    >
-                      <SelectTrigger id="allowConsultations">
-                        <SelectValue placeholder={t("offers.createDialog.selectOption")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="no">{t("offers.createDialog.no")}</SelectItem>
-                        <SelectItem value="yes">{t("offers.createDialog.yes")}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
                   {offerFormData.allowConsultations === "yes" && (
-                    <div className="bg-muted p-3 rounded-md border border-border">
+                    <div className="bg-muted p-3 rounded-md border border-border sm:col-span-2">
                       <p className="text-sm text-muted-foreground">
                         <span className="font-semibold text-foreground">{t("offers.createDialog.internalMessageChannel")}</span> {t("offers.createDialog.consultationsEnabledMessage")}
                       </p>
@@ -521,7 +525,7 @@ export default function OffersPage() {
 
       {/* Create Proposal Dialog */}
       <Dialog open={isProposalDialogOpen} onOpenChange={setIsProposalDialogOpen}>
-        <DialogContent>
+        <DialogContent className="w-[95vw] max-w-md sm:max-w-lg">
           <form onSubmit={handleSubmitProposal}>
             <DialogHeader>
               <DialogTitle>{t("offers.proposalDialog.title")}</DialogTitle>
@@ -601,7 +605,7 @@ export default function OffersPage() {
 
       {/* Offer Detail Dialog */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("offers.detailDialog.title")}</DialogTitle>
             <DialogDescription>
@@ -616,7 +620,7 @@ export default function OffersPage() {
                   {t("offers.detailDialog.basicInformation")}
                 </h3>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.title")}</p>
                     <p className="text-sm font-medium">{selectedOffer.title}</p>
@@ -649,7 +653,7 @@ export default function OffersPage() {
                     {t("offers.detailDialog.extendedDetails")}
                   </h3>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {selectedOffer.leadType && (
                       <div>
                         <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.leadType")}</p>

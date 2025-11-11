@@ -249,13 +249,13 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">{t("leads.title")}</h1>
-          <p className="text-muted-foreground">{t("leads.subtitle")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("leads.title")}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">{t("leads.subtitle")}</p>
         </div>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
+        <Button onClick={() => setIsCreateDialogOpen(true)} className="w-full sm:w-auto">
           {t("leads.createLead")}
         </Button>
       </div>
@@ -269,7 +269,7 @@ export default function LeadsPage() {
           {/* Filter and Sort Bar */}
           <div className="space-y-4 mb-6">
             {/* Search Bar */}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -284,7 +284,7 @@ export default function LeadsPage() {
                   variant="outline"
                   size="sm"
                   onClick={handleClearFilters}
-                  className="gap-1"
+                  className="gap-1 w-full sm:w-auto"
                 >
                   <X className="h-4 w-4" />
                   {t("leads.filter.clearFilters")}
@@ -299,7 +299,7 @@ export default function LeadsPage() {
                 value={filters.industry}
                 onValueChange={(value) => setFilters({ ...filters, industry: value })}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={t("leads.filter.industry")} />
                 </SelectTrigger>
@@ -318,7 +318,7 @@ export default function LeadsPage() {
                 value={filters.country}
                 onValueChange={(value) => setFilters({ ...filters, country: value })}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={t("leads.filter.country")} />
                 </SelectTrigger>
@@ -337,7 +337,7 @@ export default function LeadsPage() {
                 value={filters.city}
                 onValueChange={(value) => setFilters({ ...filters, city: value })}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={t("leads.filter.city")} />
                 </SelectTrigger>
@@ -356,7 +356,7 @@ export default function LeadsPage() {
                 value={filters.gender}
                 onValueChange={(value) => setFilters({ ...filters, gender: value })}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={t("leads.filter.gender")} />
                 </SelectTrigger>
@@ -373,7 +373,7 @@ export default function LeadsPage() {
               {/* Sort Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-1">
+                  <Button variant="outline" className="gap-1 w-full sm:w-auto">
                     <ArrowUpDown className="h-4 w-4" />
                     {t("leads.sort.sortBy")}
                   </Button>
@@ -460,28 +460,28 @@ export default function LeadsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{t("leads.company")}</TableHead>
-                    <TableHead>{t("leads.fullName")}</TableHead>
-                    <TableHead>{t("leads.email")}</TableHead>
-                    <TableHead>{t("leads.phone")}</TableHead>
-                    <TableHead>{t("leads.location")}</TableHead>
-                    <TableHead>{t("leads.industry")}</TableHead>
-                    <TableHead>{t("leads.compensationRange")}</TableHead>
-                    <TableHead>{t("leads.actions")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("leads.company")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("leads.fullName")}</TableHead>
+                    <TableHead className="min-w-[180px]">{t("leads.email")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("leads.phone")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("leads.location")}</TableHead>
+                    <TableHead className="min-w-[120px]">{t("leads.industry")}</TableHead>
+                    <TableHead className="min-w-[180px]">{t("leads.compensationRange")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("leads.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredLeads.map((lead) => (
                     <TableRow key={lead.id}>
-                      <TableCell className="font-medium">{lead.companyName}</TableCell>
-                      <TableCell>{lead.fullName}</TableCell>
-                      <TableCell>{lead.email}</TableCell>
-                      <TableCell>{lead.phone}</TableCell>
-                      <TableCell>{`${lead.city}, ${lead.country}`}</TableCell>
+                      <TableCell className="font-medium text-sm md:text-base">{lead.companyName}</TableCell>
+                      <TableCell className="text-sm md:text-base">{lead.fullName}</TableCell>
+                      <TableCell className="text-sm md:text-base">{lead.email}</TableCell>
+                      <TableCell className="text-sm md:text-base">{lead.phone}</TableCell>
+                      <TableCell className="text-sm md:text-base whitespace-nowrap">{`${lead.city}, ${lead.country}`}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{lead.industry}</Badge>
+                        <Badge variant="outline" className="text-xs md:text-sm">{lead.industry}</Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-sm md:text-base whitespace-nowrap">
                         {formatCurrencyCLP(lead.minRevenue)} - {formatCurrencyCLP(lead.maxRevenue)}
                       </TableCell>
                       <TableCell>
