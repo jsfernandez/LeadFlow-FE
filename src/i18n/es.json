@@ -387,6 +387,12 @@
     "english": "Inglés",
     "spanish": "Español"
   },
+  "legal": {
+    "title": "Legal",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "cookiesPolicy": "Política de Cookies"
+  },
   "landing": {
     "nav": {
       "features": "Características",

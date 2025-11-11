@@ -448,21 +448,21 @@ export default function LandingPage() {
 
             {/* Legal */}
             <div className="text-center">
-              <h4 className="mb-4 font-semibold">{t("landing.footer.legal.title")}</h4>
+              <h4 className="mb-4 font-semibold">{t("legal.title")}</h4>
               <ul className="flex flex-wrap justify-center gap-4 text-sm">
                 <li>
                   <a href="/legal/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.legal.privacy")}
+                    {t("legal.privacyPolicy")}
                   </a>
                 </li>
                 <li>
                   <a href="/legal/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.legal.terms")}
+                    {t("legal.termsOfService")}
                   </a>
                 </li>
                 <li>
                   <a href="/legal/cookies" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t("landing.footer.legal.cookies")}
+                    {t("legal.cookiesPolicy")}
                   </a>
                 </li>
               </ul>
