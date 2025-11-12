@@ -485,11 +485,12 @@ export default function LeadsPage() {
                         {formatCurrencyCLP(lead.minRevenue)} - {formatCurrencyCLP(lead.maxRevenue)}
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => openEditDialog(lead)}
+                            className="w-full sm:w-auto"
                           >
                             {t("common.edit")}
                           </Button>
@@ -497,6 +498,7 @@ export default function LeadsPage() {
                             size="sm"
                             variant="destructive"
                             onClick={() => handleDeleteLead(lead.id)}
+                            className="w-full sm:w-auto"
                           >
                             {t("common.delete")}
                           </Button>
@@ -527,7 +529,7 @@ export default function LeadsPage() {
 
       {/* Create Lead Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleCreateLead}>
             <DialogHeader>
               <DialogTitle>{t("leads.createLead")}</DialogTitle>
@@ -537,7 +539,7 @@ export default function LeadsPage() {
             </DialogHeader>
 
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">{t("leads.fullName")} *</Label>
                   <Input
@@ -559,7 +561,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">{t("leads.email")} *</Label>
                   <Input
@@ -591,7 +593,7 @@ export default function LeadsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">{t("leads.academicDegree")} *</Label>
                   <Input
@@ -613,7 +615,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="country">{t("leads.country")} *</Label>
                   <Input
@@ -634,7 +636,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="industry">{t("leads.industry")} *</Label>
                   <Input
@@ -662,7 +664,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="minRevenue">{t("leads.minCompensation")} (CLP) *</Label>
                   <MoneyInput
@@ -706,18 +708,20 @@ export default function LeadsPage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => setIsCreateDialogOpen(false)}
                 disabled={createLead.isPending}
+                className="w-full sm:w-auto"
               >
                 {t("common.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={createLead.isPending}
+                className="w-full sm:w-auto"
               >
                 {createLead.isPending ? t("leads.creating") : t("common.create")}
               </Button>
@@ -728,7 +732,7 @@ export default function LeadsPage() {
 
       {/* Edit Lead Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
           <form onSubmit={handleUpdateLead}>
             <DialogHeader>
               <DialogTitle>{t("leads.editLead")}</DialogTitle>
@@ -738,7 +742,7 @@ export default function LeadsPage() {
             </DialogHeader>
 
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-fullName">{t("leads.fullName")} *</Label>
                   <Input
@@ -760,7 +764,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-email">{t("leads.email")} *</Label>
                   <Input
@@ -792,7 +796,7 @@ export default function LeadsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-title">{t("leads.academicDegree")} *</Label>
                   <Input
@@ -814,7 +818,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-country">{t("leads.country")} *</Label>
                   <Input
@@ -835,7 +839,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-industry">{t("leads.industry")} *</Label>
                   <Input
@@ -863,7 +867,7 @@ export default function LeadsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="edit-minRevenue">{t("leads.minCompensation")} (CLP) *</Label>
                   <MoneyInput
@@ -907,7 +911,7 @@ export default function LeadsPage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="secondary"
@@ -916,12 +920,14 @@ export default function LeadsPage() {
                   setSelectedLead(null);
                 }}
                 disabled={updateLead.isPending}
+                className="w-full sm:w-auto"
               >
                 {t("common.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={updateLead.isPending}
+                className="w-full sm:w-auto"
               >
                 {updateLead.isPending ? t("leads.updating") : t("common.save")}
               </Button>
