@@ -276,6 +276,23 @@
       "success": "Proposal submitted successfully",
       "error": "Failed to submit proposal",
       "leadNotFound": "Selected lead not found"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by title, description or company...",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "sortBy": "Sort by",
+      "clearFilters": "Clear Filters",
+      "showingResults": "Showing {current} of {total} offers",
+      "sort": {
+        "dateAsc": "Date (Oldest)",
+        "dateDesc": "Date (Newest)",
+        "priceAsc": "Price (Low to High)",
+        "priceDesc": "Price (High to Low)",
+        "titleAsc": "Title (A-Z)",
+        "titleDesc": "Title (Z-A)"
+      }
     }
   },
   "myOffers": {
@@ -348,7 +365,22 @@
     "chooseLead": "Choose a lead",
     "searchLead": "Search leads...",
     "noLeadsAvailable": "No leads available",
-    "selectedLead": "Selected Lead"
+    "selectedLead": "Selected Lead",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by offer name, lead manager or seller...",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "sortBy": "Sort by",
+      "clearFilters": "Clear Filters",
+      "showingResults": "Showing {current} of {total} proposals",
+      "sort": {
+        "dateAsc": "Submitted (Oldest)",
+        "dateDesc": "Submitted (Newest)",
+        "statusAsc": "Status (A-Z)",
+        "statusDesc": "Status (Z-A)"
+      }
+    }
   },
   "payouts": {
     "title": "Payouts",
@@ -386,7 +418,24 @@
     "emptyStateDescription": "Payouts are generated when leads are marked as WON. Start qualifying your leads to earn payouts!",
     "errorLoading": "Failed to load payouts. Please try again.",
     "successMarkedPaid": "Payout marked as paid successfully",
-    "errorMarkingPaid": "Failed to update payout status. Please try again."
+    "errorMarkingPaid": "Failed to update payout status. Please try again.",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by lead manager or company...",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "sortBy": "Sort by",
+      "clearFilters": "Clear Filters",
+      "showingResults": "Showing {current} of {total} payouts",
+      "sort": {
+        "dateAsc": "Created (Oldest)",
+        "dateDesc": "Created (Newest)",
+        "amountAsc": "Amount (Low to High)",
+        "amountDesc": "Amount (High to Low)",
+        "statusAsc": "Status (A-Z)",
+        "statusDesc": "Status (Z-A)"
+      }
+    }
   },
   "users": {
     "title": "Users",

@@ -276,6 +276,23 @@
       "success": "Propuesta enviada exitosamente",
       "error": "Error al enviar la propuesta",
       "leadNotFound": "Lead seleccionado no encontrado"
+    },
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por título, descripción o empresa...",
+      "status": "Estado",
+      "allStatuses": "Todos los Estados",
+      "sortBy": "Ordenar por",
+      "clearFilters": "Limpiar Filtros",
+      "showingResults": "Mostrando {current} de {total} ofertas",
+      "sort": {
+        "dateAsc": "Fecha (Más antigua)",
+        "dateDesc": "Fecha (Más reciente)",
+        "priceAsc": "Precio (Menor a Mayor)",
+        "priceDesc": "Precio (Mayor a Menor)",
+        "titleAsc": "Título (A-Z)",
+        "titleDesc": "Título (Z-A)"
+      }
     }
   },
   "myOffers": {
@@ -348,7 +365,22 @@
     "chooseLead": "Elegir un lead",
     "searchLead": "Buscar leads...",
     "noLeadsAvailable": "No hay leads disponibles",
-    "selectedLead": "Lead Seleccionado"
+    "selectedLead": "Lead Seleccionado",
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre de oferta, gestor de leads o vendedor...",
+      "status": "Estado",
+      "allStatuses": "Todos los Estados",
+      "sortBy": "Ordenar por",
+      "clearFilters": "Limpiar Filtros",
+      "showingResults": "Mostrando {current} de {total} propuestas",
+      "sort": {
+        "dateAsc": "Enviado (Más antigua)",
+        "dateDesc": "Enviado (Más reciente)",
+        "statusAsc": "Estado (A-Z)",
+        "statusDesc": "Estado (Z-A)"
+      }
+    }
   },
   "payouts": {
     "title": "Pagos",
@@ -386,7 +418,24 @@
     "emptyStateDescription": "Los pagos se generan cuando los leads se marcan como GANADOS. ¡Comience a calificar sus leads para obtener pagos!",
     "errorLoading": "Error al cargar los pagos. Por favor, inténtelo de nuevo.",
     "successMarkedPaid": "Pago marcado como pagado exitosamente",
-    "errorMarkingPaid": "Error al actualizar el estado del pago. Por favor, inténtelo de nuevo."
+    "errorMarkingPaid": "Error al actualizar el estado del pago. Por favor, inténtelo de nuevo.",
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por gestor de leads o empresa...",
+      "status": "Estado",
+      "allStatuses": "Todos los Estados",
+      "sortBy": "Ordenar por",
+      "clearFilters": "Limpiar Filtros",
+      "showingResults": "Mostrando {current} de {total} pagos",
+      "sort": {
+        "dateAsc": "Creado (Más antigua)",
+        "dateDesc": "Creado (Más reciente)",
+        "amountAsc": "Monto (Menor a Mayor)",
+        "amountDesc": "Monto (Mayor a Menor)",
+        "statusAsc": "Estado (A-Z)",
+        "statusDesc": "Estado (Z-A)"
+      }
+    }
   },
   "users": {
     "title": "Usuarios",
