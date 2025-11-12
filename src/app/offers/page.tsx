@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { NumericInput } from "@/components/ui/numeric-input";
 import { MoneyInput } from "@/components/ui/money-input";
@@ -40,6 +48,9 @@ import { toast } from "sonner";
 import { dataProvider } from "@/lib/dataProvider";
 import { useQuery } from "@tanstack/react-query";
 import { LeadSelector } from "@/components/leads/LeadSelector";
+import { useFilteredOffers, type OfferFilters, type OfferSort } from "@/hooks/use-filtered-offers";
+import { useDebounce } from "@/hooks/use-debounce";
+import { Search, Filter, ArrowUpDown, X } from "lucide-react";
 
 export default function OffersPage() {
   const { user } = useAuth();
@@ -76,6 +87,55 @@ export default function OffersPage() {
 
   const isSeller = user?.role === "SELLER";
   const isLeadManager = user?.role === "LEAD_MANAGER";
+
+  // Filter and sort state
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebounce(searchInput, 300);
+  const [filters, setFilters] = useState<OfferFilters>({
+    search: "",
+    status: "all",
+  });
+
+  // Sort state - default to createdAt DESC
+  const [sort, setSort] = useState<OfferSort>({
+    field: "createdAt",
+    direction: "desc",
+  });
+
+  // Update filters when debounced search changes
+  useMemo(() => {
+    setFilters((prev) => ({ ...prev, search: debouncedSearch }));
+  }, [debouncedSearch]);
+
+  // Apply filters and sorting to offers
+  const filteredAllOffers = useFilteredOffers(allOffers, filters, sort);
+  const filteredMyOffers = useFilteredOffers(myOffers, filters, sort);
+
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return filters.search !== "" || filters.status !== "all";
+  }, [filters]);
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setSearchInput("");
+    setFilters({
+      search: "",
+      status: "all",
+    });
+  };
+
+  // Toggle sort or change sort field
+  const handleSort = (field: OfferSort["field"]) => {
+    setSort((prev) => {
+      if (prev.field === field) {
+        // Toggle direction if same field
+        return { field, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      // Default to descending for new field
+      return { field, direction: "desc" };
+    });
+  };
 
   const handleCreateOffer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -348,7 +408,99 @@ export default function OffersPage() {
             <CardDescription>{t("myOffers.subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
-            {renderOffersTable(myOffers, isLoadingMy, true)}
+            {/* Filter and Sort Bar */}
+            <div className="space-y-4 mb-6">
+              {/* Search Bar */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={t("offers.filters.searchPlaceholder")}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+                {hasActiveFilters && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClearFilters}
+                    className="gap-1 w-full sm:w-auto"
+                  >
+                    <X className="h-4 w-4" />
+                    {t("offers.filters.clearFilters")}
+                  </Button>
+                )}
+              </div>
+
+              {/* Filters and Sort */}
+              <div className="flex flex-wrap gap-2">
+                {/* Status Filter */}
+                <Select
+                  value={filters.status}
+                  onValueChange={(value) => setFilters({ ...filters, status: value as OfferStatus | "all" })}
+                >
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <Filter className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder={t("offers.filters.status")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("offers.filters.allStatuses")}</SelectItem>
+                    <SelectItem value="ACTIVE">{t("common.active")}</SelectItem>
+                    <SelectItem value="INACTIVE">{t("common.inactive")}</SelectItem>
+                    <SelectItem value="ARCHIVED">{t("common.archived")}</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Sort Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-1 w-full sm:w-auto">
+                      <ArrowUpDown className="h-4 w-4" />
+                      {t("offers.filters.sortBy")}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[200px]">
+                    <DropdownMenuLabel>{t("offers.filters.sortBy")}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleSort("createdAt")}>
+                      {sort.field === "createdAt" && sort.direction === "desc" ? t("offers.filters.sort.dateDesc") : t("offers.filters.sort.dateAsc")}
+                      {sort.field === "createdAt" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleSort("price")}>
+                      {sort.field === "price" && sort.direction === "asc" ? t("offers.filters.sort.priceAsc") : t("offers.filters.sort.priceDesc")}
+                      {sort.field === "price" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleSort("title")}>
+                      {sort.field === "title" && sort.direction === "asc" ? t("offers.filters.sort.titleAsc") : t("offers.filters.sort.titleDesc")}
+                      {sort.field === "title" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Results count */}
+              {!isLoadingMy && filteredMyOffers && (
+                <p className="text-sm text-muted-foreground">
+                  {`${filteredMyOffers.length} ${t("common.of")} ${myOffers?.length || 0} ${t("offers.title").toLowerCase()}`}
+                </p>
+              )}
+            </div>
+
+            {renderOffersTable(filteredMyOffers, isLoadingMy, true)}
           </CardContent>
         </Card>
       ) : (
@@ -358,12 +510,104 @@ export default function OffersPage() {
             <CardDescription>{t("offers.listDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Filter and Sort Bar */}
+            <div className="space-y-4 mb-6">
+              {/* Search Bar */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={t("offers.filters.searchPlaceholder")}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+                {hasActiveFilters && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClearFilters}
+                    className="gap-1 w-full sm:w-auto"
+                  >
+                    <X className="h-4 w-4" />
+                    {t("offers.filters.clearFilters")}
+                  </Button>
+                )}
+              </div>
+
+              {/* Filters and Sort */}
+              <div className="flex flex-wrap gap-2">
+                {/* Status Filter */}
+                <Select
+                  value={filters.status}
+                  onValueChange={(value) => setFilters({ ...filters, status: value as OfferStatus | "all" })}
+                >
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <Filter className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder={t("offers.filters.status")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("offers.filters.allStatuses")}</SelectItem>
+                    <SelectItem value="ACTIVE">{t("common.active")}</SelectItem>
+                    <SelectItem value="INACTIVE">{t("common.inactive")}</SelectItem>
+                    <SelectItem value="ARCHIVED">{t("common.archived")}</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Sort Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-1 w-full sm:w-auto">
+                      <ArrowUpDown className="h-4 w-4" />
+                      {t("offers.filters.sortBy")}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[200px]">
+                    <DropdownMenuLabel>{t("offers.filters.sortBy")}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleSort("createdAt")}>
+                      {sort.field === "createdAt" && sort.direction === "desc" ? t("offers.filters.sort.dateDesc") : t("offers.filters.sort.dateAsc")}
+                      {sort.field === "createdAt" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleSort("price")}>
+                      {sort.field === "price" && sort.direction === "asc" ? t("offers.filters.sort.priceAsc") : t("offers.filters.sort.priceDesc")}
+                      {sort.field === "price" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleSort("title")}>
+                      {sort.field === "title" && sort.direction === "asc" ? t("offers.filters.sort.titleAsc") : t("offers.filters.sort.titleDesc")}
+                      {sort.field === "title" && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {sort.direction === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Results count */}
+              {!isLoadingAll && filteredAllOffers && (
+                <p className="text-sm text-muted-foreground">
+                  {`${filteredAllOffers.length} ${t("common.of")} ${allOffers?.length || 0} ${t("offers.title").toLowerCase()}`}
+                </p>
+              )}
+            </div>
+
             {errorAll ? (
               <div className="text-center py-8">
                 <p className="text-sm text-red-400">{t("offers.failedToLoad")}</p>
               </div>
             ) : (
-              renderOffersTable(allOffers, isLoadingAll, false)
+              renderOffersTable(filteredAllOffers, isLoadingAll, false)
             )}
           </CardContent>
         </Card>

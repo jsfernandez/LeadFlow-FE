@@ -32,7 +32,9 @@
     "previous": "Previous",
     "next": "Next",
     "noDataAvailable": "No data available",
-    "unknownOffer": "Unknown Offer"
+    "unknownOffer": "Unknown Offer",
+    "of": "of",
+    "showing": "Showing"
   },
   "header": {
     "title": "LeadManager"
