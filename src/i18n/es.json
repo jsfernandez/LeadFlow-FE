@@ -46,6 +46,7 @@
     "offers": "Ofertas",
     "myOffers": "Mis Ofertas",
     "proposals": "Propuestas",
+    "sellerProposals": "Propuestas Recibidas",
     "payouts": "Pagos",
     "users": "Usuarios",
     "loggedInAs": "Conectado como",
@@ -383,6 +384,54 @@
         "statusDesc": "Estado (Z-A)"
       }
     }
+  },
+  "sellerProposals": {
+    "title": "Propuestas Recibidas",
+    "subtitle": "Revisa las propuestas enviadas por los Lead Managers a tus ofertas activas.",
+    "table": {
+      "id": "ID",
+      "offer": "Oferta",
+      "leadManager": "Gestor de Leads",
+      "leadCount": "Cantidad de Leads",
+      "value": "Valor / Comisión",
+      "date": "Fecha",
+      "status": "Estado"
+    },
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre de oferta o gestor de leads...",
+      "status": "Estado",
+      "all": "Todos",
+      "pending": "Pendientes",
+      "accepted": "Aceptadas",
+      "rejected": "Rechazadas",
+      "allStatuses": "Todos los Estados",
+      "sortBy": "Ordenar por",
+      "clearFilters": "Limpiar Filtros",
+      "sort": {
+        "dateAsc": "Fecha (Más antigua)",
+        "dateDesc": "Fecha (Más reciente)",
+        "valueAsc": "Valor (Menor a Mayor)",
+        "valueDesc": "Valor (Mayor a Menor)"
+      }
+    },
+    "empty": "No tienes propuestas registradas aún.",
+    "actions": {
+      "accept": "Aceptar propuesta",
+      "reject": "Rechazar propuesta"
+    },
+    "allProposals": "Todas las Propuestas",
+    "listDescription": "Propuestas enviadas por gestores de leads",
+    "failedToLoad": "Error al cargar las propuestas. Por favor, inténtelo de nuevo.",
+    "viewDetails": "Ver Detalles",
+    "detailsTitle": "Detalles de la Propuesta",
+    "leadInfo": "Información del Lead",
+    "offerInfo": "Información de la Oferta",
+    "managerInfo": "Información del Gestor de Leads",
+    "proposalStatus": "Estado de la Propuesta",
+    "acceptSuccess": "Propuesta aceptada exitosamente",
+    "rejectSuccess": "Propuesta rechazada exitosamente",
+    "updateError": "Error al actualizar el estado de la propuesta"
   },
   "payouts": {
     "title": "Pagos",

@@ -46,6 +46,7 @@
     "offers": "Offers",
     "myOffers": "My Offers",
     "proposals": "Proposals",
+    "sellerProposals": "Received Proposals",
     "payouts": "Payouts",
     "users": "Users",
     "loggedInAs": "Logged in as",
@@ -383,6 +384,54 @@
         "statusDesc": "Status (Z-A)"
       }
     }
+  },
+  "sellerProposals": {
+    "title": "Received Proposals",
+    "subtitle": "Review proposals submitted by Lead Managers to your active offers.",
+    "table": {
+      "id": "ID",
+      "offer": "Offer",
+      "leadManager": "Lead Manager",
+      "leadCount": "Lead Count",
+      "value": "Value / Commission",
+      "date": "Date",
+      "status": "Status"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by offer name or lead manager...",
+      "status": "Status",
+      "all": "All",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "allStatuses": "All Statuses",
+      "sortBy": "Sort by",
+      "clearFilters": "Clear Filters",
+      "sort": {
+        "dateAsc": "Date (Oldest)",
+        "dateDesc": "Date (Newest)",
+        "valueAsc": "Value (Low to High)",
+        "valueDesc": "Value (High to Low)"
+      }
+    },
+    "empty": "No proposals received yet.",
+    "actions": {
+      "accept": "Accept proposal",
+      "reject": "Reject proposal"
+    },
+    "allProposals": "All Proposals",
+    "listDescription": "Proposals submitted by lead managers",
+    "failedToLoad": "Failed to load proposals. Please try again.",
+    "viewDetails": "View Details",
+    "detailsTitle": "Proposal Details",
+    "leadInfo": "Lead Information",
+    "offerInfo": "Offer Information",
+    "managerInfo": "Lead Manager Information",
+    "proposalStatus": "Proposal Status",
+    "acceptSuccess": "Proposal accepted successfully",
+    "rejectSuccess": "Proposal rejected successfully",
+    "updateError": "Failed to update proposal status"
   },
   "payouts": {
     "title": "Payouts",

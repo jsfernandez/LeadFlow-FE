@@ -47,6 +47,17 @@ export function useLeadOffersByOffer(offerId: string) {
 }
 
 /**
+ * Hook for fetching lead offers by seller ID (seller's proposals)
+ */
+export function useLeadOffersBySeller(sellerId: string) {
+  return useQuery({
+    queryKey: ["leadOffers", "seller", sellerId],
+    queryFn: () => dataProvider.getLeadOffersBySellerId(sellerId),
+    enabled: !!sellerId,
+  });
+}
+
+/**
  * Hook for creating a new lead offer (proposal) with optimistic update
  */
 export function useCreateLeadOffer() {

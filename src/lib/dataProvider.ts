@@ -35,6 +35,7 @@ export interface DataProvider {
   getLeadOfferById(id: string): Promise<LeadOffer | null>;
   getLeadOffersByManagerId(managerId: string): Promise<LeadOffer[]>;
   getLeadOffersByOfferId(offerId: string): Promise<LeadOffer[]>;
+  getLeadOffersBySellerId(sellerId: string): Promise<LeadOffer[]>;
   createLeadOffer(
     data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
   ): Promise<LeadOffer>;

@@ -613,6 +613,19 @@ class MockDataStore {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
+  async getLeadOffersBySellerId(sellerId: string): Promise<LeadOffer[]> {
+    await delay();
+    // Get all offers for this seller
+    const sellerOfferIds = Array.from(this.offers.values())
+      .filter((offer) => offer.sellerId === sellerId)
+      .map((offer) => offer.id);
+
+    // Get all lead offers for these offers
+    return Array.from(this.leadOffers.values())
+      .filter((leadOffer) => sellerOfferIds.includes(leadOffer.offerId))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
   async createLeadOffer(
     data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
   ): Promise<LeadOffer> {
@@ -824,6 +837,7 @@ export const mockProvider = {
   getLeadOffersByManagerId: (managerId: string) =>
     mockDataStore.getLeadOffersByManagerId(managerId),
   getLeadOffersByOfferId: (offerId: string) => mockDataStore.getLeadOffersByOfferId(offerId),
+  getLeadOffersBySellerId: (sellerId: string) => mockDataStore.getLeadOffersBySellerId(sellerId),
   createLeadOffer: (
     data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
   ) => mockDataStore.createLeadOffer(data),
