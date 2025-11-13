@@ -202,6 +202,9 @@
     "listDescription": "List of all available offers in the system",
     "offerTitle": "Title",
     "description": "Description",
+    "offerAttachmentUrl": "Offer Attachment URL",
+    "offerAttachmentUrlPlaceholder": "e.g., https://example.com/attachment.pdf",
+    "noAttachment": "No Attachment",
     "price": "Price",
     "status": "Status",
     "seller": "Seller",
@@ -215,6 +218,8 @@
     "createDialog": {
       "title": "Create New Offer",
       "description": "Fill in the details to create a new offer",
+      "offerAttachmentUrl":"Offer Attachment URL",
+      "offerAttachmentUrlPlaceholder": "e.g., https://example.com/attachment.pdf",
       "offerTitle": "Offer Title",
       "offerDescription": "Description",
       "offerPrice": "Price",
@@ -242,11 +247,13 @@
     "detailDialog": {
       "title": "Offer Details",
       "description": "Complete information about this offer",
+      "offerAttachmentUrl":"Offer Attachment URL",
       "basicInformation": "Basic Information",
       "extendedDetails": "Extended Details",
       "fields": {
         "title": "Title",
         "status": "Status",
+        "offerAttachmentUrl":"Offer Attachment URL",
         "price": "Price",
         "created": "Created",
         "description": "Description",
