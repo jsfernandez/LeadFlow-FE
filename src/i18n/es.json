@@ -201,7 +201,7 @@
     "listDescription": "Lista de todas las ofertas disponibles en el sistema",
     "offerTitle": "Título",
     "description": "Descripción",
-    "price": "Precio",
+    "Comision": "Comisión",
     "status": "Estado",
     "seller": "Vendedor",
     "company": "Empresa",
@@ -216,10 +216,10 @@
       "description": "Complete los detalles para crear una nueva oferta",
       "offerTitle": "Título de la Oferta",
       "offerDescription": "Descripción",
-      "offerPrice": "Precio",
+      "offerComision": "Comisión",
       "titlePlaceholder": "ej., Paquete de Leads Premium",
       "descriptionPlaceholder": "Describa lo que incluye la oferta...",
-      "pricePlaceholder": "0.00",
+      "ComisionPlaceholder": "0.00",
       "optionalDetails": "Detalles Opcionales",
       "leadType": "Tipo de Lead",
       "leadTypePlaceholder": "ej., B2B Empresarial, B2C Minorista",
@@ -246,7 +246,7 @@
       "fields": {
         "title": "Título",
         "status": "Estado",
-        "price": "Precio",
+        "Comision": "Comisión",
         "created": "Creado",
         "description": "Descripción",
         "leadType": "Tipo de Lead",
@@ -290,8 +290,8 @@
       "sort": {
         "dateAsc": "Fecha (Más antigua)",
         "dateDesc": "Fecha (Más reciente)",
-        "priceAsc": "Precio (Menor a Mayor)",
-        "priceDesc": "Precio (Mayor a Menor)",
+        "ComisionAsc": "Comisión (Menor a Mayor)",
+        "ComisionDesc": "Comisión (Mayor a Menor)",
         "titleAsc": "Título (A-Z)",
         "titleDesc": "Título (Z-A)"
       }
@@ -313,7 +313,7 @@
     "table": {
       "title": "Título",
       "description": "Descripción",
-      "price": "Precio",
+      "Comision": "Comisión",
       "status": "Estado",
       "created": "Creado",
       "actions": "Acciones",
@@ -487,7 +487,7 @@
       "subtitle": "Un flujo de trabajo optimizado desde la creación de ofertas hasta el pago",
       "step1": {
         "title": "Crear Ofertas",
-        "description": "Los vendedores crean ofertas atractivas con precios y requisitos claros"
+        "description": "Los vendedores crean ofertas atractivas con Comisións y requisitos claros"
       },
       "step2": {
         "title": "Enviar Propuestas",
@@ -516,8 +516,8 @@
           "description": "Revise y apruebe solo los leads que cumplan sus criterios"
         },
         "benefit2": {
-          "title": "Precios Transparentes",
-          "description": "Establezca sus propios precios y pague solo por leads calificados"
+          "title": "Comisións Transparentes",
+          "description": "Establezca sus propios Comisións y pague solo por leads calificados"
         },
         "benefit3": {
           "title": "Seguimiento de Rendimiento",
@@ -573,7 +573,7 @@
       "product": {
         "title": "Producto",
         "features": "Características",
-        "pricing": "Precios",
+        "pricing": "Comisións",
         "security": "Seguridad",
         "roadmap": "Hoja de Ruta"
       },
@@ -761,8 +761,8 @@
       "decimalPointRequired": "Use punto (.) como separador decimal, no coma (,)",
       "onlyNumbers": "Solo se permiten números",
       "invalidMoneyFormat": "Formato de dinero inválido. Use solo números sin símbolos",
-      "priceRequired": "El precio es requerido",
-      "pricePositive": "El precio debe ser mayor a 0"
+      "ComisionRequired": "El Comisión es requerido",
+      "ComisionPositive": "El Comisión debe ser mayor a 0"
     }
   }
 }
