@@ -287,6 +287,18 @@
       "error": "Error al enviar la propuesta",
       "leadNotFound": "Lead seleccionado no encontrado"
     },
+    "proposalDisclaimer": {
+      "title": "Declaración de consentimiento y responsabilidad",
+      "body": "Al enviar esta propuesta, declaro que cuento con la autorización necesaria para compartir los datos personales de los leads seleccionados y que su uso cumple con la legislación vigente sobre protección de datos personales en Chile. Asumo la responsabilidad sobre la veracidad, licitud y procedencia de esta información.",
+      "checkbox": "Confirmo que tengo permiso para compartir estos datos y que cumplo con la normativa aplicable."
+    },
+    "offerDisclaimer": {
+      "title": "Confirmación de Condiciones de la Oferta",
+      "body": "Al crear esta oferta, el vendedor declara y acepta:\n\n• Cumplir con los pagos acordados con el Lead Manager según los términos establecidos.\n• Respetar los plazos de pago definidos en la oferta y realizar los pagos de manera oportuna.\n• Gestionar los leads recibidos de forma adecuada, profesional y conforme a las mejores prácticas comerciales.\n• Que la plataforma no es responsable por incumplimientos de pago, retrasos, o disputas que surjan entre vendedor y lead manager.\n• Que toda la información proporcionada en esta oferta es verídica, precisa y completa.\n\nEl incumplimiento de estas condiciones puede resultar en la suspensión o cancelación de la cuenta del vendedor.",
+      "acceptLabel": "Acepto los términos y condiciones descritos",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar y Crear Oferta"
+    },
     "filters": {
       "search": "Buscar",
       "searchPlaceholder": "Buscar por título, descripción o empresa...",
