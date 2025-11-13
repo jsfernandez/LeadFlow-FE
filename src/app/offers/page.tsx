@@ -81,7 +81,7 @@ export default function OffersPage() {
   });
 
   const [proposalFormData, setProposalFormData] = useState({
-    leadId: "",
+    leadIds: [] as string[],
     description: "",
   });
 
@@ -188,29 +188,36 @@ export default function OffersPage() {
     if (!user || !selectedOffer) return;
 
     try {
-      // Verify lead exists
-      const lead = leads?.find(l => l.id === proposalFormData.leadId);
-      if (!lead) {
+      // Verify all leads exist
+      const selectedLeads = leads?.filter(l => proposalFormData.leadIds.includes(l.id)) || [];
+      if (selectedLeads.length === 0) {
         toast.error(t("offers.proposalDialog.error"), {
           description: t("offers.proposalDialog.leadNotFound"),
         });
         return;
       }
 
-      await createProposal.mutateAsync({
-        offerId: selectedOffer.id,
-        leadManagerId: user.id,
-        leadId: proposalFormData.leadId,
-        description: proposalFormData.description,
-      });
+      // Create a proposal for each selected lead
+      const proposalPromises = proposalFormData.leadIds.map((leadId) =>
+        createProposal.mutateAsync({
+          offerId: selectedOffer.id,
+          leadManagerId: user.id,
+          leadId: leadId,
+          description: proposalFormData.description,
+        })
+      );
+
+      await Promise.all(proposalPromises);
 
       setProposalFormData({
-        leadId: "",
+        leadIds: [],
         description: "",
       });
       setIsProposalDialogOpen(false);
       setIsDetailDialogOpen(false);
-      toast.success(t("offers.proposalDialog.success"));
+      toast.success(t("offers.proposalDialog.success"), {
+        description: `${proposalFormData.leadIds.length} proposal(s) submitted successfully`,
+      });
     } catch (error) {
       console.error("Failed to submit proposal:", error);
       toast.error(t("offers.proposalDialog.error"));
@@ -234,18 +241,18 @@ export default function OffersPage() {
     setSelectedOffer(offer);
     // Reset proposal form
     setProposalFormData({
-      leadId: "",
+      leadIds: [],
       description: "",
     });
     // Open lead selector modal
     setIsLeadSelectorOpen(true);
   };
 
-  const handleLeadSelected = (lead: Lead) => {
-    // Set the selected lead ID
+  const handleLeadsSelected = (selectedLeads: Lead[]) => {
+    // Set the selected lead IDs
     setProposalFormData((prev) => ({
       ...prev,
-      leadId: lead.id,
+      leadIds: selectedLeads.map((lead) => lead.id),
     }));
     // Close lead selector and open proposal dialog
     setIsLeadSelectorOpen(false);
@@ -768,8 +775,8 @@ export default function OffersPage() {
         onOpenChange={setIsLeadSelectorOpen}
         leads={leads}
         isLoading={false}
-        onSelectLead={handleLeadSelected}
-        selectedLeadId={proposalFormData.leadId}
+        onSelectLeads={handleLeadsSelected}
+        selectedLeadIds={proposalFormData.leadIds}
       />
 
       {/* Create Proposal Dialog */}
@@ -784,33 +791,37 @@ export default function OffersPage() {
             </DialogHeader>
 
             <div className="space-y-4 py-4">
-              {/* Display selected lead info */}
-              {proposalFormData.leadId && leads && (
+              {/* Display selected leads info */}
+              {proposalFormData.leadIds.length > 0 && leads && (
                 <div className="space-y-2">
-                  <Label>{t("proposals.selectedLead")}</Label>
-                  {(() => {
-                    const selectedLead = leads.find(l => l.id === proposalFormData.leadId);
-                    return selectedLead ? (
-                      <div className="p-3 border rounded-md bg-muted/50">
-                        <p className="font-medium">{selectedLead.companyName}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {selectedLead.fullName} - {selectedLead.email}
-                        </p>
-                        <Button
-                          type="button"
-                          variant="link"
-                          size="sm"
-                          className="px-0 h-auto"
-                          onClick={() => {
-                            setIsProposalDialogOpen(false);
-                            setIsLeadSelectorOpen(true);
-                          }}
-                        >
-                          {t("offers.detailDialog.messages.changeLead")}
-                        </Button>
-                      </div>
-                    ) : null;
-                  })()}
+                  <Label>
+                    {t("proposals.selectedLead")} ({proposalFormData.leadIds.length})
+                  </Label>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {proposalFormData.leadIds.map((leadId) => {
+                      const selectedLead = leads.find(l => l.id === leadId);
+                      return selectedLead ? (
+                        <div key={leadId} className="p-3 border rounded-md bg-muted/50">
+                          <p className="font-medium">{selectedLead.companyName}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {selectedLead.fullName} - {selectedLead.email}
+                          </p>
+                        </div>
+                      ) : null;
+                    })}
+                  </div>
+                  <Button
+                    type="button"
+                    variant="link"
+                    size="sm"
+                    className="px-0 h-auto"
+                    onClick={() => {
+                      setIsProposalDialogOpen(false);
+                      setIsLeadSelectorOpen(true);
+                    }}
+                  >
+                    {t("offers.detailDialog.messages.changeLead")}
+                  </Button>
                 </div>
               )}
 
@@ -845,7 +856,7 @@ export default function OffersPage() {
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createProposal.isPending || !proposalFormData.leadId} className="w-full sm:w-auto">
+              <Button type="submit" disabled={createProposal.isPending || proposalFormData.leadIds.length === 0} className="w-full sm:w-auto">
                 {createProposal.isPending ? t("common.loading") : t("offers.proposalDialog.submit")}
               </Button>
             </DialogFooter>

@@ -369,6 +369,12 @@
     "searchLead": "Search leads...",
     "noLeadsAvailable": "No leads available",
     "selectedLead": "Selected Lead",
+    "selectLeadModal": {
+      "selectAll": "Select All",
+      "clearAll": "Clear All",
+      "confirmSelection": "Add {count} selected leads",
+      "noneSelected": "No leads selected"
+    },
     "filters": {
       "search": "Search",
       "searchPlaceholder": "Search by offer name, lead manager or seller...",

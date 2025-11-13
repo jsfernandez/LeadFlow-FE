@@ -369,6 +369,12 @@
     "searchLead": "Buscar leads...",
     "noLeadsAvailable": "No hay leads disponibles",
     "selectedLead": "Lead Seleccionado",
+    "selectLeadModal": {
+      "selectAll": "Seleccionar Todos",
+      "clearAll": "Limpiar Todos",
+      "confirmSelection": "Agregar {count} leads seleccionados",
+      "noneSelected": "No hay leads seleccionados"
+    },
     "filters": {
       "search": "Buscar",
       "searchPlaceholder": "Buscar por nombre de oferta, gestor de leads o vendedor...",
