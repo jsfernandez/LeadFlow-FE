@@ -333,6 +333,13 @@ export const realProvider = {
     return data.map(transformLeadOffer);
   },
 
+  async getLeadOffersBySellerId(sellerId: string): Promise<LeadOffer[]> {
+    const data = await apiClient.get<LeadOfferDTO[]>("/lead-offers", {
+      params: { sellerId },
+    });
+    return data.map(transformLeadOffer);
+  },
+
   async createLeadOffer(
     data: Omit<LeadOffer, "id" | "createdAt" | "status" | "assignedAt" | "qualifiedAt">
   ): Promise<LeadOffer> {
