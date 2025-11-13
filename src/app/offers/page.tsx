@@ -64,6 +64,7 @@ export default function OffersPage() {
   const updateStatus = useUpdateOfferStatus();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isOfferDisclaimerOpen, setIsOfferDisclaimerOpen] = useState(false);
   const [isProposalDialogOpen, setIsProposalDialogOpen] = useState(false);
   const [isLeadSelectorOpen, setIsLeadSelectorOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
@@ -88,6 +89,7 @@ export default function OffersPage() {
   });
 
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [offerDisclaimerAccepted, setOfferDisclaimerAccepted] = useState(false);
 
   const isSeller = user?.role === "SELLER";
   const isLeadManager = user?.role === "LEAD_MANAGER";
@@ -141,8 +143,14 @@ export default function OffersPage() {
     });
   };
 
-  const handleCreateOffer = async (e: React.FormEvent) => {
+  const handleCreateOffer = (e: React.FormEvent) => {
     e.preventDefault();
+    // Intercept the submit and show disclaimer modal instead
+    setOfferDisclaimerAccepted(false);
+    setIsOfferDisclaimerOpen(true);
+  };
+
+  const handleConfirmCreateOffer = async () => {
     if (!user) return;
 
     try {
@@ -178,6 +186,7 @@ export default function OffersPage() {
         offerDuration: "",
         allowConsultations: "no",
       });
+      setIsOfferDisclaimerOpen(false);
       setIsCreateDialogOpen(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -799,6 +808,61 @@ export default function OffersPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Offer Terms Disclaimer Modal */}
+      <Dialog open={isOfferDisclaimerOpen} onOpenChange={setIsOfferDisclaimerOpen}>
+        <DialogContent className="w-[95vw] max-w-md sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t("offers.offerDisclaimer.title")}</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {t("offers.offerDisclaimer.body")}
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-border pt-4">
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="offer-disclaimer-checkbox"
+                  checked={offerDisclaimerAccepted}
+                  onCheckedChange={(checked) => setOfferDisclaimerAccepted(checked === true)}
+                />
+                <label
+                  htmlFor="offer-disclaimer-checkbox"
+                  className="text-sm font-medium leading-relaxed cursor-pointer"
+                >
+                  {t("offers.offerDisclaimer.acceptLabel")}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsOfferDisclaimerOpen(false)}
+              disabled={createOffer.isPending}
+              className="w-full sm:w-auto"
+            >
+              {t("offers.offerDisclaimer.cancel")}
+            </Button>
+            <Button
+              onClick={handleConfirmCreateOffer}
+              disabled={!offerDisclaimerAccepted || createOffer.isPending}
+              className="w-full sm:w-auto"
+            >
+              {createOffer.isPending ? t("common.loading") : t("offers.offerDisclaimer.confirm")}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 

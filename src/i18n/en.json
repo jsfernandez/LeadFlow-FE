@@ -292,6 +292,13 @@
       "body": "By submitting this proposal, I confirm that I am authorized to share the personal data of the selected leads and that such processing complies with current personal data protection legislation. I accept full responsibility for the legality, accuracy, and authorization of this information.",
       "checkbox": "I confirm that I am authorized to share this data and comply with applicable regulations."
     },
+    "offerDisclaimer": {
+      "title": "Offer Terms & Conditions Confirmation",
+      "body": "By creating this offer, the seller declares and agrees to:\n\n• Fulfill the agreed payments to the Lead Manager according to the established terms.\n• Respect the payment deadlines defined in the offer and make payments in a timely manner.\n• Manage received leads appropriately, professionally, and in accordance with best business practices.\n• That the platform is not responsible for payment breaches, delays, or disputes that arise between seller and lead manager.\n• That all information provided in this offer is truthful, accurate, and complete.\n\nFailure to comply with these conditions may result in suspension or cancellation of the seller's account.",
+      "acceptLabel": "I accept the terms and conditions described",
+      "cancel": "Cancel",
+      "confirm": "Confirm and Create Offer"
+    },
     "filters": {
       "search": "Search",
       "searchPlaceholder": "Search by title, description or company...",
