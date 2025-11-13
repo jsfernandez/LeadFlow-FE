@@ -71,6 +71,7 @@ export default function OffersPage() {
   const [offerFormData, setOfferFormData] = useState({
     title: "",
     description: "",
+    offerAttachmentUrl: "",
     price: 0,
     leadType: "",
     leadQuantity: "",
@@ -145,6 +146,7 @@ export default function OffersPage() {
       const offerData: Omit<Offer, "id" | "createdAt" | "updatedAt"> = {
         title: offerFormData.title,
         description: offerFormData.description,
+        offerAttachmentUrl: offerFormData.offerAttachmentUrl,
         price: offerFormData.price,
         status: "ACTIVE" as OfferStatus,
         sellerId: user.id,
@@ -164,6 +166,7 @@ export default function OffersPage() {
       setOfferFormData({
         title: "",
         description: "",
+        offerAttachmentUrl: "",
         price: 0,
         leadType: "",
         leadQuantity: "",
@@ -328,6 +331,7 @@ export default function OffersPage() {
             <TableRow>
               <TableHead className="min-w-[150px]">{t("offers.offerTitle")}</TableHead>
               <TableHead className="min-w-[200px]">{t("offers.description")}</TableHead>
+              <TableHead className="min-w-[200px]">{t("offers.offerAttachmentUrl")}</TableHead>
               <TableHead className="min-w-[120px]">{t("offers.price")}</TableHead>
               <TableHead className="min-w-[100px]">{t("offers.status")}</TableHead>
               {!showActions && <TableHead className="min-w-[150px]">{t("offers.company")}</TableHead>}
@@ -340,6 +344,18 @@ export default function OffersPage() {
               <TableRow key={offer.id}>
                 <TableCell className="font-medium text-sm md:text-base">{offer.title}</TableCell>
                 <TableCell className="max-w-md truncate text-sm md:text-base">{offer.description}</TableCell>
+                <TableCell className="max-w-md truncate text-sm md:text-base">{offer.offerAttachmentUrl ? (
+                  <a
+                    href={offer.offerAttachmentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {offer.offerAttachmentUrl}
+                    </a>
+                    ) : (
+                      <span className="text-muted-foreground">{t("offers.noAttachment")}</span>
+                    )}</TableCell>
                 <TableCell className="font-semibold text-primary text-sm md:text-base whitespace-nowrap">
                   {formatCurrencyCLP(offer.price)}
                 </TableCell>
@@ -655,6 +671,17 @@ export default function OffersPage() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="offerAttachmentUrl">{t("offers.createDialog.offerAttachmentUrl")}</Label>
+                <Input
+                  id="offerAttachmentUrl"
+                  placeholder={t("offers.createDialog.offerAttachmentUrlPlaceholder")}
+                  value={offerFormData.description}
+                  onChange={(e) => setOfferFormData({ ...offerFormData, offerAttachmentUrl: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="price">{t("offers.createDialog.offerPrice")} (CLP)</Label>
                 <MoneyInput
                   id="price"
@@ -885,6 +912,10 @@ export default function OffersPage() {
                   <div>
                     <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.title")}</p>
                     <p className="text-sm font-medium">{selectedOffer.title}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.offerAttachmentUrl")}</p>
+                    <p className="text-sm font-medium">{selectedOffer.offerAttachmentUrl}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.status")}</p>

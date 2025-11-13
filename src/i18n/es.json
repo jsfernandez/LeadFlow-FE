@@ -202,6 +202,9 @@
     "listDescription": "Lista de todas las ofertas disponibles en el sistema",
     "offerTitle": "Título",
     "description": "Descripción",
+    "offerAttachmentUrl": "URL del Adjunto de la Oferta",
+    "offerAttachmentUrlPlaceholder": "ej., https://example.com/attachment.pdf",
+    "noAttachment": "Sin Adjunto",
     "Comision": "Comisión",
     "status": "Estado",
     "seller": "Vendedor",
@@ -215,6 +218,8 @@
     "createDialog": {
       "title": "Crear Nueva Oferta",
       "description": "Complete los detalles para crear una nueva oferta",
+      "offerAttachmentUrl": "URL del Adjunto de la Oferta",
+      "offerAttachmentUrlPlaceholder": "ej., https://example.com/attachment.pdf",
       "offerTitle": "Título de la Oferta",
       "offerDescription": "Descripción",
       "offerComision": "Comisión",
@@ -242,6 +247,7 @@
     "detailDialog": {
       "title": "Detalles de la Oferta",
       "description": "Información completa sobre esta oferta",
+      "offerAttachmentUrl":"URL del Adjunto de la Oferta",
       "basicInformation": "Información Básica",
       "extendedDetails": "Detalles Extendidos",
       "fields": {
@@ -250,6 +256,7 @@
         "Comision": "Comisión",
         "created": "Creado",
         "description": "Descripción",
+        "offerAttachmentUrl":"URL del Adjunto de la Oferta",
         "leadType": "Tipo de Lead",
         "leadQuantity": "Cantidad de Leads",
         "clientType": "Tipo de Cliente",
