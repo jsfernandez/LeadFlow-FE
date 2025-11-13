@@ -38,7 +38,6 @@ export function LoginForm({ onToggleToRegister }: LoginFormProps) {
       const emailToRole: Record<string, UserRole> = {
         "seller@leadmanager.com": "SELLER",
         "manager@leadmanager.com": "LEAD_MANAGER",
-        "admin@leadmanager.com": "ADMIN",
       };
 
       const role = emailToRole[email.toLowerCase()];
