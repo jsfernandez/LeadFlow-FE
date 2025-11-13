@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Select,
@@ -46,24 +47,25 @@ interface LeadSelectorProps {
    */
   isLoading: boolean;
   /**
-   * Callback when a lead is selected
-   * @param lead - The selected lead
+   * Callback when leads are selected
+   * @param leads - The selected leads array
    */
-  onSelectLead: (lead: Lead) => void;
+  onSelectLeads: (leads: Lead[]) => void;
   /**
-   * Currently selected lead ID (optional, for highlighting)
+   * Currently selected lead IDs (optional, for highlighting)
    */
-  selectedLeadId?: string;
+  selectedLeadIds?: string[];
 }
 
 /**
- * LeadSelector - Modal component for selecting a lead with advanced filtering and sorting
+ * LeadSelector - Modal component for selecting multiple leads with advanced filtering and sorting
  * 
  * Features:
+ * - Multi-select with checkboxes
  * - Search by fullName, companyName, email
  * - Filter by industry, country, city, gender
  * - Sort by multiple fields (companyName, fullName, industry, country, createdAt, revenue)
- * - Virtualization support for large datasets (>50 leads)
+ * - Selections persist across pagination and filters
  * - Responsive table layout
  * 
  * Usage:
@@ -73,7 +75,8 @@ interface LeadSelectorProps {
  *   onOpenChange={setIsOpen}
  *   leads={leads}
  *   isLoading={loading}
- *   onSelectLead={(lead) => handleSelectLead(lead)}
+ *   onSelectLeads={(leads) => handleSelectLeads(leads)}
+ *   selectedLeadIds={selectedIds}
  * />
  * ```
  */
@@ -82,10 +85,13 @@ export function LeadSelector({
   onOpenChange,
   leads,
   isLoading,
-  onSelectLead,
-  selectedLeadId,
+  onSelectLeads,
+  selectedLeadIds = [],
 }: LeadSelectorProps) {
   const { t } = useTranslation();
+  
+  // Local state for selected lead IDs (preserves selections across filters/pagination)
+  const [localSelectedIds, setLocalSelectedIds] = useState<string[]>(selectedLeadIds);
 
   // Filter state
   const [filters, setFilters] = useState<LeadFilters>({
@@ -130,9 +136,53 @@ export function LeadSelector({
     });
   };
 
-  // Handle lead selection
-  const handleSelectLead = (lead: Lead) => {
-    onSelectLead(lead);
+  // Toggle single lead selection
+  const toggleLead = (leadId: string) => {
+    setLocalSelectedIds((prev) => {
+      if (prev.includes(leadId)) {
+        return prev.filter((id) => id !== leadId);
+      } else {
+        return [...prev, leadId];
+      }
+    });
+  };
+
+  // Toggle all visible leads
+  const toggleAll = () => {
+    if (!filteredLeads) return;
+    
+    const visibleLeadIds = filteredLeads.map((lead) => lead.id);
+    const allVisibleSelected = visibleLeadIds.every((id) => localSelectedIds.includes(id));
+    
+    if (allVisibleSelected) {
+      // Deselect all visible leads
+      setLocalSelectedIds((prev) => prev.filter((id) => !visibleLeadIds.includes(id)));
+    } else {
+      // Select all visible leads (merge with existing selections)
+      setLocalSelectedIds((prev) => {
+        const newIds = visibleLeadIds.filter((id) => !prev.includes(id));
+        return [...prev, ...newIds];
+      });
+    }
+  };
+
+  // Check if all visible leads are selected
+  const allVisibleSelected = useMemo(() => {
+    if (!filteredLeads || filteredLeads.length === 0) return false;
+    return filteredLeads.every((lead) => localSelectedIds.includes(lead.id));
+  }, [filteredLeads, localSelectedIds]);
+
+  // Check if some (but not all) visible leads are selected
+  const someVisibleSelected = useMemo(() => {
+    if (!filteredLeads || filteredLeads.length === 0) return false;
+    return filteredLeads.some((lead) => localSelectedIds.includes(lead.id)) && !allVisibleSelected;
+  }, [filteredLeads, localSelectedIds, allVisibleSelected]);
+
+  // Handle confirm selection
+  const handleConfirmSelection = () => {
+    if (!leads) return;
+    const selectedLeads = leads.filter((lead) => localSelectedIds.includes(lead.id));
+    onSelectLeads(selectedLeads);
     onOpenChange(false);
   };
 
@@ -350,6 +400,14 @@ export function LeadSelector({
               <Table>
                 <TableHeader className="sticky top-0 bg-background z-10">
                   <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={allVisibleSelected}
+                        onCheckedChange={toggleAll}
+                        aria-label={allVisibleSelected ? t("proposals.selectLeadModal.clearAll") : t("proposals.selectLeadModal.selectAll")}
+                        className={someVisibleSelected ? "data-[state=checked]:bg-primary/50" : ""}
+                      />
+                    </TableHead>
                     <TableHead>{t("leads.company")}</TableHead>
                     <TableHead>{t("leads.fullName")}</TableHead>
                     <TableHead>{t("leads.email")}</TableHead>
@@ -357,7 +415,6 @@ export function LeadSelector({
                     <TableHead>{t("leads.industry")}</TableHead>
                     <TableHead>{t("leads.location")}</TableHead>
                     <TableHead>{t("leads.revenueRange")}</TableHead>
-                    <TableHead>{t("leads.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -365,10 +422,17 @@ export function LeadSelector({
                     <TableRow
                       key={lead.id}
                       className={`cursor-pointer hover:bg-muted/50 ${
-                        selectedLeadId === lead.id ? "bg-muted" : ""
+                        localSelectedIds.includes(lead.id) ? "bg-muted" : ""
                       }`}
-                      onClick={() => handleSelectLead(lead)}
+                      onClick={() => toggleLead(lead.id)}
                     >
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <Checkbox
+                          checked={localSelectedIds.includes(lead.id)}
+                          onCheckedChange={() => toggleLead(lead.id)}
+                          aria-label={`Select ${lead.companyName}`}
+                        />
+                      </TableCell>
                       <TableCell className="font-medium">{lead.companyName}</TableCell>
                       <TableCell>{lead.fullName}</TableCell>
                       <TableCell className="text-sm">{lead.email}</TableCell>
@@ -381,18 +445,6 @@ export function LeadSelector({
                       </TableCell>
                       <TableCell className="text-sm">
                         ${lead.minRevenue} - ${lead.maxRevenue}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="sm"
-                          variant="default"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelectLead(lead);
-                          }}
-                        >
-                          {t("common.select")}
-                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -409,6 +461,33 @@ export function LeadSelector({
             </div>
           )}
         </div>
+
+        {/* Bottom Action Bar */}
+        <DialogFooter className="flex flex-col sm:flex-row gap-2 items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            {localSelectedIds.length > 0
+              ? `${localSelectedIds.length} ${localSelectedIds.length === 1 ? "lead" : "leads"} selected`
+              : t("proposals.selectLeadModal.noneSelected")}
+          </div>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="flex-1 sm:flex-none"
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              onClick={handleConfirmSelection}
+              disabled={localSelectedIds.length === 0}
+              className="flex-1 sm:flex-none"
+            >
+              {localSelectedIds.length > 0
+                ? t("proposals.selectLeadModal.confirmSelection").replace("{count}", localSelectedIds.length.toString())
+                : t("common.select")}
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
