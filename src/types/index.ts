@@ -54,6 +54,7 @@ export interface Offer {
   id: string;
   title: string;
   description: string;
+  offerAttachmentUrl?: string;
   price: number;
   status: OfferStatus;
   sellerId: string;

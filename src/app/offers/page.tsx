@@ -71,6 +71,7 @@ export default function OffersPage() {
   const [offerFormData, setOfferFormData] = useState({
     title: "",
     description: "",
+    offerAttachmentUrl: "",
     price: 0,
     leadType: "",
     leadQuantity: "",
@@ -145,6 +146,7 @@ export default function OffersPage() {
       const offerData: Omit<Offer, "id" | "createdAt" | "updatedAt"> = {
         title: offerFormData.title,
         description: offerFormData.description,
+        offerAttachmentUrl: offerFormData.offerAttachmentUrl,
         price: offerFormData.price,
         status: "ACTIVE" as OfferStatus,
         sellerId: user.id,
@@ -164,6 +166,7 @@ export default function OffersPage() {
       setOfferFormData({
         title: "",
         description: "",
+        offerAttachmentUrl: "",
         price: 0,
         leadType: "",
         leadQuantity: "",
@@ -643,6 +646,17 @@ export default function OffersPage() {
                   placeholder={t("offers.createDialog.descriptionPlaceholder")}
                   value={offerFormData.description}
                   onChange={(e) => setOfferFormData({ ...offerFormData, description: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="offerAttachmentUrl">{t("offers.createDialog.offerAttachmentUrl")}</Label>
+                <Input
+                  id="offerAttachmentUrl"
+                  placeholder={t("offers.createDialog.offerAttachmentUrlPlaceholder")}
+                  value={offerFormData.description}
+                  onChange={(e) => setOfferFormData({ ...offerFormData, offerAttachmentUrl: e.target.value })}
                   required
                 />
               </div>
