@@ -287,6 +287,11 @@
       "error": "Error al enviar la propuesta",
       "leadNotFound": "Lead seleccionado no encontrado"
     },
+    "proposalDisclaimer": {
+      "title": "Declaración de consentimiento y responsabilidad",
+      "body": "Al enviar esta propuesta, declaro que cuento con la autorización necesaria para compartir los datos personales de los leads seleccionados y que su uso cumple con la legislación vigente sobre protección de datos personales en Chile. Asumo la responsabilidad sobre la veracidad, licitud y procedencia de esta información.",
+      "checkbox": "Confirmo que tengo permiso para compartir estos datos y que cumplo con la normativa aplicable."
+    },
     "filters": {
       "search": "Buscar",
       "searchPlaceholder": "Buscar por título, descripción o empresa...",

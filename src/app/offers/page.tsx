@@ -50,7 +50,8 @@ import { useQuery } from "@tanstack/react-query";
 import { LeadSelector } from "@/components/leads/LeadSelector";
 import { useFilteredOffers, type OfferFilters, type OfferSort } from "@/hooks/use-filtered-offers";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Search, Filter, ArrowUpDown, X } from "lucide-react";
+import { Search, Filter, ArrowUpDown, X, ShieldCheck } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function OffersPage() {
   const { user } = useAuth();
@@ -85,6 +86,8 @@ export default function OffersPage() {
     leadIds: [] as string[],
     description: "",
   });
+
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
 
   const isSeller = user?.role === "SELLER";
   const isLeadManager = user?.role === "LEAD_MANAGER";
@@ -216,6 +219,7 @@ export default function OffersPage() {
         leadIds: [],
         description: "",
       });
+      setDisclaimerAccepted(false);
       setIsProposalDialogOpen(false);
       setIsDetailDialogOpen(false);
       toast.success(t("offers.proposalDialog.success"), {
@@ -257,6 +261,8 @@ export default function OffersPage() {
       ...prev,
       leadIds: selectedLeads.map((lead) => lead.id),
     }));
+    // Reset disclaimer acceptance
+    setDisclaimerAccepted(false);
     // Close lead selector and open proposal dialog
     setIsLeadSelectorOpen(false);
     setIsProposalDialogOpen(true);
@@ -871,6 +877,35 @@ export default function OffersPage() {
                   {t("proposals.descriptionHelper")} ({proposalFormData.description.length}/500)
                 </p>
               </div>
+
+              {/* Privacy & Data Processing Disclaimer */}
+              <div className="space-y-3 border-t border-border pt-4">
+                <div className="flex items-start gap-2">
+                  <ShieldCheck className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <h4 className="text-xs font-semibold text-foreground">
+                      {t("offers.proposalDisclaimer.title")}
+                    </h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {t("offers.proposalDisclaimer.body")}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-2">
+                  <Checkbox
+                    id="disclaimer-checkbox"
+                    checked={disclaimerAccepted}
+                    onCheckedChange={(checked) => setDisclaimerAccepted(checked === true)}
+                  />
+                  <label
+                    htmlFor="disclaimer-checkbox"
+                    className="text-xs text-muted-foreground leading-relaxed cursor-pointer"
+                  >
+                    {t("offers.proposalDisclaimer.checkbox")}
+                  </label>
+                </div>
+              </div>
             </div>
 
             <DialogFooter className="flex-col sm:flex-row gap-2">
@@ -883,7 +918,7 @@ export default function OffersPage() {
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" disabled={createProposal.isPending || proposalFormData.leadIds.length === 0} className="w-full sm:w-auto">
+              <Button type="submit" disabled={createProposal.isPending || proposalFormData.leadIds.length === 0 || !disclaimerAccepted} className="w-full sm:w-auto">
                 {createProposal.isPending ? t("common.loading") : t("offers.proposalDialog.submit")}
               </Button>
             </DialogFooter>

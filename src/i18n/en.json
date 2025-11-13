@@ -287,6 +287,11 @@
       "error": "Failed to submit proposal",
       "leadNotFound": "Selected lead not found"
     },
+    "proposalDisclaimer": {
+      "title": "Consent & Responsibility Declaration",
+      "body": "By submitting this proposal, I confirm that I am authorized to share the personal data of the selected leads and that such processing complies with current personal data protection legislation. I accept full responsibility for the legality, accuracy, and authorization of this information.",
+      "checkbox": "I confirm that I am authorized to share this data and comply with applicable regulations."
+    },
     "filters": {
       "search": "Search",
       "searchPlaceholder": "Search by title, description or company...",
