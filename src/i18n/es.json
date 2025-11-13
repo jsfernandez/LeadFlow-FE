@@ -838,5 +838,156 @@
       "ComisionRequired": "El Comisión es requerido",
       "ComisionPositive": "El Comisión debe ser mayor a 0"
     }
+  },
+  "leadManagerLanding": {
+    "nav": {
+      "benefits": "Beneficios",
+      "howItWorks": "Cómo Funciona",
+      "earnings": "Modelo de Ganancias",
+      "faq": "FAQ",
+      "getStarted": "Comenzar"
+    },
+    "hero": {
+      "title": "Conviértete en Lead Manager y genera ingresos conectando clientes con empresas",
+      "subtitle": "Comparte tus bases de contactos de forma segura y recibe pagos por cada lead calificado",
+      "ctaPrimary": "Comienza hoy",
+      "ctaSecondary": "Revisa cómo funciona"
+    },
+    "benefits": {
+      "title": "¿Por Qué Ser Lead Manager?",
+      "subtitle": "Transforma tu red de contactos en una fuente de ingresos",
+      "benefit1": {
+        "title": "Monetiza tus contactos",
+        "description": "Convierte tu red de contactos y base de datos en una fuente de ingresos sostenible"
+      },
+      "benefit2": {
+        "title": "Control total de tus propuestas",
+        "description": "Tú decides a qué ofertas responder y qué leads compartir"
+      },
+      "benefit3": {
+        "title": "Pagos por lead ganado",
+        "description": "Gana montos fijos o comisiones por cada conversión exitosa de lead"
+      },
+      "benefit4": {
+        "title": "Protección de datos y cumplimiento legal",
+        "description": "La plataforma garantiza anonimización y cumplimiento con las normativas de protección de datos"
+      },
+      "benefit5": {
+        "title": "Sin inversión inicial",
+        "description": "Comienza a generar ingresos sin costos iniciales ni cuotas de membresía"
+      },
+      "benefit6": {
+        "title": "Panel completo para gestionar tus leads",
+        "description": "Rastrea tus propuestas, asignaciones y ganancias en tiempo real"
+      }
+    },
+    "earnings": {
+      "title": "Modelo de Ganancias",
+      "subtitle": "Dos formas de ganar con cada lead calificado",
+      "fixedPayment": {
+        "title": "Pago Fijo por Lead",
+        "description": "Recibe un monto predeterminado por cada lead que se convierte en venta"
+      },
+      "percentagePayment": {
+        "title": "Porcentaje por Venta",
+        "description": "Gana una comisión basada en el valor total del negocio cerrado"
+      },
+      "simulator": {
+        "title": "Simulador de Ganancias",
+        "description": "Estima tus ingresos potenciales",
+        "leadCount": "Cantidad de Leads",
+        "avgPayment": "Pago Promedio por Lead",
+        "estimatedEarnings": "Ganancias Mensuales Estimadas",
+        "calculate": "Calcular"
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "subtitle": "5 pasos simples para comenzar a ganar",
+      "step1": {
+        "title": "Registra tu cuenta como Lead Manager",
+        "description": "Crea tu cuenta de Lead Manager en la plataforma"
+      },
+      "step2": {
+        "title": "Carga tus leads en el panel",
+        "description": "Agrega tus contactos al panel (los datos permanecen protegidos)"
+      },
+      "step3": {
+        "title": "Recibe ofertas de empresas",
+        "description": "Explora ofertas disponibles que coincidan con el perfil de tu red"
+      },
+      "step4": {
+        "title": "Envía propuestas según tu catálogo",
+        "description": "Envía propuestas basadas en tu catálogo de leads calificados"
+      },
+      "step5": {
+        "title": "Recibe pagos por leads convertidos",
+        "description": "Recibe tu pago por cada lead que se convierte exitosamente"
+      }
+    },
+    "legal": {
+      "title": "Legal y Cumplimiento",
+      "subtitle": "Tu responsabilidad y protección de datos",
+      "dataOwnership": {
+        "title": "Declaración de Propiedad de Datos",
+        "description": "La plataforma exige declaración de propiedad de datos de contacto usando tu RUT o Pasaporte. Eres responsable del origen lícito de todos los datos compartidos."
+      },
+      "anonymization": {
+        "title": "Anonimización de Leads",
+        "description": "Todos los datos de leads son anonimizados hasta que una propuesta es aceptada por el vendedor, protegiendo los intereses de ambas partes."
+      },
+      "compliance": {
+        "title": "Responsabilidad Legal",
+        "description": "Como Lead Manager, eres responsable de asegurar que todos los datos de contacto han sido obtenidos legalmente y con el consentimiento apropiado según las leyes aplicables de protección de datos."
+      }
+    },
+    "testimonials": {
+      "title": "Lo Que Dicen Los Lead Managers",
+      "subtitle": "Experiencias reales de nuestra comunidad",
+      "testimonial1": {
+        "quote": "Llevo 6 meses monetizando mi red profesional y no podría estar más feliz. La plataforma es transparente y los pagos siempre son puntuales.",
+        "author": "Carlos Ramírez",
+        "role": "Lead Manager Independiente"
+      },
+      "testimonial2": {
+        "quote": "La capacidad de elegir a qué ofertas responder me da control completo. Solo comparto leads cuando confío en la coincidencia.",
+        "author": "Patricia Silva",
+        "role": "Lead Manager - Sector B2B"
+      },
+      "testimonial3": {
+        "quote": "La protección de datos se toma en serio. Me siento seguro sabiendo que mis contactos están anonimizados hasta la aceptación.",
+        "author": "Miguel Torres",
+        "role": "Lead Manager - Industria Tech"
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "subtitle": "Todo lo que necesitas saber",
+      "question1": {
+        "q": "¿Qué es un Lead Manager?",
+        "a": "Un Lead Manager es una persona o entidad que tiene una red de contactos y los conecta con empresas que buscan clientes potenciales, ganando compensación por conversiones exitosas."
+      },
+      "question2": {
+        "q": "¿Qué puedo ofrecer como lead?",
+        "a": "Puedes ofrecer cualquier contacto que pueda estar interesado en productos o servicios de vendedores en la plataforma. Esto incluye contactos comerciales, conexiones profesionales o individuos que coincidan con criterios específicos."
+      },
+      "question3": {
+        "q": "¿Cómo funcionan los pagos?",
+        "a": "Recibes pago cuando un lead que proporcionas es marcado como GANADO (convertido exitosamente). Los pagos pueden ser montos fijos o comisiones basadas en porcentaje, dependiendo de los términos de cada oferta."
+      },
+      "question4": {
+        "q": "¿Qué requisitos legales necesito cumplir?",
+        "a": "Debes declarar la propiedad de los datos de contacto usando tu RUT o Pasaporte. Eres responsable de asegurar que todos los datos han sido obtenidos legalmente y con el consentimiento apropiado según las regulaciones de protección de datos."
+      },
+      "question5": {
+        "q": "¿Qué datos de mis contactos son visibles?",
+        "a": "Los detalles de contacto permanecen anonimizados hasta que tu propuesta es aceptada. Una vez aceptada, el vendedor recibe la información completa del contacto para seguir con el lead."
+      }
+    },
+    "finalCta": {
+      "title": "¿Listo Para Comenzar a Ganar?",
+      "subtitle": "Únete a nuestra comunidad de Lead Managers hoy",
+      "button": "Crear cuenta como Lead Manager"
+    }
   }
 }
