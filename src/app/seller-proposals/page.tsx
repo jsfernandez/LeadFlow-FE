@@ -145,8 +145,8 @@ export default function SellerProposalsPage() {
     );
   };
 
-  // Component to display lead info
-  const LeadCell = ({ leadId }: { leadId: string }) => {
+  // Component to display lead info - masked until proposal accepted
+  const LeadCell = ({ leadId, proposalStatus }: { leadId: string; proposalStatus: LeadStatus }) => {
     const { data: lead } = useQuery({
       queryKey: ["lead", leadId],
       queryFn: () => dataProvider.getLeadById(leadId),
@@ -157,12 +157,83 @@ export default function SellerProposalsPage() {
       return <span className="text-sm text-muted-foreground">{t("common.loading")}</span>;
     }
 
+    const isAccepted = proposalStatus === "WON";
+
     return (
       <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium">{lead.fullName}</span>
-        <span className="text-xs text-muted-foreground">{lead.companyName}</span>
+        <span className="text-sm font-medium">
+          {isAccepted ? lead.fullName : maskLeadData(lead.fullName, "name")}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {isAccepted ? lead.companyName : maskLeadData(lead.companyName, "name")}
+        </span>
       </div>
     );
+  };
+
+  // Helper function to mask sensitive lead data before acceptance
+  const maskLeadData = (data: string, type: "email" | "phone" | "name" = "name"): string => {
+    if (!data) return "***";
+    
+    if (type === "email") {
+      const [localPart, domain] = data.split("@");
+      if (!domain) return "***@***";
+      const maskedLocal = localPart.length > 2 ? localPart.substring(0, 2) + "***" : "***";
+      const [domainName, tld] = domain.split(".");
+      const maskedDomain = domainName.length > 2 ? domainName.substring(0, 2) + "***" : "***";
+      return `${maskedLocal}@${maskedDomain}.${tld || "***"}`;
+    } else if (type === "phone") {
+      // Show only last 4 digits
+      const cleaned = data.replace(/\D/g, "");
+      if (cleaned.length <= 4) return "***";
+      return "***-" + cleaned.slice(-4);
+    } else if (type === "name") {
+      // Show only first name or first word
+      const parts = data.split(" ");
+      if (parts.length === 0) return "***";
+      return parts[0] + " ***";
+    }
+    
+    return "***";
+  };
+
+  // Helper function to check if proposal is within 24-hour withdrawal window
+  // Business hours: Monday-Friday, 9 AM - 5 PM
+  const canWithdrawProposal = (proposal: LeadOffer): { canWithdraw: boolean; remainingTime: string } => {
+    if (proposal.status !== "WON" || !proposal.assignedAt) {
+      return { canWithdraw: false, remainingTime: "" };
+    }
+
+    const assignedDate = new Date(proposal.assignedAt);
+    const now = new Date();
+    
+    // Calculate business hours elapsed
+    let businessHoursElapsed = 0;
+    const currentDate = new Date(assignedDate);
+    
+    while (currentDate < now && businessHoursElapsed < 24) {
+      const dayOfWeek = currentDate.getDay();
+      const hour = currentDate.getHours();
+      
+      // Skip weekends (0 = Sunday, 6 = Saturday)
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        // Check if within business hours (9 AM - 5 PM)
+        if (hour >= 9 && hour < 17) {
+          businessHoursElapsed++;
+        }
+      }
+      
+      // Move to next hour
+      currentDate.setHours(currentDate.getHours() + 1);
+    }
+    
+    const canWithdraw = businessHoursElapsed < 24;
+    const remainingHours = Math.max(0, 24 - businessHoursElapsed);
+    
+    return {
+      canWithdraw,
+      remainingTime: canWithdraw ? `${remainingHours}h remaining` : ""
+    };
   };
 
   // Proposal details drawer
@@ -186,6 +257,10 @@ export default function SellerProposalsPage() {
     });
 
     if (!proposal) return null;
+
+    // Only show full lead data if proposal is accepted (WON status)
+    const isAccepted = proposal.status === "WON";
+    const showFullLeadData = isAccepted;
 
     return (
       <div className="space-y-6">
@@ -220,23 +295,46 @@ export default function SellerProposalsPage() {
         {lead && (
           <div>
             <h3 className="text-sm font-medium mb-2">{t("sellerProposals.leadInfo")}</h3>
+            {!showFullLeadData && (
+              <div className="mb-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-md">
+                <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                  {t("sellerProposals.leadDataHiddenNotice") || "Lead contact details are hidden until you accept this proposal. This ensures proper traceability."}
+                </p>
+              </div>
+            )}
             <div className="space-y-2 text-sm">
               <div>
                 <span className="text-muted-foreground">{t("leads.fullName")}:</span>
-                <span className="ml-2 font-medium">{lead.fullName}</span>
+                <span className="ml-2 font-medium">
+                  {showFullLeadData ? lead.fullName : maskLeadData(lead.fullName, "name")}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground">{t("leads.company")}:</span>
-                <span className="ml-2 font-medium">{lead.companyName}</span>
+                <span className="ml-2 font-medium">
+                  {showFullLeadData ? lead.companyName : maskLeadData(lead.companyName, "name")}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground">{t("leads.email")}:</span>
-                <span className="ml-2">{lead.email}</span>
+                <span className="ml-2">
+                  {showFullLeadData ? lead.email : maskLeadData(lead.email, "email")}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground">{t("leads.phone")}:</span>
-                <span className="ml-2">{lead.phone}</span>
+                <span className="ml-2">
+                  {showFullLeadData ? lead.phone : maskLeadData(lead.phone, "phone")}
+                </span>
               </div>
+              {showFullLeadData && lead.profileUrl && (
+                <div>
+                  <span className="text-muted-foreground">{t("leads.profileUrl") || "Profile"}:</span>
+                  <a href={lead.profileUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-primary hover:underline">
+                    {lead.profileUrl}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -302,6 +400,31 @@ export default function SellerProposalsPage() {
             </Button>
           </div>
         )}
+
+        {/* Withdrawal option for accepted proposals within 24 business hours */}
+        {proposal.status === "WON" && (() => {
+          const { canWithdraw, remainingTime } = canWithdrawProposal(proposal);
+          return canWithdraw ? (
+            <div className="pt-4 border-t">
+              <div className="mb-3 p-3 bg-orange-500/10 border border-orange-500/20 rounded-md">
+                <p className="text-xs text-orange-600 dark:text-orange-400 mb-1">
+                  <strong>{t("sellerProposals.withdrawalWindow") || "24-Hour Quality Window"}</strong>
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t("sellerProposals.withdrawalNotice") || "You can withdraw this accepted lead within 24 business hours if the quality is poor. Time remaining: "}{remainingTime}
+                </p>
+              </div>
+              <Button
+                onClick={() => handleUpdateStatus(proposal.id, "LOST")}
+                variant="destructive"
+                className="w-full"
+                disabled={updateStatus.isPending}
+              >
+                {t("sellerProposals.actions.withdraw") || "Withdraw Lead (Poor Quality)"}
+              </Button>
+            </div>
+          ) : null;
+        })()}
       </div>
     );
   };
@@ -401,7 +524,7 @@ export default function SellerProposalsPage() {
                         <ManagerCell managerId={proposal.leadManagerId} />
                       </TableCell>
                       <TableCell>
-                        <LeadCell leadId={proposal.leadId} />
+                        <LeadCell leadId={proposal.leadId} proposalStatus={proposal.status} />
                       </TableCell>
                       <TableCell>{getStatusBadge(proposal.status)}</TableCell>
                       <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
@@ -409,14 +532,15 @@ export default function SellerProposalsPage() {
                       </TableCell>
                       <TableCell>
                         <Button
-                          variant="ghost"
-                          size="sm"
+                          variant="default"
+                          size="default"
                           onClick={() => {
                             setSelectedProposal(proposal);
                             setIsDrawerOpen(true);
                           }}
+                          className="w-full min-w-[160px]"
                         >
-                          <Eye className="h-4 w-4 mr-1" />
+                          <Eye className="h-4 w-4 mr-2" />
                           {t("sellerProposals.viewDetails")}
                         </Button>
                       </TableCell>

@@ -5,10 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/language-context";
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 
 /**
  * Public Landing Page Component
@@ -77,6 +83,29 @@ export default function LandingPage() {
             <a href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("landing.nav.testimonials")}
             </a>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                {t("landing.nav.legal")}
+                <ChevronDown className="h-3 w-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <a href="/legal/privacy-policy" className="w-full cursor-pointer">
+                    {t("legal.privacyPolicy")}
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/legal/terms-of-service" className="w-full cursor-pointer">
+                    {t("legal.termsOfService")}
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/legal/cookies" className="w-full cursor-pointer">
+                    {t("legal.cookiesPolicy")}
+                  </a>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           {/* Desktop Actions - Hidden on mobile */}
@@ -160,6 +189,34 @@ export default function LandingPage() {
               >
                 {t("landing.nav.testimonials")}
               </a>
+              <div className="border-t border-border pt-2">
+                <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">
+                  {t("landing.nav.legal")}
+                </p>
+                <div className="flex flex-col gap-2 pl-2">
+                  <a
+                    href="/legal/privacy-policy"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t("legal.privacyPolicy")}
+                  </a>
+                  <a
+                    href="/legal/terms-of-service"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t("legal.termsOfService")}
+                  </a>
+                  <a
+                    href="/legal/cookies"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t("legal.cookiesPolicy")}
+                  </a>
+                </div>
+              </div>
             </nav>
 
             {/* Language Toggle Mobile */}

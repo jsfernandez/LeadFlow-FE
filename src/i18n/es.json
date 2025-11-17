@@ -441,10 +441,6 @@
       }
     },
     "empty": "No tienes propuestas registradas aún.",
-    "actions": {
-      "accept": "Aceptar propuesta",
-      "reject": "Rechazar propuesta"
-    },
     "allProposals": "Todas las Propuestas",
     "listDescription": "Propuestas enviadas por gestores de leads",
     "failedToLoad": "Error al cargar las propuestas. Por favor, inténtelo de nuevo.",
@@ -456,7 +452,15 @@
     "proposalStatus": "Estado de la Propuesta",
     "acceptSuccess": "Propuesta aceptada exitosamente",
     "rejectSuccess": "Propuesta rechazada exitosamente",
-    "updateError": "Error al actualizar el estado de la propuesta"
+    "updateError": "Error al actualizar el estado de la propuesta",
+    "leadDataHiddenNotice": "Los detalles de contacto del lead están ocultos hasta que acepte esta propuesta. Esto garantiza la trazabilidad adecuada y evita el acceso no autorizado a los leads.",
+    "withdrawalWindow": "Ventana de Calidad de 24 Horas",
+    "withdrawalNotice": "Puede retirar este lead aceptado dentro de 24 horas hábiles si la calidad es deficiente (ej: cliente sin contexto, desconoce el producto/servicio). Tiempo restante: ",
+    "actions": {
+      "accept": "Aceptar propuesta",
+      "reject": "Rechazar propuesta",
+      "withdraw": "Retirar Lead (Calidad Deficiente)"
+    }
   },
   "payouts": {
     "title": "Pagos",
@@ -548,6 +552,8 @@
       "howItWorks": "Cómo Funciona",
       "benefits": "Beneficios",
       "testimonials": "Testimonios",
+      "legal": "Legal",
+      "menu": "Menú",
       "getStarted": "Comenzar"
     },
     "hero": {
