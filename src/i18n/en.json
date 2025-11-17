@@ -838,5 +838,156 @@
       "priceRequired": "Price is required",
       "pricePositive": "Price must be greater than 0"
     }
+  },
+  "leadManagerLanding": {
+    "nav": {
+      "benefits": "Benefits",
+      "howItWorks": "How It Works",
+      "earnings": "Earnings",
+      "faq": "FAQ",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "title": "Become a Lead Manager and Generate Income by Connecting Clients with Companies",
+      "subtitle": "Share your contact database securely and receive payments for each qualified lead",
+      "ctaPrimary": "Start Today",
+      "ctaSecondary": "See How It Works"
+    },
+    "benefits": {
+      "title": "Why Become a Lead Manager?",
+      "subtitle": "Transform your network into a revenue source",
+      "benefit1": {
+        "title": "Monetize Your Contacts",
+        "description": "Turn your network and contact database into a sustainable income source"
+      },
+      "benefit2": {
+        "title": "Full Control of Your Proposals",
+        "description": "You decide which offers to respond to and which leads to share"
+      },
+      "benefit3": {
+        "title": "Payment Per Won Lead",
+        "description": "Earn fixed amounts or commissions for each successful lead conversion"
+      },
+      "benefit4": {
+        "title": "Data Protection and Legal Compliance",
+        "description": "Platform ensures anonymization and compliance with data protection regulations"
+      },
+      "benefit5": {
+        "title": "No Initial Investment",
+        "description": "Start generating income without upfront costs or membership fees"
+      },
+      "benefit6": {
+        "title": "Complete Panel to Manage Your Leads",
+        "description": "Track your proposals, assignments, and earnings in real-time"
+      }
+    },
+    "earnings": {
+      "title": "Earnings Model",
+      "subtitle": "Two ways to earn with each qualified lead",
+      "fixedPayment": {
+        "title": "Fixed Payment per Lead",
+        "description": "Receive a predetermined amount for each lead that converts to a sale"
+      },
+      "percentagePayment": {
+        "title": "Percentage per Sale",
+        "description": "Earn a commission based on the total value of the closed deal"
+      },
+      "simulator": {
+        "title": "Earnings Simulator",
+        "description": "Estimate your potential income",
+        "leadCount": "Number of Leads",
+        "avgPayment": "Average Payment per Lead",
+        "estimatedEarnings": "Estimated Monthly Earnings",
+        "calculate": "Calculate"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "5 simple steps to start earning",
+      "step1": {
+        "title": "Register Your Account",
+        "description": "Create your Lead Manager account on the platform"
+      },
+      "step2": {
+        "title": "Upload Your Leads",
+        "description": "Add your contacts to the panel (data remains protected)"
+      },
+      "step3": {
+        "title": "Receive Offers from Companies",
+        "description": "Browse available offers matching your network profile"
+      },
+      "step4": {
+        "title": "Submit Proposals",
+        "description": "Send proposals based on your catalog of qualified leads"
+      },
+      "step5": {
+        "title": "Receive Payments",
+        "description": "Get paid for each lead that converts successfully"
+      }
+    },
+    "legal": {
+      "title": "Legal & Compliance",
+      "subtitle": "Your responsibility and data protection",
+      "dataOwnership": {
+        "title": "Data Ownership Declaration",
+        "description": "The platform requires you to declare ownership of contact data using your RUT or Passport. You are responsible for the lawful origin of all shared data."
+      },
+      "anonymization": {
+        "title": "Lead Anonymization",
+        "description": "All lead data is anonymized until a proposal is accepted by the seller, protecting both parties' interests."
+      },
+      "compliance": {
+        "title": "Legal Responsibility",
+        "description": "As a Lead Manager, you are responsible for ensuring that all contact data has been obtained lawfully and with proper consent according to applicable data protection laws."
+      }
+    },
+    "testimonials": {
+      "title": "What Lead Managers Say",
+      "subtitle": "Real experiences from our community",
+      "testimonial1": {
+        "quote": "I've been monetizing my professional network for 6 months and couldn't be happier. The platform is transparent and payments are always on time.",
+        "author": "Carlos Ramírez",
+        "role": "Independent Lead Manager"
+      },
+      "testimonial2": {
+        "quote": "The ability to choose which offers I respond to gives me complete control. I only share leads when I'm confident in the match.",
+        "author": "Patricia Silva",
+        "role": "Lead Manager - B2B Sector"
+      },
+      "testimonial3": {
+        "quote": "Data protection is taken seriously. I feel secure knowing that my contacts are anonymized until acceptance.",
+        "author": "Miguel Torres",
+        "role": "Lead Manager - Tech Industry"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know",
+      "question1": {
+        "q": "What is a Lead Manager?",
+        "a": "A Lead Manager is a person or entity that has a network of contacts and connects them with companies looking for potential customers, earning compensation for successful conversions."
+      },
+      "question2": {
+        "q": "What can I offer as a lead?",
+        "a": "You can offer any contact that might be interested in products or services from sellers on the platform. This includes business contacts, professional connections, or individuals matching specific criteria."
+      },
+      "question3": {
+        "q": "How do payments work?",
+        "a": "You receive payment when a lead you provide is marked as WON (successfully converted). Payments can be fixed amounts or percentage-based commissions, depending on each offer's terms."
+      },
+      "question4": {
+        "q": "What legal requirements do I need to meet?",
+        "a": "You must declare ownership of contact data using your RUT or Passport. You're responsible for ensuring all data has been obtained lawfully and with proper consent according to data protection regulations."
+      },
+      "question5": {
+        "q": "What contact data is visible to sellers?",
+        "a": "Contact details remain anonymized until your proposal is accepted. Once accepted, the seller receives the full contact information to pursue the lead."
+      }
+    },
+    "finalCta": {
+      "title": "Ready to Start Earning?",
+      "subtitle": "Join our Lead Manager community today",
+      "button": "Create Lead Manager Account"
+    }
   }
 }
