@@ -441,10 +441,6 @@
       }
     },
     "empty": "No proposals received yet.",
-    "actions": {
-      "accept": "Accept proposal",
-      "reject": "Reject proposal"
-    },
     "allProposals": "All Proposals",
     "listDescription": "Proposals submitted by lead managers",
     "failedToLoad": "Failed to load proposals. Please try again.",
@@ -456,7 +452,15 @@
     "proposalStatus": "Proposal Status",
     "acceptSuccess": "Proposal accepted successfully",
     "rejectSuccess": "Proposal rejected successfully",
-    "updateError": "Failed to update proposal status"
+    "updateError": "Failed to update proposal status",
+    "leadDataHiddenNotice": "Lead contact details are hidden until you accept this proposal. This ensures proper traceability and prevents unauthorized lead access.",
+    "withdrawalWindow": "24-Hour Quality Window",
+    "withdrawalNotice": "You can withdraw this accepted lead within 24 business hours if the quality is poor (e.g., client lacks context, unfamiliar with product/service). Time remaining: ",
+    "actions": {
+      "accept": "Accept proposal",
+      "reject": "Reject proposal",
+      "withdraw": "Withdraw Lead (Poor Quality)"
+    }
   },
   "payouts": {
     "title": "Payouts",
