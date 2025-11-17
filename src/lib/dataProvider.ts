@@ -55,6 +55,7 @@ export interface DataProvider {
   // User operations
   getUserById(id: string): Promise<User | null>;
   updateUserLanguage(userId: string, language: "en" | "es"): Promise<User | null>;
+  updateUser(userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>): Promise<User | null>;
 
   // Rating operations
   createRating(data: Omit<Rating, "id" | "createdAt">): Promise<Rating>;

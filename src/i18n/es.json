@@ -50,7 +50,8 @@
     "payouts": "Pagos",
     "users": "Usuarios",
     "loggedInAs": "Conectado como",
-    "leads": "Leads"
+    "leads": "Leads",
+    "profile": "Perfil"
   },
   "home": {
     "title": "Bienvenido a",
@@ -993,5 +994,30 @@
       "subtitle": "Únete a nuestra comunidad de Lead Managers hoy",
       "button": "Crear cuenta como Lead Manager"
     }
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Administra tu información de cuenta y detalles de contacto",
+    "personalInfo": "Información Personal",
+    "personalInfoDescription": "Detalles básicos de tu cuenta",
+    "contactInfo": "Información de Contacto",
+    "contactInfoDescription": "Cómo otros pueden contactarte",
+    "name": "Nombre Completo",
+    "namePlaceholder": "Ingresa tu nombre completo",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "phone": "Número de Teléfono",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "company": "Empresa",
+    "companyPlaceholder": "Ingresa el nombre de tu empresa",
+    "address": "Dirección",
+    "addressPlaceholder": "Ingresa tu dirección",
+    "city": "Ciudad",
+    "cityPlaceholder": "Ingresa tu ciudad",
+    "country": "País",
+    "countryPlaceholder": "Ingresa tu país",
+    "saveChanges": "Guardar Cambios",
+    "updateSuccess": "Perfil actualizado exitosamente",
+    "updateError": "Error al actualizar el perfil"
   }
 }

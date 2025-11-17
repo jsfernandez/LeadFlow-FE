@@ -766,6 +766,23 @@ class MockDataStore {
     return updatedUser;
   }
 
+  async updateUser(userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>): Promise<User | null> {
+    await delay();
+    const user = this.users.get(userId);
+    if (!user) return null;
+
+    const updatedUser: User = {
+      ...user,
+      ...data,
+      id: user.id, // Ensure id is not overwritten
+      role: user.role, // Ensure role is not overwritten
+      createdAt: user.createdAt, // Ensure createdAt is not overwritten
+    };
+
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+
   // ===== Rating Operations =====
 
   async createRating(
@@ -857,6 +874,8 @@ export const mockProvider = {
   getUserById: (id: string) => mockDataStore.getUserById(id),
   updateUserLanguage: (userId: string, language: "en" | "es") =>
     mockDataStore.updateUserLanguage(userId, language),
+  updateUser: (userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>) =>
+    mockDataStore.updateUser(userId, data),
 
   // Ratings
   createRating: (data: Omit<Rating, "id" | "createdAt">) =>

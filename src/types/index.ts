@@ -44,6 +44,12 @@ export interface User {
   role: UserRole;
   language?: "en" | "es"; // User's preferred language
   reputation?: UserReputation; // User's reputation from ratings
+  // Profile contact information
+  phone?: string;
+  company?: string;
+  address?: string;
+  city?: string;
+  country?: string;
   createdAt: Date;
 }
 

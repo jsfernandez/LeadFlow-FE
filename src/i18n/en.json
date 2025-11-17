@@ -50,7 +50,8 @@
     "payouts": "Payouts",
     "users": "Users",
     "loggedInAs": "Logged in as",
-    "leads": "Leads"
+    "leads": "Leads",
+    "profile": "Profile"
   },
   "home": {
     "title": "Welcome to",
@@ -993,5 +994,30 @@
       "subtitle": "Join our Lead Manager community today",
       "button": "Create Lead Manager Account"
     }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account information and contact details",
+    "personalInfo": "Personal Information",
+    "personalInfoDescription": "Your basic account details",
+    "contactInfo": "Contact Information",
+    "contactInfoDescription": "How others can reach you",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "company": "Company",
+    "companyPlaceholder": "Enter your company name",
+    "address": "Address",
+    "addressPlaceholder": "Enter your street address",
+    "city": "City",
+    "cityPlaceholder": "Enter your city",
+    "country": "Country",
+    "countryPlaceholder": "Enter your country",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   }
 }
