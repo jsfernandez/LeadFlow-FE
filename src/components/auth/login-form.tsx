@@ -120,7 +120,7 @@ export function LoginForm({ onToggleToRegister }: LoginFormProps) {
         <p className="font-semibold mb-2">Development Mode:</p>
         <p className="mb-1">Seller: seller@leadmanager.com</p>
         <p className="mb-1">Manager: manager@leadmanager.com</p>
-        <p>Admin: admin@leadmanager.com</p>
+        {/*<p>Admin: admin@leadmanager.com</p>*/}
         <p className="mt-2 italic">Any password will work</p>
       </div>
     </div>
