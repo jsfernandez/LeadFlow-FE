@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { dataProvider } from "@/lib/dataProvider";
 import { 
@@ -38,6 +39,8 @@ export default function ProfilePage() {
     city: "",
     country: "",
     billingType: undefined,
+    bio: "",
+    professionalDescription: "",
   });
   const [passwordData, setPasswordData] = useState<ChangePasswordInput>({
     currentPassword: "",
@@ -57,6 +60,8 @@ export default function ProfilePage() {
         city: user.city || "",
         country: user.country || "",
         billingType: user.billingType,
+        bio: user.bio || "",
+        professionalDescription: user.professionalDescription || "",
       });
     }
   }, [user]);
@@ -275,6 +280,45 @@ export default function ProfilePage() {
                 disabled
                 className="bg-muted"
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Additional Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("profile.additionalInfo")}</CardTitle>
+            <CardDescription>{t("profile.additionalInfoDescription")}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="bio">{t("profile.bio")}</Label>
+              <Textarea
+                id="bio"
+                value={formData.bio || ""}
+                onChange={(e) => handleInputChange("bio", e.target.value)}
+                placeholder={t("profile.bioPlaceholder")}
+                maxLength={500}
+                rows={4}
+              />
+              <p className="text-sm text-muted-foreground">
+                {formData.bio?.length || 0}/500
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="professionalDescription">{t("profile.professionalDescription")}</Label>
+              <Textarea
+                id="professionalDescription"
+                value={formData.professionalDescription || ""}
+                onChange={(e) => handleInputChange("professionalDescription", e.target.value)}
+                placeholder={t("profile.professionalDescriptionPlaceholder")}
+                maxLength={500}
+                rows={4}
+              />
+              <p className="text-sm text-muted-foreground">
+                {formData.professionalDescription?.length || 0}/500
+              </p>
             </div>
           </CardContent>
         </Card>

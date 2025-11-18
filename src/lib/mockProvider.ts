@@ -43,6 +43,8 @@ class MockDataStore {
       email: "seller@leadmanager.com",
       name: "John Seller",
       role: "SELLER",
+      bio: "Experienced B2B sales professional with a passion for connecting businesses with the right solutions.",
+      professionalDescription: "As a Seller, I specialize in SaaS and enterprise solutions, bringing over 10 years of experience in lead generation and client acquisition.",
       createdAt: new Date("2024-01-01"),
     };
 
@@ -51,6 +53,8 @@ class MockDataStore {
       email: "manager@leadmanager.com",
       name: "Jane Manager",
       role: "LEAD_MANAGER",
+      bio: "Lead generation specialist with extensive network in tech and e-commerce sectors.",
+      professionalDescription: "As a Lead Manager, I focus on delivering high-quality, pre-qualified leads for B2B companies, leveraging my network built over 8 years in the industry.",
       createdAt: new Date("2024-01-01"),
     };
     

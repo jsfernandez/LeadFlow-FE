@@ -80,6 +80,8 @@ interface UserDTO {
   city?: string;
   country?: string;
   billingType?: "BOLETA" | "FACTURA" | "AMBOS";
+  bio?: string;
+  professionalDescription?: string;
   createdAt: string;
 }
 

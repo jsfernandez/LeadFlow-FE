@@ -57,6 +57,9 @@ export interface User {
   country?: string;
   // Billing information
   billingType?: BillingType;
+  // Additional information
+  bio?: string; // User biography (max 500 chars)
+  professionalDescription?: string; // Professional role description (max 500 chars)
   createdAt: Date;
 }
 
