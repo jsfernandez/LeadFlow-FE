@@ -4,6 +4,11 @@
 export type UserRole = "SELLER" | "LEAD_MANAGER" | "ADMIN";
 
 /**
+ * Billing type for invoicing
+ */
+export type BillingType = "BOLETA" | "FACTURA" | "AMBOS";
+
+/**
  * Lead qualification status
  */
 export type LeadStatus = "PENDING" | "WON" | "LOST";
@@ -50,6 +55,8 @@ export interface User {
   address?: string;
   city?: string;
   country?: string;
+  // Billing information
+  billingType?: BillingType;
   createdAt: Date;
 }
 

@@ -17,9 +17,28 @@ export const updateProfileSchema = z.object({
   address: z.string().max(200, "Address must be less than 200 characters").optional(),
   city: z.string().max(100, "City must be less than 100 characters").optional(),
   country: z.string().max(100, "Country must be less than 100 characters").optional(),
+  billingType: z.enum(["BOLETA", "FACTURA", "AMBOS"]).optional(),
 });
 
 /**
  * Type inferred from the update profile schema
  */
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+/**
+ * Schema for changing password
+ * Validates password requirements
+ */
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(8, "Password must be at least 8 characters").max(100, "Password must be less than 100 characters"),
+  confirmNewPassword: z.string().min(1, "Please confirm your new password"),
+}).refine((data) => data.newPassword === data.confirmNewPassword, {
+  message: "Passwords do not match",
+  path: ["confirmNewPassword"],
+});
+
+/**
+ * Type inferred from the change password schema
+ */
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;

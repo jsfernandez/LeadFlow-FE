@@ -79,6 +79,7 @@ interface UserDTO {
   address?: string;
   city?: string;
   country?: string;
+  billingType?: "BOLETA" | "FACTURA" | "AMBOS";
   createdAt: string;
 }
 
@@ -464,6 +465,19 @@ export const realProvider = {
       }
       console.error("[RealProvider] Error updating user:", error);
       throw error;
+    }
+  },
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    try {
+      await apiClient.patch(`/users/${userId}/password`, {
+        currentPassword,
+        newPassword,
+      });
+      return true;
+    } catch (error) {
+      console.error("[RealProvider] Error changing password:", error);
+      return false;
     }
   },
 
