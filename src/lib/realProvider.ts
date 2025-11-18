@@ -74,6 +74,12 @@ interface UserDTO {
   name: string;
   role: "SELLER" | "LEAD_MANAGER" | "ADMIN";
   language?: "en" | "es";
+  phone?: string;
+  company?: string;
+  address?: string;
+  city?: string;
+  country?: string;
+  billingType?: "BOLETA" | "FACTURA" | "AMBOS";
   createdAt: string;
 }
 
@@ -446,6 +452,32 @@ export const realProvider = {
       }
       console.error("[RealProvider] Error updating user language:", error);
       throw error;
+    }
+  },
+
+  async updateUser(userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>): Promise<User | null> {
+    try {
+      const response = await apiClient.patch<UserDTO>(`/users/${userId}`, data);
+      return transformUser(response);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating user:", error);
+      throw error;
+    }
+  },
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    try {
+      await apiClient.patch(`/users/${userId}/password`, {
+        currentPassword,
+        newPassword,
+      });
+      return true;
+    } catch (error) {
+      console.error("[RealProvider] Error changing password:", error);
+      return false;
     }
   },
 

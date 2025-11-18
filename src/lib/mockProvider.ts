@@ -766,6 +766,34 @@ class MockDataStore {
     return updatedUser;
   }
 
+  async updateUser(userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>): Promise<User | null> {
+    await delay();
+    const user = this.users.get(userId);
+    if (!user) return null;
+
+    const updatedUser: User = {
+      ...user,
+      ...data,
+      id: user.id, // Ensure id is not overwritten
+      role: user.role, // Ensure role is not overwritten
+      createdAt: user.createdAt, // Ensure createdAt is not overwritten
+    };
+
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    await delay();
+    const user = this.users.get(userId);
+    if (!user) return false;
+
+    // In mock mode, we don't actually store passwords, so we just return success
+    // In a real implementation, this would verify the current password and update to the new one
+    return true;
+  }
+
   // ===== Rating Operations =====
 
   async createRating(
@@ -857,6 +885,10 @@ export const mockProvider = {
   getUserById: (id: string) => mockDataStore.getUserById(id),
   updateUserLanguage: (userId: string, language: "en" | "es") =>
     mockDataStore.updateUserLanguage(userId, language),
+  updateUser: (userId: string, data: Partial<Omit<User, "id" | "role" | "createdAt">>) =>
+    mockDataStore.updateUser(userId, data),
+  changePassword: (userId: string, currentPassword: string, newPassword: string) =>
+    mockDataStore.changePassword(userId, currentPassword, newPassword),
 
   // Ratings
   createRating: (data: Omit<Rating, "id" | "createdAt">) =>
