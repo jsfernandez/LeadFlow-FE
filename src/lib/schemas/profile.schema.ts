@@ -18,6 +18,8 @@ export const updateProfileSchema = z.object({
   city: z.string().max(100, "City must be less than 100 characters").optional(),
   country: z.string().max(100, "Country must be less than 100 characters").optional(),
   billingType: z.enum(["BOLETA", "FACTURA", "AMBOS"]).optional(),
+  bio: z.string().max(500, "Bio must be less than 500 characters").optional(),
+  professionalDescription: z.string().max(500, "Professional description must be less than 500 characters").optional(),
 });
 
 /**
