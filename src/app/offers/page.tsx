@@ -690,7 +690,7 @@ export default function OffersPage() {
                 <Input
                   id="offerAttachmentUrl"
                   placeholder={t("offers.createDialog.offerAttachmentUrlPlaceholder")}
-                  value={offerFormData.description}
+                  value={offerFormData.offerAttachmentUrl}
                   onChange={(e) => setOfferFormData({ ...offerFormData, offerAttachmentUrl: e.target.value })}
                   required
                 />
