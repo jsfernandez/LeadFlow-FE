@@ -14,6 +14,20 @@ export type BillingType = "BOLETA" | "FACTURA" | "AMBOS";
 export type LeadStatus = "PENDING" | "WON" | "LOST";
 
 /**
+ * Deal status for proposals after completion
+ */
+export type DealStatus = "ACTIVE" | "COMPLETED" | "RETRACTED";
+
+/**
+ * Ticket category for disputes
+ */
+export type TicketCategory = 
+  | "PAYMENT_NON_COMPLIANCE" 
+  | "DATA_MISUSE" 
+  | "INAPPROPRIATE_CONDUCT" 
+  | "OTHER";
+
+/**
  * Offer status
  */
 export type OfferStatus = "ACTIVE" | "INACTIVE" | "ARCHIVED";
@@ -126,6 +140,13 @@ export interface LeadOffer {
   assignedAt?: Date;
   qualifiedAt?: Date;
   createdAt: Date;
+  // Deal completion tracking
+  dealStatus?: DealStatus;
+  completedAt?: Date;
+  retractedAt?: Date;
+  retractionReason?: string;
+  evaluatedByManager?: boolean; // True if lead manager submitted evaluation
+  evaluatedBySeller?: boolean; // True if seller submitted evaluation
 }
 
 /**
@@ -163,4 +184,23 @@ export interface UserReputation {
   averageRating: number; // Average of all ratings (1-5)
   totalRatings: number; // Number of ratings received
   lastUpdated: Date;
+}
+
+/**
+ * Ticket/Dispute entity for reporting issues
+ */
+export interface Ticket {
+  id: string;
+  reporterId: string; // User who created the ticket
+  reportedUserId?: string; // User being reported (if applicable)
+  relatedProposalId?: string; // Related proposal ID
+  relatedOfferId?: string; // Related offer ID
+  category: TicketCategory;
+  description: string;
+  attachmentUrl?: string; // Optional file attachment
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+  resolution?: string; // Admin resolution notes
+  createdAt: Date;
+  updatedAt: Date;
+  resolvedAt?: Date;
 }

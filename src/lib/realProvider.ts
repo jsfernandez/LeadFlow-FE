@@ -7,7 +7,7 @@
  */
 
 import { apiClient, ApiError } from "./apiClient";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket, TicketCategory, DealStatus } from "@/types";
 
 /**
  * API response types (DTOs from backend)
@@ -57,6 +57,12 @@ interface LeadOfferDTO {
   assignedAt?: string;
   qualifiedAt?: string;
   createdAt: string;
+  dealStatus?: "ACTIVE" | "COMPLETED" | "RETRACTED";
+  completedAt?: string;
+  retractedAt?: string;
+  retractionReason?: string;
+  evaluatedByManager?: boolean;
+  evaluatedBySeller?: boolean;
 }
 
 interface PayoutDTO {
@@ -104,6 +110,22 @@ interface UserReputationDTO {
   lastUpdated: string;
 }
 
+interface TicketDTO {
+  id: string;
+  reporterId: string;
+  reportedUserId?: string;
+  relatedProposalId?: string;
+  relatedOfferId?: string;
+  category: "PAYMENT_NON_COMPLIANCE" | "DATA_MISUSE" | "INAPPROPRIATE_CONDUCT" | "OTHER";
+  description: string;
+  attachmentUrl?: string;
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+  resolution?: string;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt?: string;
+}
+
 /**
  * Helper to convert API date strings to Date objects
  */
@@ -143,6 +165,8 @@ function transformLeadOffer(data: LeadOfferDTO): LeadOffer {
     createdAt: parseDate(data.createdAt) || new Date(),
     assignedAt: parseDate(data.assignedAt),
     qualifiedAt: parseDate(data.qualifiedAt),
+    completedAt: parseDate(data.completedAt),
+    retractedAt: parseDate(data.retractedAt),
   };
 }
 
@@ -184,6 +208,18 @@ function transformUserReputation(data: UserReputationDTO): UserReputation {
   return {
     ...data,
     lastUpdated: parseDate(data.lastUpdated) || new Date(),
+  };
+}
+
+/**
+ * Transform API ticket response to typed Ticket
+ */
+function transformTicket(data: TicketDTO): Ticket {
+  return {
+    ...data,
+    createdAt: parseDate(data.createdAt) || new Date(),
+    updatedAt: parseDate(data.updatedAt) || new Date(),
+    resolvedAt: parseDate(data.resolvedAt),
   };
 }
 
@@ -513,6 +549,100 @@ export const realProvider = {
         return null;
       }
       console.error("[RealProvider] Error fetching user reputation:", error);
+      throw error;
+    }
+  },
+
+  // ===== Ticket Operations =====
+
+  async createTicket(
+    data: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "status" | "resolvedAt">
+  ): Promise<Ticket> {
+    const response = await apiClient.post<TicketDTO>("/tickets", data);
+    return transformTicket(response);
+  },
+
+  async getTicketById(id: string): Promise<Ticket | null> {
+    try {
+      const data = await apiClient.get<TicketDTO>(`/tickets/${id}`);
+      return transformTicket(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching ticket:", error);
+      throw error;
+    }
+  },
+
+  async getTicketsByReporter(reporterId: string): Promise<Ticket[]> {
+    const data = await apiClient.get<TicketDTO[]>("/tickets", {
+      params: { reporterId },
+    });
+    return data.map(transformTicket);
+  },
+
+  async getTicketsByProposal(proposalId: string): Promise<Ticket[]> {
+    const data = await apiClient.get<TicketDTO[]>("/tickets", {
+      params: { relatedProposalId: proposalId },
+    });
+    return data.map(transformTicket);
+  },
+
+  // ===== Deal Completion Operations =====
+
+  async markDealCompleted(proposalId: string): Promise<LeadOffer | null> {
+    try {
+      const data = await apiClient.patch<LeadOfferDTO>(
+        `/deals/${proposalId}/complete`,
+        {}
+      );
+      return transformLeadOffer(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error marking deal completed:", error);
+      throw error;
+    }
+  },
+
+  async retractDeal(
+    proposalId: string,
+    reason: string,
+    userId: string
+  ): Promise<LeadOffer | null> {
+    try {
+      const data = await apiClient.post<LeadOfferDTO>(
+        `/deals/${proposalId}/retract`,
+        { reason, userId }
+      );
+      return transformLeadOffer(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error retracting deal:", error);
+      throw error;
+    }
+  },
+
+  async recordEvaluation(
+    proposalId: string,
+    userId: string,
+    userRole: "SELLER" | "LEAD_MANAGER"
+  ): Promise<LeadOffer | null> {
+    try {
+      const data = await apiClient.patch<LeadOfferDTO>(
+        `/deals/${proposalId}/evaluation`,
+        { userId, userRole }
+      );
+      return transformLeadOffer(data);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error recording evaluation:", error);
       throw error;
     }
   },
