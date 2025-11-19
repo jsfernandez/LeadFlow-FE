@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket, DealStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -895,6 +895,7 @@ class MockDataStore {
   async retractDeal(
     proposalId: string,
     reason: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     userId: string
   ): Promise<LeadOffer | null> {
     await delay();

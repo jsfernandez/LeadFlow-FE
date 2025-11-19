@@ -8,7 +8,7 @@
 
 import { mockProvider } from "./mockProvider";
 import { realProvider } from "./realProvider";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket, DealStatus } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
 
 /**
  * Data provider interface

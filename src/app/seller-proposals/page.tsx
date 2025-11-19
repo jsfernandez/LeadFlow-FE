@@ -23,6 +23,7 @@ import {
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
+import { DealEvaluationActions } from "@/components/ui/deal-evaluation-actions";
 import { useLeadOffersBySeller, useUpdateLeadOfferStatus } from "@/hooks/use-lead-offers";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadOffer, LeadStatus } from "@/types";
@@ -531,18 +532,29 @@ export default function SellerProposalsPage() {
                         {new Date(proposal.createdAt).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="default"
-                          size="default"
-                          onClick={() => {
-                            setSelectedProposal(proposal);
-                            setIsDrawerOpen(true);
-                          }}
-                          className="w-full min-w-[160px]"
-                        >
-                          <Eye className="h-4 w-4 mr-2" />
-                          {t("sellerProposals.viewDetails")}
-                        </Button>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedProposal(proposal);
+                              setIsDrawerOpen(true);
+                            }}
+                            className="w-full"
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            {t("sellerProposals.viewDetails")}
+                          </Button>
+                          {user && (
+                            <DealEvaluationActions
+                              proposal={proposal}
+                              currentUserId={user.id}
+                              currentUserRole="SELLER"
+                              otherUserId={proposal.leadManagerId}
+                              offerId={proposal.offerId}
+                            />
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

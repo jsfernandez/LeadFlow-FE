@@ -7,7 +7,7 @@
  */
 
 import { apiClient, ApiError } from "./apiClient";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket, TicketCategory, DealStatus } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
 
 /**
  * API response types (DTOs from backend)
