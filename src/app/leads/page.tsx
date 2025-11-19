@@ -578,6 +578,8 @@ export default function LeadsPage() {
                     id="phone"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    minLength={11}
+                    maxLength={12}
                     required
                   />
                 </div>
@@ -781,6 +783,8 @@ export default function LeadsPage() {
                     id="edit-phone"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    minLength={11}
+                    maxLength={12}
                     required
                   />
                 </div>
