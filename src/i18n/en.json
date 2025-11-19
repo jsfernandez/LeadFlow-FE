@@ -1048,5 +1048,50 @@
     "passwordChangeError": "Failed to change password",
     "passwordMismatch": "Passwords do not match",
     "passwordMinLength": "Password must be at least 8 characters"
+  },
+  "evaluation": {
+    "title": "Evaluate Collaboration",
+    "description": "Share your experience working on this proposal",
+    "ratingLabel": "Your Rating",
+    "reviewPlaceholder": "Share your experience working together...",
+    "reviewLabel": "Review (Optional)",
+    "submitButton": "Submit Evaluation",
+    "denounceButton": "Report Issue",
+    "completed": "Evaluation Completed",
+    "alreadyEvaluated": "You have already submitted your evaluation",
+    "viewEvaluation": "View Evaluation",
+    "markCompleted": "Mark as Completed",
+    "dealCompleted": "Deal Completed"
+  },
+  "ticket": {
+    "title": "Report Issue",
+    "description": "Describe the problem you're experiencing",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category",
+    "categoryPaymentNonCompliance": "Payment Non-Compliance",
+    "categoryDataMisuse": "Data Misuse",
+    "categoryInappropriateConduct": "Inappropriate Conduct",
+    "categoryOther": "Other",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Provide details about the issue...",
+    "attachmentLabel": "Attach File (Optional)",
+    "submitButton": "Submit Report",
+    "success": "Report submitted successfully",
+    "error": "Failed to submit report"
+  },
+  "retraction": {
+    "title": "Retract Agreement",
+    "description": "Are you sure you want to retract this agreement?",
+    "warning": "This action cannot be undone. The deal will be marked as retracted and both parties will be notified.",
+    "reasonLabel": "Reason for Retraction",
+    "reasonPlaceholder": "Explain why you are retracting this agreement...",
+    "confirmButton": "Confirm Retraction",
+    "cancelButton": "Cancel",
+    "success": "Agreement retracted successfully",
+    "error": "Failed to retract agreement",
+    "retracted": "This deal has been retracted",
+    "retractedBy": "Retracted by",
+    "retractedAt": "Retracted at",
+    "retractButton": "Retract Agreement"
   }
 }

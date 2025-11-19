@@ -1048,5 +1048,50 @@
     "passwordChangeError": "Error al cambiar la contraseña",
     "passwordMismatch": "Las contraseñas no coinciden",
     "passwordMinLength": "La contraseña debe tener al menos 8 caracteres"
+  },
+  "evaluation": {
+    "title": "Evaluar Colaboración",
+    "description": "Comparte tu experiencia trabajando en esta propuesta",
+    "ratingLabel": "Tu Calificación",
+    "reviewPlaceholder": "Comparte tu experiencia trabajando juntos...",
+    "reviewLabel": "Comentarios (Opcional)",
+    "submitButton": "Enviar Evaluación",
+    "denounceButton": "Denunciar Problema",
+    "completed": "Evaluación Completada",
+    "alreadyEvaluated": "Ya has enviado tu evaluación",
+    "viewEvaluation": "Ver Evaluación",
+    "markCompleted": "Marcar como Completado",
+    "dealCompleted": "Acuerdo Completado"
+  },
+  "ticket": {
+    "title": "Denunciar Problema",
+    "description": "Describe el problema que estás experimentando",
+    "category": "Categoría",
+    "categoryPlaceholder": "Selecciona una categoría",
+    "categoryPaymentNonCompliance": "Incumplimiento de Pago",
+    "categoryDataMisuse": "Uso Indebido de Datos",
+    "categoryInappropriateConduct": "Conducta Inapropiada",
+    "categoryOther": "Otro",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Proporciona detalles sobre el problema...",
+    "attachmentLabel": "Adjuntar Archivo (Opcional)",
+    "submitButton": "Enviar Denuncia",
+    "success": "Denuncia enviada exitosamente",
+    "error": "Error al enviar la denuncia"
+  },
+  "retraction": {
+    "title": "Retractarse del Acuerdo",
+    "description": "¿Estás seguro de que deseas retractarte de este acuerdo?",
+    "warning": "Esta acción no se puede deshacer. El acuerdo se marcará como retractado y ambas partes serán notificadas.",
+    "reasonLabel": "Motivo de Retracto",
+    "reasonPlaceholder": "Explica por qué te estás retractando de este acuerdo...",
+    "confirmButton": "Confirmar Retracto",
+    "cancelButton": "Cancelar",
+    "success": "Acuerdo retractado exitosamente",
+    "error": "Error al retractar el acuerdo",
+    "retracted": "Este acuerdo ha sido retractado",
+    "retractedBy": "Retractado por",
+    "retractedAt": "Retractado el",
+    "retractButton": "Retractarse del Acuerdo"
   }
 }

@@ -8,7 +8,7 @@
 
 import { mockProvider } from "./mockProvider";
 import { realProvider } from "./realProvider";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
 
 /**
  * Data provider interface
@@ -63,6 +63,17 @@ export interface DataProvider {
   getRatingsByUser(userId: string): Promise<Rating[]>;
   getRatingsByRater(raterId: string): Promise<Rating[]>;
   getUserReputation(userId: string): Promise<UserReputation | null>;
+
+  // Ticket operations
+  createTicket(data: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "status" | "resolvedAt">): Promise<Ticket>;
+  getTicketById(id: string): Promise<Ticket | null>;
+  getTicketsByReporter(reporterId: string): Promise<Ticket[]>;
+  getTicketsByProposal(proposalId: string): Promise<Ticket[]>;
+
+  // Deal completion operations
+  markDealCompleted(proposalId: string): Promise<LeadOffer | null>;
+  retractDeal(proposalId: string, reason: string, userId: string): Promise<LeadOffer | null>;
+  recordEvaluation(proposalId: string, userId: string, userRole: "SELLER" | "LEAD_MANAGER"): Promise<LeadOffer | null>;
 }
 
 /**

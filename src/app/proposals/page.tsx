@@ -24,6 +24,7 @@ import {
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
+import { DealEvaluationActions } from "@/components/ui/deal-evaluation-actions";
 import { useLeadOffersByManager } from "@/hooks/use-lead-offers";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { LeadStatus } from "@/types";
@@ -276,28 +277,56 @@ export default function ProposalsPage() {
                     <TableHead className="min-w-[100px]">{t("proposals.status")}</TableHead>
                     <TableHead className="min-w-[120px]">{t("proposals.submitted")}</TableHead>
                     <TableHead className="min-w-[120px]">{t("proposals.qualified")}</TableHead>
+                    <TableHead className="min-w-[150px]">{t("proposals.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {finalFilteredProposals.map((proposal) => (
-                    <TableRow key={proposal.id}>
-                      <TableCell>
-                        <LeadCell leadId={proposal.leadId} />
-                      </TableCell>
-                      <TableCell>
-                        <OfferCell offerId={proposal.offerId} />
-                      </TableCell>
-                      <TableCell>{getStatusBadge(proposal.status)}</TableCell>
-                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                        {new Date(proposal.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                        {proposal.qualifiedAt
-                          ? new Date(proposal.qualifiedAt).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {finalFilteredProposals.map((proposal) => {
+                    // Fetch offer to get seller ID for evaluation
+                    const OfferWithActions = () => {
+                      const { data: offer } = useQuery({
+                        queryKey: ["offer", proposal.offerId],
+                        queryFn: () => dataProvider.getOfferById(proposal.offerId),
+                      });
+
+                      return (
+                        <>
+                          <TableCell>
+                            <LeadCell leadId={proposal.leadId} />
+                          </TableCell>
+                          <TableCell>
+                            <OfferCell offerId={proposal.offerId} />
+                          </TableCell>
+                          <TableCell>{getStatusBadge(proposal.status)}</TableCell>
+                          <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                            {new Date(proposal.createdAt).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                            {proposal.qualifiedAt
+                              ? new Date(proposal.qualifiedAt).toLocaleDateString()
+                              : "-"}
+                          </TableCell>
+                          <TableCell>
+                            {offer && user && (
+                              <DealEvaluationActions
+                                proposal={proposal}
+                                currentUserId={user.id}
+                                currentUserRole="LEAD_MANAGER"
+                                otherUserId={offer.sellerId}
+                                offerId={proposal.offerId}
+                              />
+                            )}
+                          </TableCell>
+                        </>
+                      );
+                    };
+
+                    return (
+                      <TableRow key={proposal.id}>
+                        <OfferWithActions />
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

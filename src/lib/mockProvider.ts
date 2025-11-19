@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation } from "@/types";
+import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -28,6 +28,7 @@ class MockDataStore {
   private users: Map<string, User> = new Map();
   private ratings: Map<string, Rating> = new Map();
   private reputations: Map<string, UserReputation> = new Map();
+  private tickets: Map<string, Ticket> = new Map();
 
   constructor() {
     this.initializeMockData();
@@ -836,6 +837,102 @@ class MockDataStore {
     await delay();
     return this.reputations.get(userId) || null;
   }
+
+  // ===== Ticket Operations =====
+
+  async createTicket(
+    data: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "status" | "resolvedAt">
+  ): Promise<Ticket> {
+    await delay();
+    const newTicket: Ticket = {
+      ...data,
+      id: `ticket-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      status: "OPEN",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    this.tickets.set(newTicket.id, newTicket);
+    return newTicket;
+  }
+
+  async getTicketById(id: string): Promise<Ticket | null> {
+    await delay();
+    return this.tickets.get(id) || null;
+  }
+
+  async getTicketsByReporter(reporterId: string): Promise<Ticket[]> {
+    await delay();
+    return Array.from(this.tickets.values())
+      .filter((ticket) => ticket.reporterId === reporterId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getTicketsByProposal(proposalId: string): Promise<Ticket[]> {
+    await delay();
+    return Array.from(this.tickets.values())
+      .filter((ticket) => ticket.relatedProposalId === proposalId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  // ===== Deal Completion Operations =====
+
+  async markDealCompleted(proposalId: string): Promise<LeadOffer | null> {
+    await delay();
+    const proposal = this.leadOffers.get(proposalId);
+    if (!proposal) return null;
+
+    const updatedProposal: LeadOffer = {
+      ...proposal,
+      dealStatus: "COMPLETED",
+      completedAt: new Date(),
+    };
+
+    this.leadOffers.set(proposalId, updatedProposal);
+    return updatedProposal;
+  }
+
+  async retractDeal(
+    proposalId: string,
+    reason: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    userId: string
+  ): Promise<LeadOffer | null> {
+    await delay();
+    const proposal = this.leadOffers.get(proposalId);
+    if (!proposal) return null;
+
+    const updatedProposal: LeadOffer = {
+      ...proposal,
+      dealStatus: "RETRACTED",
+      retractedAt: new Date(),
+      retractionReason: reason,
+    };
+
+    this.leadOffers.set(proposalId, updatedProposal);
+    return updatedProposal;
+  }
+
+  async recordEvaluation(
+    proposalId: string,
+    userId: string,
+    userRole: "SELLER" | "LEAD_MANAGER"
+  ): Promise<LeadOffer | null> {
+    await delay();
+    const proposal = this.leadOffers.get(proposalId);
+    if (!proposal) return null;
+
+    const updatedProposal: LeadOffer = {
+      ...proposal,
+      evaluatedByManager:
+        userRole === "LEAD_MANAGER" ? true : proposal.evaluatedByManager,
+      evaluatedBySeller:
+        userRole === "SELLER" ? true : proposal.evaluatedBySeller,
+    };
+
+    this.leadOffers.set(proposalId, updatedProposal);
+    return updatedProposal;
+  }
 }
 
 // Singleton instance
@@ -900,4 +997,18 @@ export const mockProvider = {
   getRatingsByUser: (userId: string) => mockDataStore.getRatingsByUser(userId),
   getRatingsByRater: (raterId: string) => mockDataStore.getRatingsByRater(raterId),
   getUserReputation: (userId: string) => mockDataStore.getUserReputation(userId),
+
+  // Tickets
+  createTicket: (data: Omit<Ticket, "id" | "createdAt" | "updatedAt" | "status" | "resolvedAt">) =>
+    mockDataStore.createTicket(data),
+  getTicketById: (id: string) => mockDataStore.getTicketById(id),
+  getTicketsByReporter: (reporterId: string) => mockDataStore.getTicketsByReporter(reporterId),
+  getTicketsByProposal: (proposalId: string) => mockDataStore.getTicketsByProposal(proposalId),
+
+  // Deal Completion
+  markDealCompleted: (proposalId: string) => mockDataStore.markDealCompleted(proposalId),
+  retractDeal: (proposalId: string, reason: string, userId: string) =>
+    mockDataStore.retractDeal(proposalId, reason, userId),
+  recordEvaluation: (proposalId: string, userId: string, userRole: "SELLER" | "LEAD_MANAGER") =>
+    mockDataStore.recordEvaluation(proposalId, userId, userRole),
 };
