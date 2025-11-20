@@ -10,9 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
 import { RatingsList } from "@/components/ui/ratings-list";
 import { useUserRatings, useUserReputation } from "@/hooks/use-ratings";
+import { usePaymentsBySeller } from "@/hooks/use-payments";
+import { calculatePaymentSummary } from "@/lib/payment-utils";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { LeadInfo } from "./lead-info";
 import { formatCurrencyCLP } from "@/lib/utils";
+import { AlertCircle, Clock } from "lucide-react";
 
 // Constants
 const MAX_DISPLAYED_RATINGS = 5;
@@ -28,10 +31,14 @@ export function SellerDashboard() {
   const { data: allLeadOffers = [] } = useLeadOffers();
   const { data: myReputation } = useUserReputation(user?.id || "");
   const { data: myRatings = [] } = useUserRatings(user?.id || "");
+  const { data: myPayments = [] } = usePaymentsBySeller(user?.id || "");
 
   // Filter proposals related to seller's offers
   const myOfferIds = myOffers.map(offer => offer.id);
   const proposalsForMyOffers = allLeadOffers.filter(lo => myOfferIds.includes(lo.offerId));
+  
+  // Calculate payment summary
+  const paymentSummary = calculatePaymentSummary(myPayments);
   
   // Calculate metrics
   const activeOffers = myOffers.filter(o => o.status === "ACTIVE").length;
@@ -198,6 +205,45 @@ export function SellerDashboard() {
           className="border-primary/50"
         />
       </div>
+
+      {/* Payment Obligations Summary */}
+      {paymentSummary.total > 0 && (
+        <Card className="border-amber-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-amber-500" />
+              {t("payments.paymentObligations")}
+            </CardTitle>
+            <CardDescription>{t("payments.iMustPay")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+              <div>
+                <p className="text-sm text-muted-foreground">{t("payments.pendingPayments")}</p>
+                <p className="text-2xl font-bold text-yellow-500">{paymentSummary.pending}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formatCurrencyCLP(paymentSummary.pendingAmount)}
+                </p>
+              </div>
+              {paymentSummary.overdue > 0 && (
+                <div>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    {t("payments.overduePayments")}
+                  </p>
+                  <p className="text-2xl font-bold text-red-500">{paymentSummary.overdue}</p>
+                  <p className="text-xs text-red-400 mt-1">{t("payments.duesSoon")}</p>
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-muted-foreground">{t("payments.upcomingPayments")}</p>
+                <p className="text-2xl font-bold text-orange-500">{paymentSummary.upcoming}</p>
+                <p className="text-xs text-muted-foreground mt-1">Next 7 days</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Charts and Tables */}
       <div className="grid gap-6 md:grid-cols-2">
