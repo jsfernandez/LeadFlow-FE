@@ -8,7 +8,7 @@
 
 import { mockProvider } from "./mockProvider";
 import { realProvider } from "./realProvider";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket, Payment, PaymentStatus } from "@/types";
 
 /**
  * Data provider interface
@@ -74,6 +74,17 @@ export interface DataProvider {
   markDealCompleted(proposalId: string): Promise<LeadOffer | null>;
   retractDeal(proposalId: string, reason: string, userId: string): Promise<LeadOffer | null>;
   recordEvaluation(proposalId: string, userId: string, userRole: "SELLER" | "LEAD_MANAGER"): Promise<LeadOffer | null>;
+
+  // Payment operations (new payment tracking system)
+  getPayments(): Promise<Payment[]>;
+  getPaymentById(id: string): Promise<Payment | null>;
+  getPaymentsByOfferId(offerId: string): Promise<Payment[]>;
+  getPaymentsBySellerId(sellerId: string): Promise<Payment[]>;
+  getPaymentsByLeadManagerId(leadManagerId: string): Promise<Payment[]>;
+  createPayment(data: Omit<Payment, "id" | "createdAt">): Promise<Payment>;
+  updatePaymentStatus(id: string, status: PaymentStatus, notes?: string): Promise<Payment | null>;
+  getOverduePayments(): Promise<Payment[]>;
+  getUpcomingPayments(daysAhead: number): Promise<Payment[]>;
 }
 
 /**
