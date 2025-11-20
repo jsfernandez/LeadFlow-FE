@@ -5,6 +5,8 @@ import { StatCard } from "@/components/ui/stat-card";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLeadOffersByManager } from "@/hooks/use-lead-offers";
 import { usePayoutsByManager } from "@/hooks/use-payouts";
+import { usePaymentsByLeadManager } from "@/hooks/use-payments";
+import { calculatePaymentSummary } from "@/lib/payment-utils";
 import { useOffers } from "@/hooks/use-offers";
 import { Badge } from "@/components/ui/badge";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
@@ -14,7 +16,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recha
 import { useTranslation } from "@/hooks/use-translation";
 import { useState, useMemo, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LeadInfo } from "./lead-info";
 import { formatCurrencyCLP } from "@/lib/utils";
@@ -30,9 +32,13 @@ export function LeadManagerDashboard() {
   const { user } = useAuth();
   const { data: myLeads = [] } = useLeadOffersByManager(user?.id || "");
   const { data: myPayouts = [] } = usePayoutsByManager(user?.id || "");
+  const { data: myPayments = [] } = usePaymentsByLeadManager(user?.id || "");
   const { data: myReputation } = useUserReputation(user?.id || "");
   const { data: myRatings = [] } = useUserRatings(user?.id || "");
   const { data: allOffers = [] } = useOffers();
+  
+  // Calculate payment summary
+  const paymentSummary = calculatePaymentSummary(myPayments);
 
   // State for ratings filters and pagination
   const [scoreFilter, setScoreFilter] = useState<string>("all");
@@ -229,6 +235,47 @@ export function LeadManagerDashboard() {
           className="border-primary/50"
         />
       </div>
+
+      {/* Payments Awaiting Summary */}
+      {paymentSummary.total > 0 && (
+        <Card className="border-green-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5 text-green-500" />
+              {t("payments.paymentsAwaitingFromSellers")}
+            </CardTitle>
+            <CardDescription>{t("payments.owedToMe")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+              <div>
+                <p className="text-sm text-muted-foreground">{t("payments.pendingPayments")}</p>
+                <p className="text-2xl font-bold text-yellow-500">{paymentSummary.pending}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formatCurrencyCLP(paymentSummary.pendingAmount)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t("common.paid")}</p>
+                <p className="text-2xl font-bold text-green-500">{paymentSummary.paid}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formatCurrencyCLP(paymentSummary.paidAmount)}
+                </p>
+              </div>
+              {paymentSummary.overdue > 0 && (
+                <div>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Clock className="h-4 w-4 text-orange-500" />
+                    {t("payments.overduePayments")}
+                  </p>
+                  <p className="text-2xl font-bold text-orange-500">{paymentSummary.overdue}</p>
+                  <p className="text-xs text-orange-400 mt-1">{t("payments.duesSoon")}</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Charts and Tables */}
       <div className="grid gap-6 md:grid-cols-2">

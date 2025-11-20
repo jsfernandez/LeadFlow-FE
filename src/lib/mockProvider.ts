@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
+import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket, Payment, PaymentStatus } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -25,6 +25,7 @@ class MockDataStore {
   private leads: Map<string, Lead> = new Map();
   private leadOffers: Map<string, LeadOffer> = new Map();
   private payouts: Map<string, Payout> = new Map();
+  private payments: Map<string, Payment> = new Map();
   private users: Map<string, User> = new Map();
   private ratings: Map<string, Rating> = new Map();
   private reputations: Map<string, UserReputation> = new Map();
@@ -672,6 +673,8 @@ class MockDataStore {
     // Create payout if status is WON
     if (status === "WON" && !leadOffer.qualifiedAt) {
       await this.createPayoutForLeadOffer(id);
+      // Also create payment obligation when lead is marked as WON
+      await this.createPaymentOnLeadWon(id);
     }
 
     return updatedLeadOffer;
@@ -748,6 +751,202 @@ class MockDataStore {
 
     this.payouts.set(id, updatedPayout);
     return updatedPayout;
+  }
+
+  // ===== Payment Operations (New Payment Tracking System) =====
+
+  /**
+   * Get all payments
+   */
+  async getPayments(): Promise<Payment[]> {
+    await delay();
+    return Array.from(this.payments.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
+  }
+
+  /**
+   * Get payment by ID
+   */
+  async getPaymentById(id: string): Promise<Payment | null> {
+    await delay();
+    return this.payments.get(id) || null;
+  }
+
+  /**
+   * Get payments by offer ID
+   */
+  async getPaymentsByOfferId(offerId: string): Promise<Payment[]> {
+    await delay();
+    return Array.from(this.payments.values())
+      .filter((payment) => payment.offerId === offerId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  /**
+   * Get payments by seller ID
+   */
+  async getPaymentsBySellerId(sellerId: string): Promise<Payment[]> {
+    await delay();
+    return Array.from(this.payments.values())
+      .filter((payment) => payment.sellerId === sellerId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  /**
+   * Get payments by lead manager ID
+   */
+  async getPaymentsByLeadManagerId(leadManagerId: string): Promise<Payment[]> {
+    await delay();
+    return Array.from(this.payments.values())
+      .filter((payment) => payment.leadManagerId === leadManagerId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  /**
+   * Create a new payment record
+   */
+  async createPayment(data: Omit<Payment, "id" | "createdAt">): Promise<Payment> {
+    await delay();
+    const newPayment: Payment = {
+      ...data,
+      id: `payment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date(),
+    };
+    this.payments.set(newPayment.id, newPayment);
+    return newPayment;
+  }
+
+  /**
+   * Update payment status
+   */
+  async updatePaymentStatus(
+    id: string,
+    status: PaymentStatus,
+    notes?: string
+  ): Promise<Payment | null> {
+    await delay();
+    const payment = this.payments.get(id);
+    if (!payment) return null;
+
+    const updatedPayment: Payment = {
+      ...payment,
+      status,
+      paidAt: status === "PAID" ? new Date() : payment.paidAt,
+      notes: notes || payment.notes,
+    };
+
+    this.payments.set(id, updatedPayment);
+    return updatedPayment;
+  }
+
+  /**
+   * Get overdue payments
+   */
+  async getOverduePayments(): Promise<Payment[]> {
+    await delay();
+    const now = new Date();
+    return Array.from(this.payments.values())
+      .filter((payment) => {
+        return (
+          payment.status === "PENDING" &&
+          new Date(payment.dueDate).getTime() < now.getTime()
+        );
+      })
+      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+  }
+
+  /**
+   * Get upcoming payments within specified days
+   */
+  async getUpcomingPayments(daysAhead: number): Promise<Payment[]> {
+    await delay();
+    const now = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + daysAhead);
+
+    return Array.from(this.payments.values())
+      .filter((payment) => {
+        const dueDate = new Date(payment.dueDate);
+        return (
+          payment.status === "PENDING" &&
+          dueDate.getTime() > now.getTime() &&
+          dueDate.getTime() <= futureDate.getTime()
+        );
+      })
+      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+  }
+
+  /**
+   * Helper: Create payment when proposal is accepted
+   * Called automatically when a proposal is accepted
+   */
+  private async createPaymentOnProposalAcceptance(leadOfferId: string): Promise<Payment | null> {
+    const leadOffer = this.leadOffers.get(leadOfferId);
+    if (!leadOffer) return null;
+
+    const offer = this.offers.get(leadOffer.offerId);
+    if (!offer) return null;
+
+    // Calculate due date (30 days from acceptance)
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 30);
+
+    const newPayment: Payment = {
+      id: `payment-acceptance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      offerId: offer.id,
+      proposalId: leadOfferId,
+      leadManagerId: leadOffer.leadManagerId,
+      sellerId: offer.sellerId,
+      leadId: leadOffer.leadId,
+      amountCLP: offer.price,
+      dueDate,
+      status: "PENDING",
+      createdAt: new Date(),
+      notes: "Payment obligation from accepted proposal",
+    };
+
+    this.payments.set(newPayment.id, newPayment);
+    return newPayment;
+  }
+
+  /**
+   * Helper: Create payment when lead is marked as WON
+   * Called automatically when lead status changes to WON
+   */
+  private async createPaymentOnLeadWon(leadOfferId: string): Promise<Payment | null> {
+    const leadOffer = this.leadOffers.get(leadOfferId);
+    if (!leadOffer) return null;
+
+    const offer = this.offers.get(leadOffer.offerId);
+    if (!offer) return null;
+
+    // Check if payment already exists for this lead offer
+    const existingPayment = Array.from(this.payments.values()).find(
+      (p) => p.proposalId === leadOfferId && p.leadId === leadOffer.leadId
+    );
+    if (existingPayment) return existingPayment;
+
+    // Calculate due date (15 days from won status)
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 15);
+
+    const newPayment: Payment = {
+      id: `payment-won-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      offerId: offer.id,
+      proposalId: leadOfferId,
+      leadManagerId: leadOffer.leadManagerId,
+      sellerId: offer.sellerId,
+      leadId: leadOffer.leadId,
+      amountCLP: offer.price,
+      dueDate,
+      status: "PENDING",
+      createdAt: new Date(),
+      notes: "Payment obligation from qualified lead (WON)",
+    };
+
+    this.payments.set(newPayment.id, newPayment);
+    return newPayment;
   }
 
   // ===== User Operations =====
@@ -1011,4 +1210,18 @@ export const mockProvider = {
     mockDataStore.retractDeal(proposalId, reason, userId),
   recordEvaluation: (proposalId: string, userId: string, userRole: "SELLER" | "LEAD_MANAGER") =>
     mockDataStore.recordEvaluation(proposalId, userId, userRole),
+
+  // Payments (New Payment Tracking System)
+  getPayments: () => mockDataStore.getPayments(),
+  getPaymentById: (id: string) => mockDataStore.getPaymentById(id),
+  getPaymentsByOfferId: (offerId: string) => mockDataStore.getPaymentsByOfferId(offerId),
+  getPaymentsBySellerId: (sellerId: string) => mockDataStore.getPaymentsBySellerId(sellerId),
+  getPaymentsByLeadManagerId: (leadManagerId: string) =>
+    mockDataStore.getPaymentsByLeadManagerId(leadManagerId),
+  createPayment: (data: Omit<Payment, "id" | "createdAt">) =>
+    mockDataStore.createPayment(data),
+  updatePaymentStatus: (id: string, status: PaymentStatus, notes?: string) =>
+    mockDataStore.updatePaymentStatus(id, status, notes),
+  getOverduePayments: () => mockDataStore.getOverduePayments(),
+  getUpcomingPayments: (daysAhead: number) => mockDataStore.getUpcomingPayments(daysAhead),
 };

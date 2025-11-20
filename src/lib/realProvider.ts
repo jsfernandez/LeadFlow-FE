@@ -7,7 +7,7 @@
  */
 
 import { apiClient, ApiError } from "./apiClient";
-import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket } from "@/types";
+import type { Offer, Lead, LeadOffer, Payout, User, LeadStatus, Rating, UserReputation, Ticket, Payment, PaymentStatus } from "@/types";
 
 /**
  * API response types (DTOs from backend)
@@ -643,6 +643,156 @@ export const realProvider = {
         return null;
       }
       console.error("[RealProvider] Error recording evaluation:", error);
+      throw error;
+    }
+  },
+
+  // ===== Payment Operations (New Payment Tracking System) =====
+
+  async getPayments(): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>("/payments");
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching payments:", error);
+      throw error;
+    }
+  },
+
+  async getPaymentById(id: string): Promise<Payment | null> {
+    try {
+      const data = await apiClient.get<Payment>(`/payments/${id}`);
+      return {
+        ...data,
+        createdAt: new Date(data.createdAt),
+        dueDate: new Date(data.dueDate),
+        paidAt: data.paidAt ? new Date(data.paidAt) : undefined,
+      };
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error fetching payment:", error);
+      throw error;
+    }
+  },
+
+  async getPaymentsByOfferId(offerId: string): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>(`/payments?offerId=${offerId}`);
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching payments by offer:", error);
+      throw error;
+    }
+  },
+
+  async getPaymentsBySellerId(sellerId: string): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>(`/payments?sellerId=${sellerId}`);
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching payments by seller:", error);
+      throw error;
+    }
+  },
+
+  async getPaymentsByLeadManagerId(leadManagerId: string): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>(`/payments?leadManagerId=${leadManagerId}`);
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching payments by lead manager:", error);
+      throw error;
+    }
+  },
+
+  async createPayment(data: Omit<Payment, "id" | "createdAt">): Promise<Payment> {
+    try {
+      const response = await apiClient.post<Payment>("/payments", data);
+      return {
+        ...response,
+        createdAt: new Date(response.createdAt),
+        dueDate: new Date(response.dueDate),
+        paidAt: response.paidAt ? new Date(response.paidAt) : undefined,
+      };
+    } catch (error) {
+      console.error("[RealProvider] Error creating payment:", error);
+      throw error;
+    }
+  },
+
+  async updatePaymentStatus(
+    id: string,
+    status: PaymentStatus,
+    notes?: string
+  ): Promise<Payment | null> {
+    try {
+      const data = await apiClient.patch<Payment>(`/payments/${id}/status`, {
+        status,
+        notes,
+      });
+      return {
+        ...data,
+        createdAt: new Date(data.createdAt),
+        dueDate: new Date(data.dueDate),
+        paidAt: data.paidAt ? new Date(data.paidAt) : undefined,
+      };
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      console.error("[RealProvider] Error updating payment status:", error);
+      throw error;
+    }
+  },
+
+  async getOverduePayments(): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>("/payments/overdue");
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching overdue payments:", error);
+      throw error;
+    }
+  },
+
+  async getUpcomingPayments(daysAhead: number): Promise<Payment[]> {
+    try {
+      const data = await apiClient.get<Payment[]>(`/payments/upcoming?days=${daysAhead}`);
+      return data.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        dueDate: new Date(p.dueDate),
+        paidAt: p.paidAt ? new Date(p.paidAt) : undefined,
+      }));
+    } catch (error) {
+      console.error("[RealProvider] Error fetching upcoming payments:", error);
       throw error;
     }
   },

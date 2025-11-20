@@ -150,7 +150,37 @@ export interface LeadOffer {
 }
 
 /**
- * Payout information
+ * Payment status types for tracking obligations
+ */
+export type PaymentStatus = 
+  | "PENDING" 
+  | "IN_GRACE_PERIOD" 
+  | "PAID" 
+  | "REJECTED" 
+  | "DISPUTED";
+
+/**
+ * Payment information - tracks payment obligations between sellers and lead managers
+ * Note: This is for tracking only, not processing payments
+ */
+export interface Payment {
+  id: string;
+  offerId: string;
+  proposalId: string; // leadOfferId
+  leadManagerId: string;
+  sellerId: string;
+  leadId?: string; // Optional: specific lead that triggered this payment
+  amountCLP: number;
+  dueDate: Date;
+  status: PaymentStatus;
+  createdAt: Date;
+  paidAt?: Date;
+  notes?: string;
+}
+
+/**
+ * Payout information (Legacy - kept for backwards compatibility)
+ * @deprecated Use Payment type instead for new implementations
  */
 export interface Payout {
   id: string;
