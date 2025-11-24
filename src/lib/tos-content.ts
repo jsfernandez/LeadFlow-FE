@@ -7,7 +7,7 @@ export const TOS_VERSION = "1.0";
 
 export const TOS_CONTENT = `TÉRMINOS Y CONDICIONES DEL PROGRAMA PILOTO DE LA PLATAFORMA LEADMANAGER.CL
 
-Última actualización: [poner fecha]
+Última actualización: 24 de noviembre de 2025
 
 Al marcar la casilla "He leído y acepto los Términos y Condiciones del Pilotaje", el Usuario (ya sea Seller o LeadManager) declara haber leído íntegramente, comprendido y aceptado el contenido de este documento, celebrando un acuerdo legalmente vinculante, válido conforme a la legislación chilena aplicable a los contratos electrónicos.
 

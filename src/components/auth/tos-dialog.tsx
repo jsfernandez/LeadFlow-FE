@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { TOS_CONTENT } from "@/lib/tos-content";
+import { useLanguage } from "@/contexts/language-context";
 
 interface TosDialogProps {
   open: boolean;
@@ -14,12 +15,14 @@ interface TosDialogProps {
  * The TOS text is in Spanish as required by Chilean law
  */
 export function TosDialog({ open, onOpenChange }: TosDialogProps) {
+  const { t } = useLanguage();
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            Términos y Condiciones del Programa Piloto
+            {t("auth.register.tosDialogTitle")}
           </DialogTitle>
         </DialogHeader>
         <div className="overflow-y-auto flex-1 pr-4 mt-4">

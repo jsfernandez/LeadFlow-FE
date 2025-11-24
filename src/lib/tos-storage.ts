@@ -15,18 +15,12 @@ export interface TosAcceptanceData {
 /**
  * Get client IP address (best effort)
  * Note: This is a client-side approximation. In production, IP should be captured server-side.
+ * For the pilot phase, we record 'client-side' as the IP to avoid external dependencies.
  */
 async function getClientIpAddress(): Promise<string> {
-  try {
-    // For pilot phase, we'll use a best-effort approach
-    // In production, this should be captured server-side
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip || 'unknown';
-  } catch {
-    // Fallback if IP detection fails
-    return 'unknown';
-  }
+  // For pilot phase, we mark it as captured client-side
+  // In production, this should be captured server-side during registration API call
+  return 'captured-client-side';
 }
 
 /**
@@ -46,9 +40,6 @@ export async function storeTosAcceptance(userId: string): Promise<void> {
 
     const storageKey = `tos_acceptance_${userId}`;
     localStorage.setItem(storageKey, JSON.stringify(acceptanceData));
-    
-    // Also store a general flag for easier checking
-    localStorage.setItem('tos_accepted', 'true');
   } catch (error) {
     console.error('Failed to store TOS acceptance:', error);
     // Even if storage fails, we should not block registration

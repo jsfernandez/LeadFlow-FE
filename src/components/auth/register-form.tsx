@@ -94,6 +94,8 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
 
     try {
       // Store TOS acceptance data before registration
+      // Note: For pilot phase with mock auth, TOS storage errors are logged but don't block registration
+      // In production with real backend, TOS acceptance should be stored server-side atomically with user creation
       await storeTosAcceptance(formData.email);
       
       // Mock registration - in real app, this would call an API to create the user
