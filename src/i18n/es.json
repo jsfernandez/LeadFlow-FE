@@ -797,7 +797,11 @@
       "passwordMismatch": "Las contraseñas no coinciden",
       "roleRequired": "Por favor seleccione un rol",
       "corporateEmailRequired": "Los vendedores deben usar una dirección de correo corporativa (Gmail, Outlook, Yahoo y Hotmail no están permitidos)",
-      "error": "Registro fallido. Por favor, inténtelo de nuevo."
+      "error": "Registro fallido. Por favor, inténtelo de nuevo.",
+      "tosAcceptance": "He leído y acepto los",
+      "tosLink": "Términos y Condiciones del Pilotaje",
+      "tosRequired": "Debe aceptar los Términos y Condiciones para continuar",
+      "tosDialogTitle": "Términos y Condiciones del Programa Piloto"
     }
   },
   "ratings": {
