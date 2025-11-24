@@ -797,7 +797,11 @@
       "passwordMismatch": "Passwords do not match",
       "roleRequired": "Please select a role",
       "corporateEmailRequired": "Sellers must use a corporate email address (Gmail, Outlook, Yahoo, and Hotmail are not allowed)",
-      "error": "Registration failed. Please try again."
+      "error": "Registration failed. Please try again.",
+      "tosAcceptance": "I have read and accept the",
+      "tosLink": "Pilot Terms and Conditions",
+      "tosRequired": "You must accept the Terms and Conditions to continue",
+      "tosDialogTitle": "Pilot Program Terms and Conditions"
     }
   },
   "ratings": {

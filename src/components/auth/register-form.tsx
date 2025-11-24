@@ -5,11 +5,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLanguage } from "@/contexts/language-context";
 import { getDashboardRoute } from "@/lib/routes";
 import { isCorporateEmail } from "@/lib/utils";
+import { storeTosAcceptance } from "@/lib/tos-storage";
+import { TosDialog } from "./tos-dialog";
 import type { UserRole } from "@/types";
 
 interface RegisterFormProps {
@@ -46,6 +49,8 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
   }));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [tosAccepted, setTosAccepted] = useState(false);
+  const [tosDialogOpen, setTosDialogOpen] = useState(false);
 
   // Save role to localStorage when it changes
   const handleRoleChange = (role: UserRole) => {
@@ -79,9 +84,18 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
       return;
     }
 
+    // Validate TOS acceptance
+    if (!tosAccepted) {
+      setError(t("auth.register.tosRequired"));
+      return;
+    }
+
     setIsLoading(true);
 
     try {
+      // Store TOS acceptance data before registration
+      await storeTosAcceptance(formData.email);
+      
       // Mock registration - in real app, this would call an API to create the user
       // For now, we'll just log them in with the selected role
       // Note: Admin role is intentionally excluded from registration for security.
@@ -201,6 +215,39 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
           />
         </div>
 
+        {/* Terms of Service Acceptance */}
+        <div className="space-y-3">
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="tos"
+              checked={tosAccepted}
+              onCheckedChange={(checked) => setTosAccepted(checked === true)}
+              disabled={isLoading}
+              aria-required="true"
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="tos"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                {t("auth.register.tosAcceptance")}{" "}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setTosDialogOpen(true);
+                  }}
+                  className="text-primary hover:underline font-semibold"
+                  disabled={isLoading}
+                >
+                  {t("auth.register.tosLink")}
+                </button>
+                <span className="text-destructive" aria-label="required"> *</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
         {error && (
           <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
             {error}
@@ -211,6 +258,9 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
           {isLoading ? t("common.loading") : t("auth.register.submit")}
         </Button>
       </form>
+
+      {/* TOS Dialog */}
+      <TosDialog open={tosDialogOpen} onOpenChange={setTosDialogOpen} />
 
       <div className="mt-6 text-center text-sm">
         <span className="text-muted-foreground">{t("auth.register.hasAccount")}</span>{" "}
