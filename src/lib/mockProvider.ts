@@ -6,7 +6,7 @@
  * Designed to match the backend API contract for seamless transition.
  */
 
-import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket, Payment, PaymentStatus } from "@/types";
+import type { Offer, LeadOffer, Payout, User, Lead, LeadStatus, Rating, UserReputation, Ticket, Payment, PaymentStatus, PreRegistroPersona, PreRegistroEmpresa } from "@/types";
 
 // Simulated API latency (in milliseconds)
 const API_LATENCY = 300;
@@ -30,6 +30,8 @@ class MockDataStore {
   private ratings: Map<string, Rating> = new Map();
   private reputations: Map<string, UserReputation> = new Map();
   private tickets: Map<string, Ticket> = new Map();
+  private preRegistrosPersonas: Map<string, PreRegistroPersona> = new Map();
+  private preRegistrosEmpresas: Map<string, PreRegistroEmpresa> = new Map();
 
   constructor() {
     this.initializeMockData();
@@ -1132,6 +1134,48 @@ class MockDataStore {
     this.leadOffers.set(proposalId, updatedProposal);
     return updatedProposal;
   }
+
+  // ===== Pre-registration Operations =====
+
+  async createPreRegistroPersona(
+    data: Omit<PreRegistroPersona, "id" | "fechaRegistro">
+  ): Promise<PreRegistroPersona> {
+    await delay();
+    const newPreRegistro: PreRegistroPersona = {
+      ...data,
+      id: `preregistro-persona-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      fechaRegistro: new Date(),
+    };
+    this.preRegistrosPersonas.set(newPreRegistro.id, newPreRegistro);
+    return newPreRegistro;
+  }
+
+  async getPreRegistrosPersonas(): Promise<PreRegistroPersona[]> {
+    await delay();
+    return Array.from(this.preRegistrosPersonas.values()).sort(
+      (a, b) => b.fechaRegistro.getTime() - a.fechaRegistro.getTime()
+    );
+  }
+
+  async createPreRegistroEmpresa(
+    data: Omit<PreRegistroEmpresa, "id" | "fechaRegistro">
+  ): Promise<PreRegistroEmpresa> {
+    await delay();
+    const newPreRegistro: PreRegistroEmpresa = {
+      ...data,
+      id: `preregistro-empresa-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      fechaRegistro: new Date(),
+    };
+    this.preRegistrosEmpresas.set(newPreRegistro.id, newPreRegistro);
+    return newPreRegistro;
+  }
+
+  async getPreRegistrosEmpresas(): Promise<PreRegistroEmpresa[]> {
+    await delay();
+    return Array.from(this.preRegistrosEmpresas.values()).sort(
+      (a, b) => b.fechaRegistro.getTime() - a.fechaRegistro.getTime()
+    );
+  }
 }
 
 // Singleton instance
@@ -1210,6 +1254,14 @@ export const mockProvider = {
     mockDataStore.retractDeal(proposalId, reason, userId),
   recordEvaluation: (proposalId: string, userId: string, userRole: "SELLER" | "LEAD_MANAGER") =>
     mockDataStore.recordEvaluation(proposalId, userId, userRole),
+
+  // Pre-registrations
+  createPreRegistroPersona: (data: Omit<PreRegistroPersona, "id" | "fechaRegistro">) =>
+    mockDataStore.createPreRegistroPersona(data),
+  getPreRegistrosPersonas: () => mockDataStore.getPreRegistrosPersonas(),
+  createPreRegistroEmpresa: (data: Omit<PreRegistroEmpresa, "id" | "fechaRegistro">) =>
+    mockDataStore.createPreRegistroEmpresa(data),
+  getPreRegistrosEmpresas: () => mockDataStore.getPreRegistrosEmpresas(),
 
   // Payments (New Payment Tracking System)
   getPayments: () => mockDataStore.getPayments(),

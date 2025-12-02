@@ -234,3 +234,31 @@ export interface Ticket {
   updatedAt: Date;
   resolvedAt?: Date;
 }
+
+/**
+ * Pre-registration for personas/conectores
+ */
+export interface PreRegistroPersona {
+  id: string;
+  nombre: string;
+  telefono: string;
+  email: string;
+  ciudad: string;
+  tipoContactos: string;
+  fechaRegistro: Date;
+}
+
+/**
+ * Pre-registration for empresas
+ */
+export interface PreRegistroEmpresa {
+  id: string;
+  empresa: string;
+  rubro: string;
+  responsable: string;
+  email: string;
+  telefono: string;
+  tamano: string;
+  tipoLead: string;
+  fechaRegistro: Date;
+}
