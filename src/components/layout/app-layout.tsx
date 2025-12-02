@@ -22,7 +22,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   // Public routes that don't require authentication
-  const publicRoutes = ["/landing", "/leadmanager"];
+  const publicRoutes = ["/landing", "/leadmanager", "/landing-empresas", "/landing-personas"];
   const isPublicRoute = publicRoutes.some(route => pathname === route);
 
   // Redirect unauthenticated users to landing page
