@@ -14,6 +14,8 @@ import { isCorporateEmail } from "@/lib/utils";
 import { storeTosAcceptance } from "@/lib/tos-storage";
 import { TosDialog } from "./tos-dialog";
 import type { UserRole } from "@/types";
+import { useRegisterUser } from "@/hooks/use-register-user";
+import { useLogin } from "@/hooks/use-login";
 
 interface RegisterFormProps {
   onToggleToLogin: () => void;
@@ -39,6 +41,19 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
   const { login } = useAuth();
   const { t } = useLanguage();
   const router = useRouter();
+
+  const registerMutation = useRegisterUser();
+  const loginMutation = useLogin();
+
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    userIdentifier: "",
+    role: "LEAD_MANAGER" as "SELLER" | "LEAD_MANAGER" | "ADMIN",
+  });
+
+  //const isLoading: boolean = registerMutation.isPending || loginMutation.isPending;
   
   const [formData, setFormData] = useState(() => ({
     name: "",
@@ -92,25 +107,58 @@ export function RegisterForm({ onToggleToLogin }: RegisterFormProps) {
 
     setIsLoading(true);
 
+    const formDataToRegister = {
+        fullName: formData.name,
+        email: formData.email,
+        passwordHash: formData.password,
+        role: formData.role,
+        userIdentifier: "16.751.285-2", // We need to add this field but we don't have it in the form yet
+    };
+
     try {
-      // Store TOS acceptance data before registration
-      // Note: For pilot phase with mock auth, TOS storage errors are logged but don't block registration
-      // In production with real backend, TOS acceptance should be stored server-side atomically with user creation
-      await storeTosAcceptance(formData.email);
-      
-      // Mock registration - in real app, this would call an API to create the user
-      // For now, we'll just log them in with the selected role
-      // Note: Admin role is intentionally excluded from registration for security.
-      // Admin users should be created through a separate administrative process.
-      login(formData.role);
-      
-      // Clear saved role from localStorage after successful registration
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("registration_role");
-      }
-      
-      // Redirect to role-specific dashboard
-      router.push(getDashboardRoute(formData.role));
+      registerMutation.mutate(formDataToRegister, {
+      onSuccess: () => {
+        // 2️⃣ Si registro ok, hacer login automático
+        loginMutation.mutate(
+          {
+            email: formData.email,
+            password: formData.password,
+          },
+          {
+            onSuccess: (data) => {
+              // 3️⃣ Guardar token (ejemplo: localStorage)
+              if (typeof window !== "undefined") {
+                localStorage.setItem("access_token", data.access_token);
+              }
+
+              // 4️⃣ all the rest de la lógica de login
+              // Store TOS acceptance data before registration
+              // Note: For pilot phase with mock auth, TOS storage errors are logged but don't block registration
+              // In production with real backend, TOS acceptance should be stored server-side atomically with user creation
+              storeTosAcceptance(formData.email).then(() => {
+                // TOS acceptance stored successfully
+                // Mock registration - in real app, this would call an API to create the user
+                // For now, we'll just log them in with the selected role
+                // Note: Admin role is intentionally excluded from registration for security.
+                // Admin users should be created through a separate administrative process.
+                login(formData.role || "LEAD_MANAGER");
+                
+                // Clear saved role from localStorage after successful registration
+                if (typeof window !== "undefined") {
+                  localStorage.removeItem("registration_role");
+                }
+                
+                // Redirect to role-specific dashboard
+                router.push(getDashboardRoute(formData.role || "LEAD_MANAGER"));
+                router.push("/dashboard");
+              }).catch((tosError) => {
+                console.error("TOS acceptance storage failed:", tosError);
+              });
+            },
+          }
+        );
+      },
+    });
     } catch {
       setError(t("auth.register.error"));
       setIsLoading(false);
