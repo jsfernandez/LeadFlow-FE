@@ -86,7 +86,7 @@ export default function SellerProposalsPage() {
   const handleUpdateStatus = async (proposalId: string, newStatus: LeadStatus) => {
     try {
       await updateStatus.mutateAsync({ id: proposalId, status: newStatus });
-      let successMessage = t("sellerProposals.updateError");
+      let successMessage = "";
       
       if (newStatus === "IN_PROGRESS") {
         successMessage = t("sellerProposals.startManagementSuccess") || "Lead management started successfully";
@@ -94,6 +94,9 @@ export default function SellerProposalsPage() {
         successMessage = t("sellerProposals.acceptSuccess");
       } else if (newStatus === "LOST") {
         successMessage = t("sellerProposals.rejectSuccess");
+      } else {
+        // Default success message for any other status
+        successMessage = "Proposal status updated successfully";
       }
       
       toast.success(successMessage);
