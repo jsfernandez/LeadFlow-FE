@@ -664,10 +664,13 @@ class MockDataStore {
     const leadOffer = this.leadOffers.get(id);
     if (!leadOffer) return null;
 
+    // Only set qualifiedAt for final statuses (WON/LOST), not for IN_PROGRESS
+    const shouldSetQualifiedAt = status === "WON" || status === "LOST";
+
     const updatedLeadOffer: LeadOffer = {
       ...leadOffer,
       status,
-      qualifiedAt: qualifiedAt || (status !== "PENDING" ? new Date() : undefined),
+      qualifiedAt: qualifiedAt || (shouldSetQualifiedAt ? new Date() : undefined),
     };
 
     this.leadOffers.set(id, updatedLeadOffer);

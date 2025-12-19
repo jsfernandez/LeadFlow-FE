@@ -64,8 +64,13 @@ export function useFilteredProposals(
           else compareValue = new Date(a.qualifiedAt).getTime() - new Date(b.qualifiedAt).getTime();
           break;
         case "status":
-          // Define status order: PENDING, WON, LOST
-          const statusOrder = { PENDING: 1, WON: 2, LOST: 3 };
+          // Define status order: PENDING, IN_PROGRESS, WON, LOST
+          const statusOrder: Record<LeadStatus, number> = { 
+            PENDING: 1, 
+            IN_PROGRESS: 2, 
+            WON: 3, 
+            LOST: 4 
+          };
           compareValue = statusOrder[a.status] - statusOrder[b.status];
           break;
       }
@@ -84,13 +89,18 @@ export function useProposalFilterOptions(proposals: LeadOffer[] | undefined) {
   return useMemo(() => {
     if (!proposals || proposals.length === 0) {
       return {
-        statuses: ["PENDING", "WON", "LOST"] as LeadStatus[],
+        statuses: ["PENDING", "IN_PROGRESS", "WON", "LOST"] as LeadStatus[],
       };
     }
 
     const statuses = Array.from(new Set(proposals.map((p) => p.status))) as LeadStatus[];
     // Sort in a logical order
-    const statusOrder = { PENDING: 1, WON: 2, LOST: 3 };
+    const statusOrder: Record<LeadStatus, number> = { 
+      PENDING: 1, 
+      IN_PROGRESS: 2, 
+      WON: 3, 
+      LOST: 4 
+    };
     statuses.sort((a, b) => statusOrder[a] - statusOrder[b]);
 
     return {

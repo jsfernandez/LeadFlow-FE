@@ -53,7 +53,7 @@ interface LeadOfferDTO {
   leadManagerId: string;
   leadId: string;
   description?: string;
-  status: "PENDING" | "WON" | "LOST";
+  status: "PENDING" | "IN_PROGRESS" | "WON" | "LOST";
   assignedAt?: string;
   qualifiedAt?: string;
   createdAt: string;
