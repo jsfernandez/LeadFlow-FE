@@ -10,8 +10,12 @@ export type BillingType = "BOLETA" | "FACTURA" | "AMBOS";
 
 /**
  * Lead qualification status
+ * - PENDING: Initial state when proposal is submitted
+ * - IN_PROGRESS: Seller has started working on the lead (contacted)
+ * - WON: Lead successfully converted
+ * - LOST: Lead not converted or withdrawn
  */
-export type LeadStatus = "PENDING" | "WON" | "LOST";
+export type LeadStatus = "PENDING" | "IN_PROGRESS" | "WON" | "LOST";
 
 /**
  * Deal status for proposals after completion

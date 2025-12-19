@@ -21,6 +21,7 @@
     "inactive": "Inactivo",
     "archived": "Archivado",
     "pending": "Pendiente",
+    "in_progress": "En Gestión",
     "accepted": "Aceptado",
     "rejected": "Rechazado",
     "won": "Ganado",
@@ -452,6 +453,7 @@
     "offerInfo": "Información de la Oferta",
     "managerInfo": "Información del Gestor de Leads",
     "proposalStatus": "Estado de la Propuesta",
+    "startManagementSuccess": "Gestión de lead iniciada exitosamente",
     "acceptSuccess": "Propuesta aceptada exitosamente",
     "rejectSuccess": "Propuesta rechazada exitosamente",
     "updateError": "Error al actualizar el estado de la propuesta",
@@ -459,10 +461,14 @@
     "withdrawalWindow": "Ventana de Calidad de 24 Horas",
     "withdrawalNotice": "Puede retirar este lead aceptado dentro de 24 horas hábiles si la calidad es deficiente (ej: cliente sin contexto, desconoce el producto/servicio). Tiempo restante: ",
     "actions": {
+      "startManagement": "Iniciar Gestión",
       "accept": "Aceptar propuesta",
       "reject": "Rechazar propuesta",
-      "withdraw": "Retirar Lead (Calidad Deficiente)"
-    }
+      "withdraw": "Retirar Lead (Calidad Deficiente)",
+      "markWon": "Marcar como Ganado",
+      "markLost": "Marcar como Perdido"
+    },
+    "startManagementNotice": "Haga clic en 'Iniciar Gestión' para revelar los datos de contacto del lead y comenzar a trabajar en esta oportunidad. Esta acción crea un registro de su compromiso con el lead."
   },
   "payouts": {
     "title": "Pagos",

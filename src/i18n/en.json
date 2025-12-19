@@ -21,6 +21,7 @@
     "inactive": "Inactive",
     "archived": "Archived",
     "pending": "Pending",
+    "in_progress": "In Progress",
     "accepted": "Accepted",
     "rejected": "Rejected",
     "won": "Won",
@@ -452,6 +453,7 @@
     "offerInfo": "Offer Information",
     "managerInfo": "Lead Manager Information",
     "proposalStatus": "Proposal Status",
+    "startManagementSuccess": "Lead management started successfully",
     "acceptSuccess": "Proposal accepted successfully",
     "rejectSuccess": "Proposal rejected successfully",
     "updateError": "Failed to update proposal status",
@@ -459,10 +461,14 @@
     "withdrawalWindow": "24-Hour Quality Window",
     "withdrawalNotice": "You can withdraw this accepted lead within 24 business hours if the quality is poor (e.g., client lacks context, unfamiliar with product/service). Time remaining: ",
     "actions": {
+      "startManagement": "Start Management",
       "accept": "Accept proposal",
       "reject": "Reject proposal",
-      "withdraw": "Withdraw Lead (Poor Quality)"
-    }
+      "withdraw": "Withdraw Lead (Poor Quality)",
+      "markWon": "Mark as Won",
+      "markLost": "Mark as Lost"
+    },
+    "startManagementNotice": "Click 'Start Management' to reveal lead contact details and begin working on this opportunity. This action creates a record of your engagement with the lead."
   },
   "payouts": {
     "title": "Payouts",

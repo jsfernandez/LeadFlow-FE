@@ -102,6 +102,7 @@ export default function ProposalsPage() {
   const getStatusBadge = (status: LeadStatus) => {
     const variants: Record<LeadStatus, string> = {
       PENDING: "bg-yellow-600 text-white",
+      IN_PROGRESS: "bg-blue-600 text-white",
       WON: "bg-green-600 text-white",
       LOST: "bg-red-600 text-white",
     };
@@ -217,6 +218,7 @@ export default function ProposalsPage() {
                 <SelectContent>
                   <SelectItem value="all">{t("proposals.filters.allStatuses")}</SelectItem>
                   <SelectItem value="PENDING">{t("common.pending")}</SelectItem>
+                  <SelectItem value="IN_PROGRESS">{t("common.in_progress")}</SelectItem>
                   <SelectItem value="WON">{t("common.won")}</SelectItem>
                   <SelectItem value="LOST">{t("common.lost")}</SelectItem>
                 </SelectContent>

@@ -14,12 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
@@ -86,8 +86,20 @@ export default function SellerProposalsPage() {
   const handleUpdateStatus = async (proposalId: string, newStatus: LeadStatus) => {
     try {
       await updateStatus.mutateAsync({ id: proposalId, status: newStatus });
-      const successKey = newStatus === "WON" ? "acceptSuccess" : "rejectSuccess";
-      toast.success(t(`sellerProposals.${successKey}`));
+      let successMessage = "";
+      
+      if (newStatus === "IN_PROGRESS") {
+        successMessage = t("sellerProposals.startManagementSuccess") || "Lead management started successfully";
+      } else if (newStatus === "WON") {
+        successMessage = t("sellerProposals.acceptSuccess");
+      } else if (newStatus === "LOST") {
+        successMessage = t("sellerProposals.rejectSuccess");
+      } else {
+        // Default success message for any other status
+        successMessage = "Proposal status updated successfully";
+      }
+      
+      toast.success(successMessage);
       setIsDrawerOpen(false);
     } catch {
       toast.error(t("sellerProposals.updateError"));
@@ -97,6 +109,7 @@ export default function SellerProposalsPage() {
   const getStatusBadge = (status: LeadStatus) => {
     const variants: Record<LeadStatus, string> = {
       PENDING: "bg-yellow-600 text-white",
+      IN_PROGRESS: "bg-blue-600 text-white",
       WON: "bg-green-600 text-white",
       LOST: "bg-red-600 text-white",
     };
@@ -146,7 +159,7 @@ export default function SellerProposalsPage() {
     );
   };
 
-  // Component to display lead info - masked until proposal accepted
+  // Component to display lead info - masked until proposal accepted or in progress
   const LeadCell = ({ leadId, proposalStatus }: { leadId: string; proposalStatus: LeadStatus }) => {
     const { data: lead } = useQuery({
       queryKey: ["lead", leadId],
@@ -158,15 +171,15 @@ export default function SellerProposalsPage() {
       return <span className="text-sm text-muted-foreground">{t("common.loading")}</span>;
     }
 
-    const isAccepted = proposalStatus === "WON";
+    const showFullData = proposalStatus === "WON" || proposalStatus === "IN_PROGRESS";
 
     return (
       <div className="flex flex-col gap-1">
         <span className="text-sm font-medium">
-          {isAccepted ? lead.fullName : maskLeadData(lead.fullName, "name")}
+          {showFullData ? lead.fullName : maskLeadData(lead.fullName, "name")}
         </span>
         <span className="text-xs text-muted-foreground">
-          {isAccepted ? lead.companyName : maskLeadData(lead.companyName, "name")}
+          {showFullData ? lead.companyName : maskLeadData(lead.companyName, "name")}
         </span>
       </div>
     );
@@ -259,9 +272,8 @@ export default function SellerProposalsPage() {
 
     if (!proposal) return null;
 
-    // Only show full lead data if proposal is accepted (WON status)
-    const isAccepted = proposal.status === "WON";
-    const showFullLeadData = isAccepted;
+    // Show full lead data if proposal is accepted (WON) or in progress (IN_PROGRESS)
+    const showFullLeadData = proposal.status === "WON" || proposal.status === "IN_PROGRESS";
 
     return (
       <div className="space-y-6">
@@ -381,15 +393,43 @@ export default function SellerProposalsPage() {
           </span>
         </div>
 
-        {/* Actions (only for PENDING proposals) */}
+        {/* Actions for PENDING proposals - Start Management or Reject */}
         {proposal.status === "PENDING" && (
+          <div className="pt-4 border-t space-y-3">
+            <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-md">
+              <p className="text-xs text-blue-600 dark:text-blue-400">
+                {t("sellerProposals.startManagementNotice")}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => handleUpdateStatus(proposal.id, "IN_PROGRESS")}
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                disabled={updateStatus.isPending}
+              >
+                {t("sellerProposals.actions.startManagement")}
+              </Button>
+              <Button
+                onClick={() => handleUpdateStatus(proposal.id, "LOST")}
+                variant="outline"
+                className="flex-1"
+                disabled={updateStatus.isPending}
+              >
+                {t("sellerProposals.actions.reject")}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Actions for IN_PROGRESS proposals - Mark as Won or Lost */}
+        {proposal.status === "IN_PROGRESS" && (
           <div className="flex gap-2 pt-4 border-t">
             <Button
               onClick={() => handleUpdateStatus(proposal.id, "WON")}
               className="flex-1 bg-green-600 hover:bg-green-700"
               disabled={updateStatus.isPending}
             >
-              {t("sellerProposals.actions.accept")}
+              {t("sellerProposals.actions.markWon")}
             </Button>
             <Button
               onClick={() => handleUpdateStatus(proposal.id, "LOST")}
@@ -397,7 +437,7 @@ export default function SellerProposalsPage() {
               className="flex-1"
               disabled={updateStatus.isPending}
             >
-              {t("sellerProposals.actions.reject")}
+              {t("sellerProposals.actions.markLost")}
             </Button>
           </div>
         )}
@@ -482,6 +522,7 @@ export default function SellerProposalsPage() {
                 <SelectContent>
                   <SelectItem value="all">{t("sellerProposals.filters.all")}</SelectItem>
                   <SelectItem value="PENDING">{t("common.pending")}</SelectItem>
+                  <SelectItem value="IN_PROGRESS">{t("common.in_progress")}</SelectItem>
                   <SelectItem value="WON">{t("common.won")}</SelectItem>
                   <SelectItem value="LOST">{t("common.lost")}</SelectItem>
                 </SelectContent>
@@ -571,20 +612,20 @@ export default function SellerProposalsPage() {
         </CardContent>
       </Card>
 
-      {/* Proposal Details Drawer */}
-      <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <SheetContent side="right" className="w-[90vw] sm:w-[540px] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>{t("sellerProposals.detailsTitle")}</SheetTitle>
-            <SheetDescription>
+      {/* Proposal Details Dialog */}
+      <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("sellerProposals.detailsTitle")}</DialogTitle>
+            <DialogDescription>
               {selectedProposal && `ID: ${selectedProposal.id.substring(0, 8)}...`}
-            </SheetDescription>
-          </SheetHeader>
+            </DialogDescription>
+          </DialogHeader>
           <div className="mt-6">
             <ProposalDetailsDrawer proposal={selectedProposal} />
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
