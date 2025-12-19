@@ -241,6 +241,9 @@
       "offerDuration": "Duración de la Oferta (días)",
       "offerDurationPlaceholder": "Número de días que la oferta es válida",
       "allowConsultations": "Permitir Consultas",
+      "qualificationWindow": "Ventana de Calificación (horas)",
+      "qualificationWindowPlaceholder": "24",
+      "qualificationWindowHelp": "Tiempo en horas que los vendedores tienen para evaluar y calificar el lead antes de comprometerse al pago. Recomendado: 24-72 horas.",
       "selectOption": "Seleccionar opción",
       "yes": "Sí",
       "no": "No",
@@ -265,10 +268,12 @@
         "clientType": "Tipo de Cliente",
         "offerDuration": "Duración de la Oferta",
         "allowConsultations": "Permitir Consultas",
+        "qualificationWindow": "Ventana de Calificación",
         "acceptanceCriteria": "Criterios de Aceptación",
         "yes": "Sí",
         "no": "No",
-        "days": "días"
+        "days": "días",
+        "hours": "horas"
       },
       "messages": {
         "consultationsAvailable": "Canal de Mensajes Interno Disponible:",
@@ -458,6 +463,10 @@
     "rejectSuccess": "Propuesta rechazada exitosamente",
     "updateError": "Error al actualizar el estado de la propuesta",
     "leadDataHiddenNotice": "Los detalles de contacto del lead están ocultos hasta que acepte esta propuesta. Esto garantiza la trazabilidad adecuada y evita el acceso no autorizado a los leads.",
+    "qualificationWindow": "Ventana de Calificación",
+    "qualificationWindowNotice": "Tiene tiempo para evaluar este lead antes de comprometerse al pago. Tiempo restante: ",
+    "qualificationExpired": "La ventana de calificación ha expirado. Por favor, tome una decisión sobre este lead.",
+    "totalQualificationTime": "Tiempo total de calificación: ",
     "withdrawalWindow": "Ventana de Calidad de 24 Horas",
     "withdrawalNotice": "Puede retirar este lead aceptado dentro de 24 horas hábiles si la calidad es deficiente (ej: cliente sin contexto, desconoce el producto/servicio). Tiempo restante: ",
     "actions": {
@@ -465,10 +474,10 @@
       "accept": "Aceptar propuesta",
       "reject": "Rechazar propuesta",
       "withdraw": "Retirar Lead (Calidad Deficiente)",
-      "markWon": "Marcar como Ganado",
-      "markLost": "Marcar como Perdido"
+      "markWon": "Marcar como Calificado (Ganado)",
+      "markLost": "Marcar como No Calificado (Perdido)"
     },
-    "startManagementNotice": "Haga clic en 'Iniciar Gestión' para revelar los datos de contacto del lead y comenzar a trabajar en esta oportunidad. Esta acción crea un registro de su compromiso con el lead."
+    "startManagementNotice": "Haga clic en 'Iniciar Gestión' para revelar los datos de contacto del lead y comenzar a trabajar en esta oportunidad. Esta acción crea un registro de su compromiso con el lead. Tendrá una ventana de tiempo configurable para evaluar el lead antes de comprometerse al pago."
   },
   "payouts": {
     "title": "Pagos",

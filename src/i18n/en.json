@@ -241,6 +241,9 @@
       "offerDuration": "Offer Duration (days)",
       "offerDurationPlaceholder": "Number of days the offer is valid",
       "allowConsultations": "Allow Consultations",
+      "qualificationWindow": "Qualification Window (hours)",
+      "qualificationWindowPlaceholder": "24",
+      "qualificationWindowHelp": "Time in hours that sellers have to evaluate and qualify the lead before committing to payment. Recommended: 24-72 hours.",
       "selectOption": "Select option",
       "yes": "Yes",
       "no": "No",
@@ -265,10 +268,12 @@
         "clientType": "Client Type",
         "offerDuration": "Offer Duration",
         "allowConsultations": "Allow Consultations",
+        "qualificationWindow": "Qualification Window",
         "acceptanceCriteria": "Acceptance Criteria",
         "yes": "Yes",
         "no": "No",
-        "days": "days"
+        "days": "days",
+        "hours": "hours"
       },
       "messages": {
         "consultationsAvailable": "Internal Message Channel Available:",
@@ -458,6 +463,10 @@
     "rejectSuccess": "Proposal rejected successfully",
     "updateError": "Failed to update proposal status",
     "leadDataHiddenNotice": "Lead contact details are hidden until you accept this proposal. This ensures proper traceability and prevents unauthorized lead access.",
+    "qualificationWindow": "Qualification Window",
+    "qualificationWindowNotice": "You have time to evaluate this lead before committing to payment. Time remaining: ",
+    "qualificationExpired": "The qualification window has expired. Please make a decision on this lead.",
+    "totalQualificationTime": "Total qualification time: ",
     "withdrawalWindow": "24-Hour Quality Window",
     "withdrawalNotice": "You can withdraw this accepted lead within 24 business hours if the quality is poor (e.g., client lacks context, unfamiliar with product/service). Time remaining: ",
     "actions": {
@@ -465,10 +474,10 @@
       "accept": "Accept proposal",
       "reject": "Reject proposal",
       "withdraw": "Withdraw Lead (Poor Quality)",
-      "markWon": "Mark as Won",
-      "markLost": "Mark as Lost"
+      "markWon": "Mark as Qualified (Won)",
+      "markLost": "Mark as Not Qualified (Lost)"
     },
-    "startManagementNotice": "Click 'Start Management' to reveal lead contact details and begin working on this opportunity. This action creates a record of your engagement with the lead."
+    "startManagementNotice": "Click 'Start Management' to reveal lead contact details and begin working on this opportunity. This action creates a record of your engagement with the lead. You will have a configurable time window to evaluate the lead before committing to payment."
   },
   "payouts": {
     "title": "Payouts",

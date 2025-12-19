@@ -211,8 +211,46 @@ export default function SellerProposalsPage() {
     return "***";
   };
 
-  // Helper function to check if proposal is within 24-hour withdrawal window
-  // Business hours: Monday-Friday, 9 AM - 5 PM
+  // Helper function to calculate qualification window status
+  // Uses the qualificationWindow from the offer (configurable hours)
+  const getQualificationWindowStatus = (proposal: LeadOffer, offer: { qualificationWindow?: number } | null | undefined): { 
+    isWithinWindow: boolean; 
+    remainingTime: string;
+    isExpired: boolean;
+  } => {
+    // Only applicable for IN_PROGRESS status when assignedAt is set
+    if (proposal.status !== "IN_PROGRESS" || !proposal.assignedAt) {
+      return { isWithinWindow: false, remainingTime: "", isExpired: false };
+    }
+
+    // Default to 24 hours if not specified in offer
+    const qualificationWindowHours = offer?.qualificationWindow || 24;
+    
+    const assignedDate = new Date(proposal.assignedAt);
+    const now = new Date();
+    const hoursElapsed = (now.getTime() - assignedDate.getTime()) / (1000 * 60 * 60);
+    
+    const isWithinWindow = hoursElapsed < qualificationWindowHours;
+    const remainingHours = Math.max(0, qualificationWindowHours - hoursElapsed);
+    
+    let remainingTime = "";
+    if (isWithinWindow) {
+      if (remainingHours >= 1) {
+        remainingTime = `${Math.floor(remainingHours)}h ${Math.floor((remainingHours % 1) * 60)}m`;
+      } else {
+        remainingTime = `${Math.floor(remainingHours * 60)}m`;
+      }
+    }
+    
+    return {
+      isWithinWindow,
+      remainingTime,
+      isExpired: !isWithinWindow && hoursElapsed >= qualificationWindowHours
+    };
+  };
+
+  // Helper function to check if proposal is within 24-hour withdrawal window (for WON status)
+  // This is the quality check window after accepting
   const canWithdrawProposal = (proposal: LeadOffer): { canWithdraw: boolean; remainingTime: string } => {
     if (proposal.status !== "WON" || !proposal.assignedAt) {
       return { canWithdraw: false, remainingTime: "" };
@@ -422,25 +460,63 @@ export default function SellerProposalsPage() {
         )}
 
         {/* Actions for IN_PROGRESS proposals - Mark as Won or Lost */}
-        {proposal.status === "IN_PROGRESS" && (
-          <div className="flex gap-2 pt-4 border-t">
-            <Button
-              onClick={() => handleUpdateStatus(proposal.id, "WON")}
-              className="flex-1 bg-green-600 hover:bg-green-700"
-              disabled={updateStatus.isPending}
-            >
-              {t("sellerProposals.actions.markWon")}
-            </Button>
-            <Button
-              onClick={() => handleUpdateStatus(proposal.id, "LOST")}
-              variant="outline"
-              className="flex-1"
-              disabled={updateStatus.isPending}
-            >
-              {t("sellerProposals.actions.markLost")}
-            </Button>
-          </div>
-        )}
+        {proposal.status === "IN_PROGRESS" && (() => {
+          const qualificationStatus = getQualificationWindowStatus(proposal, offer);
+          return (
+            <div className="pt-4 border-t space-y-3">
+              {/* Qualification Window Info */}
+              <div className={`p-3 border rounded-md ${
+                qualificationStatus.isExpired 
+                  ? "bg-red-500/10 border-red-500/20" 
+                  : "bg-amber-500/10 border-amber-500/20"
+              }`}>
+                <p className={`text-xs font-semibold mb-1 ${
+                  qualificationStatus.isExpired 
+                    ? "text-red-600 dark:text-red-400" 
+                    : "text-amber-600 dark:text-amber-400"
+                }`}>
+                  {t("sellerProposals.qualificationWindow") || "Qualification Window"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {qualificationStatus.isExpired ? (
+                    t("sellerProposals.qualificationExpired") || "The qualification window has expired. Please make a decision on this lead."
+                  ) : qualificationStatus.isWithinWindow ? (
+                    <>
+                      {t("sellerProposals.qualificationWindowNotice") || "You have time to evaluate this lead before committing to payment. Time remaining: "}
+                      <strong className="text-foreground">{qualificationStatus.remainingTime}</strong>
+                    </>
+                  ) : (
+                    t("sellerProposals.qualificationWindowNotice") || "Evaluating lead qualification..."
+                  )}
+                </p>
+                {offer?.qualificationWindow && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t("sellerProposals.totalQualificationTime") || "Total qualification time: "}{offer.qualificationWindow}h
+                  </p>
+                )}
+              </div>
+
+              {/* Final Decision Buttons */}
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => handleUpdateStatus(proposal.id, "WON")}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  disabled={updateStatus.isPending}
+                >
+                  {t("sellerProposals.actions.markWon")}
+                </Button>
+                <Button
+                  onClick={() => handleUpdateStatus(proposal.id, "LOST")}
+                  variant="outline"
+                  className="flex-1"
+                  disabled={updateStatus.isPending}
+                >
+                  {t("sellerProposals.actions.markLost")}
+                </Button>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Withdrawal option for accepted proposals within 24 business hours */}
         {proposal.status === "WON" && (() => {

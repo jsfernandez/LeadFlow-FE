@@ -89,6 +89,7 @@ class MockDataStore {
         acceptanceCriteria: "Must have minimum $10M ARR and be actively seeking solutions",
         offerDuration: 30,
         allowConsultations: true,
+        qualificationWindow: 48, // 48 hours to qualify the lead
         createdAt: new Date("2024-10-15"),
         updatedAt: new Date("2024-10-15"),
       },
@@ -105,6 +106,7 @@ class MockDataStore {
         acceptanceCriteria: "Verified email and phone contact information",
         offerDuration: 45,
         allowConsultations: false,
+        qualificationWindow: 24, // 24 hours to qualify the lead
         createdAt: new Date("2024-10-20"),
         updatedAt: new Date("2024-10-20"),
       },
@@ -121,6 +123,7 @@ class MockDataStore {
         acceptanceCriteria: "C-level or VP-level decision makers only",
         offerDuration: 60,
         allowConsultations: true,
+        qualificationWindow: 72, // 72 hours to qualify the lead
         createdAt: new Date("2024-11-01"),
         updatedAt: new Date("2024-11-01"),
       },
@@ -134,6 +137,7 @@ class MockDataStore {
         leadType: "Startup",
         leadQuantity: 15,
         clientType: "Early-stage Startups",
+        qualificationWindow: 24, // 24 hours to qualify the lead
         createdAt: new Date("2024-11-03"),
         updatedAt: new Date("2024-11-03"),
       },
@@ -308,6 +312,48 @@ class MockDataStore {
         createdAt: new Date("2024-10-28"),
         updatedAt: new Date("2024-10-28"),
       },
+      {
+        id: "lead-9",
+        fullName: "David Martinez",
+        leadId: "LEAD-009",
+        email: "contact@financegroup.com",
+        phone: "+1-555-0109",
+        companyName: "Finance Group International",
+        title: "MBA Finance",
+        country: "USA",
+        city: "Boston",
+        industry: "Financial Services",
+        profileUrl: "https://financegroup.com",
+        positionCode: "CFO",
+        gender: "MALE",
+        minRevenue: 2000,
+        maxRevenue: 8000,
+        source: "Industry Network",
+        tags: ["finance", "enterprise"],
+        createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+      },
+      {
+        id: "lead-10",
+        fullName: "Sarah Wilson",
+        leadId: "LEAD-010",
+        email: "hello@retailpro.com",
+        phone: "+1-555-0110",
+        companyName: "RetailPro Solutions",
+        title: "BSc Retail Management",
+        country: "USA",
+        city: "Miami",
+        industry: "Retail Technology",
+        profileUrl: "https://retailpro.com",
+        positionCode: "Director of Operations",
+        gender: "FEMALE",
+        minRevenue: 700,
+        maxRevenue: 3000,
+        source: "Trade Show",
+        tags: ["retail", "ecommerce"],
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      },
     ];
 
     leads.forEach(lead => this.leads.set(lead.id, lead));
@@ -399,6 +445,27 @@ class MockDataStore {
         assignedAt: new Date("2024-10-28"),
         qualifiedAt: new Date("2024-10-30"),
         createdAt: new Date("2024-10-28"),
+      },
+      // IN_PROGRESS proposals for testing qualification window
+      {
+        id: "lead-offer-9",
+        offerId: "offer-1",
+        leadManagerId: leadManager1.id,
+        leadId: "lead-9",
+        description: "Financial services company evaluating lead quality",
+        status: "IN_PROGRESS",
+        assignedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago (within 48h window)
+        createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+      },
+      {
+        id: "lead-offer-10",
+        offerId: "offer-2",
+        leadManagerId: leadManager1.id,
+        leadId: "lead-10",
+        description: "Retail company currently qualifying the lead",
+        status: "IN_PROGRESS",
+        assignedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago (within 24h window)
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
       },
     ];
 
@@ -669,9 +736,13 @@ class MockDataStore {
     // but hasn't yet determined the final outcome (qualified or not).
     const shouldSetQualifiedAt = status === "WON" || status === "LOST";
 
+    // Set assignedAt when transitioning to IN_PROGRESS (this starts the qualification window)
+    const shouldSetAssignedAt = status === "IN_PROGRESS" && !leadOffer.assignedAt;
+
     const updatedLeadOffer: LeadOffer = {
       ...leadOffer,
       status,
+      assignedAt: shouldSetAssignedAt ? new Date() : leadOffer.assignedAt,
       qualifiedAt: qualifiedAt || (shouldSetQualifiedAt ? new Date() : undefined),
     };
 
