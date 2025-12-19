@@ -14,12 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState, EmptyStateIcons } from "@/components/ui/empty-state";
 import { ReputationBadge } from "@/components/ui/reputation-badge";
@@ -612,20 +612,20 @@ export default function SellerProposalsPage() {
         </CardContent>
       </Card>
 
-      {/* Proposal Details Drawer */}
-      <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <SheetContent side="right" className="w-[90vw] sm:w-[540px] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>{t("sellerProposals.detailsTitle")}</SheetTitle>
-            <SheetDescription>
+      {/* Proposal Details Dialog */}
+      <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("sellerProposals.detailsTitle")}</DialogTitle>
+            <DialogDescription>
               {selectedProposal && `ID: ${selectedProposal.id.substring(0, 8)}...`}
-            </SheetDescription>
-          </SheetHeader>
+            </DialogDescription>
+          </DialogHeader>
           <div className="mt-6">
             <ProposalDetailsDrawer proposal={selectedProposal} />
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
