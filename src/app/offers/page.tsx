@@ -81,6 +81,7 @@ export default function OffersPage() {
     acceptanceCriteria: "",
     offerDuration: "",
     allowConsultations: "no",
+    qualificationWindow: "",
   });
 
   const [proposalFormData, setProposalFormData] = useState({
@@ -169,6 +170,7 @@ export default function OffersPage() {
         ...(offerFormData.allowConsultations && offerFormData.allowConsultations !== "no" && { 
           allowConsultations: offerFormData.allowConsultations === "yes" 
         }),
+        ...(offerFormData.qualificationWindow && { qualificationWindow: parseInt(offerFormData.qualificationWindow, 10) }),
       };
 
       const validatedData = createOfferSchema.parse(offerData);
@@ -185,6 +187,7 @@ export default function OffersPage() {
         acceptanceCriteria: "",
         offerDuration: "",
         allowConsultations: "no",
+        qualificationWindow: "",
       });
       setIsOfferDisclaimerOpen(false);
       setIsCreateDialogOpen(false);
@@ -769,6 +772,21 @@ export default function OffersPage() {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="qualificationWindow">{t("offers.createDialog.qualificationWindow")}</Label>
+                      <Input
+                        id="qualificationWindow"
+                        type="number"
+                        placeholder={t("offers.createDialog.qualificationWindowPlaceholder")}
+                        value={offerFormData.qualificationWindow || ""}
+                        onChange={(e) => setOfferFormData({ ...offerFormData, qualificationWindow: e.target.value })}
+                        min="1"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        {t("offers.createDialog.qualificationWindowHelp")}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="space-y-2 sm:col-span-2">
@@ -1079,6 +1097,12 @@ export default function OffersPage() {
                             <Badge className="bg-gray-600 text-white">{t("offers.detailDialog.fields.no")}</Badge>
                           )}
                         </p>
+                      </div>
+                    )}
+                    {selectedOffer.qualificationWindow && (
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("offers.detailDialog.fields.qualificationWindow")}</p>
+                        <p className="text-sm font-medium">{selectedOffer.qualificationWindow} {t("offers.detailDialog.fields.hours")}</p>
                       </div>
                     )}
                   </div>

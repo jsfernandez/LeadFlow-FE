@@ -22,6 +22,7 @@ export const createOfferSchema = z.object({
   acceptanceCriteria: z.string().max(1000, "Acceptance criteria must be less than 1000 characters").optional(),
   offerDuration: z.number().int().positive("Offer duration must be a positive integer").optional(),
   allowConsultations: z.boolean().optional(),
+  qualificationWindow: z.number().int().positive("Qualification window must be a positive integer (hours)").optional(),
 });
 
 /**

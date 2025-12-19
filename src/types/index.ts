@@ -99,6 +99,7 @@ export interface Offer {
   acceptanceCriteria?: string;
   offerDuration?: number; // in days
   allowConsultations?: boolean;
+  qualificationWindow?: number; // Time window in hours for lead qualification (configurable per offer)
   createdAt: Date;
   updatedAt: Date;
 }

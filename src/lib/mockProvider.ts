@@ -89,6 +89,7 @@ class MockDataStore {
         acceptanceCriteria: "Must have minimum $10M ARR and be actively seeking solutions",
         offerDuration: 30,
         allowConsultations: true,
+        qualificationWindow: 48, // 48 hours to qualify the lead
         createdAt: new Date("2024-10-15"),
         updatedAt: new Date("2024-10-15"),
       },
@@ -105,6 +106,7 @@ class MockDataStore {
         acceptanceCriteria: "Verified email and phone contact information",
         offerDuration: 45,
         allowConsultations: false,
+        qualificationWindow: 24, // 24 hours to qualify the lead
         createdAt: new Date("2024-10-20"),
         updatedAt: new Date("2024-10-20"),
       },
@@ -121,6 +123,7 @@ class MockDataStore {
         acceptanceCriteria: "C-level or VP-level decision makers only",
         offerDuration: 60,
         allowConsultations: true,
+        qualificationWindow: 72, // 72 hours to qualify the lead
         createdAt: new Date("2024-11-01"),
         updatedAt: new Date("2024-11-01"),
       },
@@ -134,6 +137,7 @@ class MockDataStore {
         leadType: "Startup",
         leadQuantity: 15,
         clientType: "Early-stage Startups",
+        qualificationWindow: 24, // 24 hours to qualify the lead
         createdAt: new Date("2024-11-03"),
         updatedAt: new Date("2024-11-03"),
       },
@@ -669,9 +673,13 @@ class MockDataStore {
     // but hasn't yet determined the final outcome (qualified or not).
     const shouldSetQualifiedAt = status === "WON" || status === "LOST";
 
+    // Set assignedAt when transitioning to IN_PROGRESS (this starts the qualification window)
+    const shouldSetAssignedAt = status === "IN_PROGRESS" && !leadOffer.assignedAt;
+
     const updatedLeadOffer: LeadOffer = {
       ...leadOffer,
       status,
+      assignedAt: shouldSetAssignedAt ? new Date() : leadOffer.assignedAt,
       qualifiedAt: qualifiedAt || (shouldSetQualifiedAt ? new Date() : undefined),
     };
 
