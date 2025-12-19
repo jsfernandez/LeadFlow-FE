@@ -213,7 +213,7 @@ export default function SellerProposalsPage() {
 
   // Helper function to calculate qualification window status
   // Uses the qualificationWindow from the offer (configurable hours)
-  const getQualificationWindowStatus = (proposal: LeadOffer, offer: { qualificationWindow?: number } | null): { 
+  const getQualificationWindowStatus = (proposal: LeadOffer, offer: { qualificationWindow?: number } | null | undefined): { 
     isWithinWindow: boolean; 
     remainingTime: string;
     isExpired: boolean;
@@ -470,11 +470,11 @@ export default function SellerProposalsPage() {
                   ? "bg-red-500/10 border-red-500/20" 
                   : "bg-amber-500/10 border-amber-500/20"
               }`}>
-                <p className="text-xs font-semibold mb-1 ${
+                <p className={`text-xs font-semibold mb-1 ${
                   qualificationStatus.isExpired 
                     ? "text-red-600 dark:text-red-400" 
                     : "text-amber-600 dark:text-amber-400"
-                }">
+                }`}>
                   {t("sellerProposals.qualificationWindow") || "Qualification Window"}
                 </p>
                 <p className="text-xs text-muted-foreground">
